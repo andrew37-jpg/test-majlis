@@ -1,0 +1,9 @@
+{
+  "fixture": "localhost:8892; fictional data; Telegram SDK and API mocked",
+  "initial_cards": 100,
+  "after_load_more": 105,
+  "after_manual_refresh": 100,
+  "injected_images": 0,
+  "literal_item": "<img src=x onerror=\"alert(1)\">",
+  "production_code_changed": false
+}

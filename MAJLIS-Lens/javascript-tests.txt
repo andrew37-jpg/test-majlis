@@ -1,0 +1,35 @@
+✔ drag previews without navigation, commits nearest section once on release (5.104125ms)
+✔ cancel returns to committed selection without opening previewed section (2.300083ms)
+✔ vertical exit cancels a gesture and its subsequent release (0.829583ms)
+✔ reversal continues from current position and does not overshoot (1.459333ms)
+✔ reduced motion suppresses optics while preserving drag release navigation (0.940792ms)
+✔ keyboard click navigates without waiting for animation (1.512417ms)
+✔ resize notification with unchanged geometry does not interrupt a held gesture (1.164375ms)
+✔ release outside the panel cancels even if the last move was missed (0.873625ms)
+✔ rapid alternating clicks keep one frame callback and settle on the last selection (3.307667ms)
+✔ several pages -> refresh -> continue, updated values and no duplicates (4.401208ms)
+✔ stale refresh cannot overwrite new filters (3.863166ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.513291ms)
+✔ HTML escaping and money are exact, invalid values rejected (0.585458ms)
+✔ detail and transfer form escape personal fields and explain ownership (44.987583ms)
+✔ payment and ETA edits do not rewrite a checkpoint date (8.096625ms)
+✔ separate workspaces hide role choices and discard stale page responses (1.625583ms)
+✔ tracking displays confirmed facts, escapes carrier/track, and labels old source data (0.802209ms)
+✔ manager inbox escapes client content and public cabinet has no manager entry (2.305208ms)
+✔ saved manual theme applies before DOMContentLoaded and ignores system changes (3.352417ms)
+✔ first browser launch follows system even when Telegram SDK exists outside Telegram (0.774625ms)
+✔ Telegram launch hash sets dark before body, host events follow only in auto mode (1.893333ms)
+✔ choice persists, all controls sync, reopening keeps manual priority (1.046ms)
+✔ blocked storage, invalid stored values and malformed launch data do not crash (1.139ms)
+✔ one failing or absent host method does not prevent remaining operations (0.610166ms)
+✔ old host header uses supported keyword and no unsupported bottom method (0.566417ms)
+✔ storage event updates another instance and removal resets to auto (0.664125ms)
+✔ circle toggles current appearance in one click and auto restores device theme (0.740416ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 160.968416

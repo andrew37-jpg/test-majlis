@@ -1,0 +1,39 @@
+{
+  "health": {
+    "ok": true,
+    "mode": "live",
+    "instance_id": "",
+    "build_id": "majlis-0.8-audit-fixes-20261018"
+  },
+  "/ready": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "database": "postgresql"
+    }
+  },
+  "/ops/health": {
+    "status": 503,
+    "body": {
+      "ok": false,
+      "workers": {
+        "bot": false,
+        "notify": false
+      },
+      "queue": {},
+      "actionable_failed": 0,
+      "schema": true
+    }
+  },
+  "runtime": "{\"uid\": 10001, \"pip_present\": false, \"ensurepip_present\": false}",
+  "index": {
+    "status": 200,
+    "csp": "default-src 'self'; script-src 'self' https://telegram.org; style-src 'self'; connect-src 'self'; img-src 'self' data: https://*.telegram.org; base-uri 'none'; form-action 'self'",
+    "bytes": 4578
+  },
+  "image": {
+    "Id": "sha256:6de09d49febe687f15220b94392bfe149595f5d7bcc41fa9cd489669530fc926",
+    "Architecture": "arm64",
+    "Os": "linux"
+  }
+}

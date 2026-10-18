@@ -1,0 +1,17 @@
+{
+  "fixture": "localhost:8894, fake API and Telegram SDK, fictional orders",
+  "pagination": [
+    100,
+    200,
+    200,
+    300
+  ],
+  "injected_images": 0,
+  "detail_opened": true,
+  "transfer_id_change": {
+    "new_name_property": "",
+    "confirmation_checked": false
+  },
+  "export_button_visible": true,
+  "real_telegram_tested": false
+}

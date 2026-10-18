@@ -1,0 +1,12 @@
+{
+  "env_permissions": "0o600",
+  "bot_token_present": true,
+  "manager_access_configured": false,
+  "https_mode": "localhost_run",
+  "integration_configured": false,
+  "payment_hosts_configured": false,
+  "catalog_configured": false,
+  "support_configured": false,
+  "database_host_is_loopback": true,
+  "audit_database": "majlis_audit_20261014_test"
+}

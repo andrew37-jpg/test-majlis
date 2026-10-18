@@ -1,0 +1,23 @@
+[
+  {
+    "command": "python manage.py backup --container majlis-local-db-1 --file /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal-2.dump",
+    "exit_code": 0,
+    "seconds": 0.548,
+    "stdout": "Резервная копия: /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal-2.dump\n",
+    "stderr": ""
+  },
+  {
+    "command": "python manage.py inspect-backup --container majlis-local-db-1 --file /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal-2.dump",
+    "exit_code": 0,
+    "seconds": 0.335,
+    "stdout": "Архив читается; это не проверка восстановления.\n",
+    "stderr": ""
+  },
+  {
+    "command": "python manage.py restore-test --container majlis-local-db-1 --file /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal-2.dump --target majlis_restore_1792010956_test",
+    "exit_code": 0,
+    "seconds": 2.575,
+    "stdout": "{\"tested_constraint_rejections\": 12, \"restored_database\": \"majlis_restore_1792010956_test\", \"tables\": 9, \"constraints\": 28, \"row_counts\": {\"users\": 3, \"orders\": 4, \"events\": 8, \"outbox\": 4, \"audit_log\": 8, \"integration_events\": 0, \"rate_limits\": 1, \"bot_state\": 0, \"schema_migrations\": 2}, \"data_and_constraints_match\": true, \"ownership\": \"Test restore deliberately excludes ownership/ACL; production privileges must be applied separately.\"}\n",
+    "stderr": ""
+  }
+]

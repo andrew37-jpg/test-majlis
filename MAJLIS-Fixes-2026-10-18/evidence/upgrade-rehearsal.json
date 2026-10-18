@@ -1,0 +1,39 @@
+{
+  "migrations": 9,
+  "order": [
+    "UPGRADE-FIX",
+    12001,
+    "purchased",
+    "OLD-BATCH",
+    100
+  ],
+  "outbox": [
+    "unknown",
+    "upgrade_unresolved"
+  ],
+  "history": [
+    [
+      "Preserved history"
+    ]
+  ],
+  "context": [
+    "OLD-BATCH",
+    1
+  ],
+  "stream": [
+    100
+  ],
+  "rollback": {
+    "migrations": 7,
+    "order": [
+      "UPGRADE-FIX",
+      12001,
+      "purchased"
+    ],
+    "history": [
+      [
+        "Preserved history"
+      ]
+    ]
+  }
+}

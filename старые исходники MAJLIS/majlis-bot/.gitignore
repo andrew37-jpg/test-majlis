@@ -1,0 +1,10 @@
+.env
+*.sqlite3*
+__pycache__/
+*.pyc
+.DS_Store
+
+telegram.env
+*.run.lock
+.idea/
+.venv/

@@ -1,0 +1,66 @@
+{
+  "routes": [
+    {
+      "base": "http://127.0.0.1:8876",
+      "health": 200,
+      "same_instance": true,
+      "/": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/ui.js": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/app.js": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/style.css": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/theme.js": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      }
+    },
+    {
+      "base": "https://ddbac8a527328e.lhr.life",
+      "health": 200,
+      "same_instance": true,
+      "/": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/ui.js": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/app.js": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/style.css": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      },
+      "/theme.js": {
+        "status": 200,
+        "source_matches": true,
+        "csp_present": true
+      }
+    }
+  ],
+  "bot": "majlis_test_bot",
+  "menu_matches": true
+}

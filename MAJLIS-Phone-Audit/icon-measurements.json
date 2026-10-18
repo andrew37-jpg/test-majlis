@@ -1,0 +1,23 @@
+{
+  "method": "Native 1170x2532 video; crop bottom492px; fixed icon ROI x530:650,y250:345; blue mask B-R>60,G-R>25,R<130; bbox width=maxX-minX+1,height=maxY-minY+1. No geometric resizing before measurement.",
+  "measurements": [
+    {
+      "time": 1.183333,
+      "frame": "0051.png",
+      "iconWidth": 54,
+      "iconHeight": 54
+    },
+    {
+      "time": 2.201667,
+      "frame": "0099.png",
+      "iconWidth": 54,
+      "iconHeight": 54
+    },
+    {
+      "time": 6.605,
+      "frame": "0351.png",
+      "iconWidth": 54,
+      "iconHeight": 54
+    }
+  ]
+}

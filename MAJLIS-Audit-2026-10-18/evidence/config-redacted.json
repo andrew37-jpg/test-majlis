@@ -1,0 +1,17 @@
+{
+  "ENVIRONMENT": "test",
+  "HTTPS_MODE": "localhost_run",
+  "PORT": "8876",
+  "AUTO_START_DATABASE": "true",
+  "DB_POOL_SIZE": "(default)",
+  "PUBLIC_REQUESTS_PER_MINUTE": "240",
+  "BOT_TOKEN_configured": true,
+  "DATABASE_URL_configured": true,
+  "MIGRATION_DATABASE_URL_configured": true,
+  "HEALTH_TOKEN_configured": true,
+  "INTEGRATION_SECRET_configured": false,
+  "PAYMENT_HOSTS_configured": false,
+  "CATALOG_URL_configured": false,
+  "SUPPORT_URL_configured": false,
+  "MANAGER_IDS_count": 0
+}

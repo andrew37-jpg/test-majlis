@@ -1,0 +1,26 @@
+{
+  "light": {
+    "samples": 481,
+    "lensOverflow": 0,
+    "materialOverflow": 0,
+    "heights": [
+      62
+    ]
+  },
+  "dark": {
+    "samples": 481,
+    "lensOverflow": 0,
+    "materialOverflow": 0,
+    "heights": [
+      62
+    ]
+  },
+  "manager-resize": {
+    "samples": 480,
+    "lensOverflow": 0,
+    "materialOverflow": 0,
+    "heights": [
+      62
+    ]
+  }
+}

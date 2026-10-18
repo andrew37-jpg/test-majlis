@@ -1,0 +1,16 @@
+{
+  "local_health": 200,
+  "local_ready": 200,
+  "runtime_current": true,
+  "url": "https://79537a14564067.lhr.life",
+  "public_health": 200,
+  "public_instance_match": true,
+  "public_html": 200,
+  "bot": "majlis_test_bot",
+  "telegram_getme_ok": true,
+  "telegram_menu_ok": true,
+  "menu_type": "web_app",
+  "menu_url": "https://79537a14564067.lhr.life/",
+  "menu_url_matches": false,
+  "menu_url_matches_normalized": true
+}

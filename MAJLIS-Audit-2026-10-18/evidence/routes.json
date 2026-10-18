@@ -1,0 +1,205 @@
+[
+  {
+    "method": "GET",
+    "path": "/health",
+    "function": "health",
+    "line": 94,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/ready",
+    "function": "ready",
+    "line": 99,
+    "auth": "health token"
+  },
+  {
+    "method": "GET",
+    "path": "/",
+    "function": "index",
+    "line": 109,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/app.js",
+    "function": "script",
+    "line": 114,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/ui.js",
+    "function": "ui_script",
+    "line": 119,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/nav-lens.js",
+    "function": "navigation_lens_script",
+    "line": 124,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/theme.js",
+    "function": "theme_script",
+    "line": 129,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/style.css",
+    "function": "style",
+    "line": 134,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/api/bootstrap",
+    "function": "bootstrap",
+    "line": 139,
+    "auth": "identity"
+  },
+  {
+    "method": "GET",
+    "path": "/api/orders/{order_id}",
+    "function": "read_order",
+    "line": 152,
+    "auth": "identity"
+  },
+  {
+    "method": "POST",
+    "path": "/api/orders",
+    "function": "create",
+    "line": 162,
+    "auth": "manager"
+  },
+  {
+    "method": "POST",
+    "path": "/api/orders/status",
+    "function": "status",
+    "line": 183,
+    "auth": "manager"
+  },
+  {
+    "method": "POST",
+    "path": "/api/orders/details",
+    "function": "details",
+    "line": 192,
+    "auth": "manager"
+  },
+  {
+    "method": "POST",
+    "path": "/api/orders/payment",
+    "function": "payment",
+    "line": 199,
+    "auth": "manager"
+  },
+  {
+    "method": "POST",
+    "path": "/api/integrations/events",
+    "function": "integration",
+    "line": 206,
+    "auth": "integration HMAC"
+  },
+  {
+    "method": "GET",
+    "path": "/api/me/export",
+    "function": "export",
+    "line": 238,
+    "auth": "identity"
+  },
+  {
+    "method": "GET",
+    "path": "/pagination.js",
+    "function": "pagination_script",
+    "line": 256,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/order-detail.js",
+    "function": "detail_script",
+    "line": 261,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/order-editor.js",
+    "function": "editor_script",
+    "line": 266,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/api/orders/{order_id}/history",
+    "function": "order_history",
+    "line": 271,
+    "auth": "identity"
+  },
+  {
+    "method": "POST",
+    "path": "/api/orders/commercial",
+    "function": "commercial",
+    "line": 291,
+    "auth": "manager"
+  },
+  {
+    "method": "POST",
+    "path": "/api/orders/tracking",
+    "function": "tracking",
+    "line": 298,
+    "auth": "manager"
+  },
+  {
+    "method": "GET",
+    "path": "/cabinets.js",
+    "function": "cabinets_script",
+    "line": 305,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/manager",
+    "function": "manager_index",
+    "line": 311,
+    "auth": "public"
+  },
+  {
+    "method": "GET",
+    "path": "/manager/",
+    "function": "manager_index",
+    "line": 311,
+    "auth": "public"
+  },
+  {
+    "method": "POST",
+    "path": "/api/support",
+    "function": "create_support",
+    "line": 316,
+    "auth": "identity"
+  },
+  {
+    "method": "GET",
+    "path": "/api/manager/inbox",
+    "function": "manager_inbox",
+    "line": 324,
+    "auth": "manager"
+  },
+  {
+    "method": "GET",
+    "path": "/api/manager/activity",
+    "function": "manager_activity",
+    "line": 335,
+    "auth": "manager"
+  },
+  {
+    "method": "GET",
+    "path": "/workspace.js",
+    "function": "workspace_script",
+    "line": 346,
+    "auth": "public"
+  }
+]

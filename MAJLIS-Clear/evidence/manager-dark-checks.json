@@ -1,0 +1,32 @@
+[
+  {
+    "overflow": 360,
+    "section": "Активность клиентов",
+    "theme": "dark",
+    "width": 360
+  },
+  {
+    "overflow": 360,
+    "section": "Обращения клиентов",
+    "theme": "dark",
+    "width": 360
+  },
+  {
+    "overflow": 360,
+    "section": "Новый заказ",
+    "theme": "dark",
+    "width": 360
+  },
+  {
+    "overflow": 360,
+    "section": "Помощь",
+    "theme": "dark",
+    "width": 360
+  },
+  {
+    "overflow": 360,
+    "section": "Заказы магазина",
+    "theme": "dark",
+    "width": 360
+  }
+]

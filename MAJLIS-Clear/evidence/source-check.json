@@ -1,0 +1,12 @@
+{
+  "backend_and_other_original_files_unchanged": true,
+  "changed_files": [
+    "web/ui.js",
+    "web/index.html",
+    "web/theme.js",
+    "web/style.css",
+    "web/app.js",
+    "tests/js/theme.test.mjs"
+  ],
+  "javascript_syntax_ok": true
+}

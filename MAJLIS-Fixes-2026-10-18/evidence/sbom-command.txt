@@ -1,0 +1,8 @@
+    ...Storing image for indexing
+    ✓ Image stored for indexing
+    ...Indexing
+    ✓ Indexed 155 packages
+    ✓ Provenance obtained from attestation
+    ...Pulling
+    ✓ Pulled
+    ✓ Report written to /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/outputs/MAJLIS-Fixes-2026-10-18/evidence/app-sbom.spdx.json

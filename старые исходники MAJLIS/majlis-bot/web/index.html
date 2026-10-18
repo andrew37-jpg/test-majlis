@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f6fa"><title>MAJLIS · Мои заказы</title><link rel="stylesheet" href="/style.css"><script src="https://telegram.org/js/telegram-web-app.js" defer></script><script src="/app.js" defer></script></head>
+<body><div id="demo-bar" hidden><span class="demo-label"><i></i> Тестовая версия</span><label>Просмотр <select id="persona" aria-label="Демонстрационный профиль"><option value="buyer">Покупатель</option><option value="empty">Без заказов</option><option value="manager">Менеджер</option></select></label></div>
+<header class="header"><a class="brand" href="/" aria-label="Majlis, главная"><span class="brand-mark">m</span><span>majlis<span class="brand-dot">.</span></span></a><span class="header-caption">Техника под заказ</span><button id="support-top" class="icon-button" aria-label="Связаться с менеджером">↗</button></header>
+<main id="app"><div class="loading" role="status">Загружаем ваши заказы…</div></main>
+<footer><span>MAJLIS · Сопровождение заказов</span><span id="foot-mode"></span></footer>
+<div id="toast" role="status" hidden></div>
+<dialog id="detail-dialog"><div id="detail-content"></div></dialog>
+<dialog id="info-dialog"><div class="dialog-top"><span class="eyebrow">MAJLIS</span><button class="close-dialog icon-button" aria-label="Закрыть">×</button></div><h2 id="info-title"></h2><p id="info-text"></p><button class="close-dialog button primary">Понятно</button></dialog>
+</body></html>

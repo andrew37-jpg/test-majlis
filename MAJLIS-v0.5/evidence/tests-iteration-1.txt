@@ -1,0 +1,1142 @@
+EEEEEEEEEEEE.EEEEEEEEEEEEEEE                                             [100%]
+==================================== ERRORS ====================================
+______________ ERROR at setup of test_requires_verified_telegram _______________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x1068bee40>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+_____ ERROR at setup of test_buyer_cannot_mutate_or_read_another_customer ______
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106d8c920>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+______________ ERROR at setup of test_duplicate_and_strict_money _______________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106d8f980>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+___________ ERROR at setup of test_status_atomic_outbox_and_revision ___________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106df8e30>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+________ ERROR at setup of test_transaction_rolls_back_all_side_effects ________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106dfa930>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+___________ ERROR at setup of test_integration_signature_idempotency ___________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106dfaa20>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+__________________ ERROR at setup of test_payment_exact_host ___________________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106df8bc0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+__________ ERROR at setup of test_concurrent_claim_and_lease_recovery __________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106df8c20>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+________ ERROR at setup of test_reassignment_cancels_old_customer_queue ________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106d8ce60>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+______________ ERROR at setup of test_retry_and_blocked_recipient ______________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106d5bb60>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+_______________ ERROR at setup of test_health_and_database_ready _______________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e19010>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+_______________ ERROR at setup of test_rejects_oversized_request _______________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e1bc50>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+_____________ ERROR at setup of test_two_editors_one_revision_only _____________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106dfbad0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+________________ ERROR at setup of test_rate_limit_and_recovery ________________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e558e0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+____ ERROR at setup of test_missing_integration_shipment_rolls_back_receipt ____
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e576e0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+____________ ERROR at setup of test_migration_checksum_is_enforced _____________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e65f70>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+_ ERROR at setup of test_server_search_respects_customer_scope_and_literal_wildcards _
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e665a0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+______ ERROR at setup of test_filters_counts_and_search_beyond_first_page ______
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e748c0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+________ ERROR at setup of test_single_order_reload_respects_ownership _________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e66960>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+__ ERROR at setup of test_audit_reassignment_retains_previous_personal_fields __
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e65df0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+__ ERROR at setup of test_audit_late_integration_can_regress_delivered_order ___
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e64200>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+_______ ERROR at setup of test_audit_ready_has_no_application_rate_limit _______
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e572f0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+__________ ERROR at setup of test_audit_signed_identity_is_replayable __________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e762a0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+____ ERROR at setup of test_audit_sql_injection_and_mass_assignment_denied _____
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e770b0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+______ ERROR at setup of test_audit_outbox_network_send_holds_order_lock _______
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e770e0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+_______ ERROR at setup of test_audit_mutations_exist_without_csrf_cookie _______
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e55c70>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+__________ ERROR at setup of test_audit_error_headers_not_consistent ___________
+
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...*****'), port=8893, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    @pytest.fixture
+    def db(cfg):
+>    database=Database();database.open();database.migrate()
+                                         ^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <majlis.database.Database object at 0x106e559a0>
+
+    def migrate(self):
+        import psycopg
+        migration_url=settings().migration_database_url.get_secret_value()
+        if not migration_url:
+            raise RuntimeError('Задайте MIGRATION_DATABASE_URL с отдельной ролью мигратора.')
+        with psycopg.connect(migration_url,row_factory=dict_row) as db:
+            db.execute('SELECT pg_advisory_xact_lock(742019143)')
+            db.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, checksum TEXT NOT NULL, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())')
+            for path in sorted((ROOT / 'migrations').glob('*.sql')):
+                sql = path.read_text(encoding='utf-8')
+                checksum = hashlib.sha256(sql.encode()).hexdigest()
+                old = db.execute('SELECT checksum FROM schema_migrations WHERE name=%s', (path.name,)).fetchone()
+                if old:
+                    if old['checksum'] != checksum:
+                        raise RuntimeError('Изменена применённая миграция. Создайте новую миграцию.')
+                    continue
+                db.execute(sql)
+                db.execute('INSERT INTO schema_migrations(name,checksum) VALUES (%s,%s)', (path.name, checksum))
+            runtime=conninfo_to_dict(self.url).get('user')
+            owner=db.execute('SELECT current_user AS name').fetchone()['name']
+            if not runtime or runtime==owner:
+                raise RuntimeError('Runtime и мигратор должны быть разными ролями.')
+>           role=sql.Identifier(runtime)
+                 ^^^^^^^^^^^^^^
+E           AttributeError: 'str' object has no attribute 'Identifier'. Did you mean: 'isidentifier'?
+
+majlis/database.py:48: AttributeError
+=========================== short test summary info ============================
+ERROR tests/test_platform.py::test_requires_verified_telegram - AttributeErro...
+ERROR tests/test_platform.py::test_buyer_cannot_mutate_or_read_another_customer
+ERROR tests/test_platform.py::test_duplicate_and_strict_money - AttributeErro...
+ERROR tests/test_platform.py::test_status_atomic_outbox_and_revision - Attrib...
+ERROR tests/test_platform.py::test_transaction_rolls_back_all_side_effects - ...
+ERROR tests/test_platform.py::test_integration_signature_idempotency - Attrib...
+ERROR tests/test_platform.py::test_payment_exact_host - AttributeError: 'str'...
+ERROR tests/test_platform.py::test_concurrent_claim_and_lease_recovery - Attr...
+ERROR tests/test_platform.py::test_reassignment_cancels_old_customer_queue - ...
+ERROR tests/test_platform.py::test_retry_and_blocked_recipient - AttributeErr...
+ERROR tests/test_platform.py::test_health_and_database_ready - AttributeError...
+ERROR tests/test_platform.py::test_rejects_oversized_request - AttributeError...
+ERROR tests/test_platform.py::test_two_editors_one_revision_only - AttributeE...
+ERROR tests/test_platform.py::test_rate_limit_and_recovery - AttributeError: ...
+ERROR tests/test_platform.py::test_missing_integration_shipment_rolls_back_receipt
+ERROR tests/test_platform.py::test_migration_checksum_is_enforced - Attribute...
+ERROR tests/test_platform.py::test_server_search_respects_customer_scope_and_literal_wildcards
+ERROR tests/test_platform.py::test_filters_counts_and_search_beyond_first_page
+ERROR tests/test_platform.py::test_single_order_reload_respects_ownership - A...
+ERROR tests/test_regressions.py::test_audit_reassignment_retains_previous_personal_fields
+ERROR tests/test_regressions.py::test_audit_late_integration_can_regress_delivered_order
+ERROR tests/test_regressions.py::test_audit_ready_has_no_application_rate_limit
+ERROR tests/test_regressions.py::test_audit_signed_identity_is_replayable - A...
+ERROR tests/test_regressions.py::test_audit_sql_injection_and_mass_assignment_denied
+ERROR tests/test_regressions.py::test_audit_outbox_network_send_holds_order_lock
+ERROR tests/test_regressions.py::test_audit_mutations_exist_without_csrf_cookie
+ERROR tests/test_regressions.py::test_audit_error_headers_not_consistent - At...
+1 passed, 27 errors in 2.86s
+/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/tools/lib/python3.12/site-packages/coverage/inorout.py:558: CoverageWarning: Module main was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.16.2/messages.html#warning-module-not-imported
+  self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/tools/lib/python3.12/site-packages/coverage/inorout.py:558: CoverageWarning: Module manage was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.16.2/messages.html#warning-module-not-imported
+  self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")

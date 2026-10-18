@@ -1,0 +1,6 @@
+{
+  "hidden": true,
+  "layers": 5,
+  "material": "transform: scale(1, 1); border-radius: 23px;",
+  "metrics": "{\"frames\":384,\"p50\":16.699999999999818,\"p95\":17.699999999999818,\"max\":17.800000000000182,\"over33\":0}"
+}

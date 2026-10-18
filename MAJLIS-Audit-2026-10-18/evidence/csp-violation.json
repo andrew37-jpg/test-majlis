@@ -1,0 +1,8 @@
+{
+  "event": "{\"directive\":\"style-src-elem\",\"blocked\":\"inline\",\"line\":133,\"source\":\"http://127.0.0.1:8911/nav-lens.js\"}",
+  "styles": [
+    {
+      "characters": 2005
+    }
+  ]
+}

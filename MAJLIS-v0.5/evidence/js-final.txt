@@ -1,0 +1,13 @@
+✔ several pages -> refresh -> continue, updated values and no duplicates (4.678708ms)
+✔ stale refresh cannot overwrite new filters (3.832458ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.354833ms)
+✔ HTML escaping and money are exact, invalid values rejected (0.463917ms)
+✔ detail and transfer form escape personal fields and explain ownership (50.974292ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 148.5905

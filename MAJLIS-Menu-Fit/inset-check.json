@@ -1,0 +1,53 @@
+{
+  "insetAfter": {
+    "hidden": true,
+    "inset": "64px",
+    "material": {
+      "bottom": 773,
+      "height": 62,
+      "left": 19,
+      "right": 89.3984375,
+      "top": 711,
+      "width": 70.3984375,
+      "x": 19,
+      "y": 711
+    },
+    "nav": {
+      "bottom": 780,
+      "height": 76,
+      "left": 12,
+      "right": 378,
+      "top": 704,
+      "width": 366,
+      "x": 12,
+      "y": 704
+    },
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  "insetHeld": {
+    "hidden": false,
+    "lens": {
+      "bottom": 773,
+      "height": 62,
+      "left": 159.7421875,
+      "right": 230.2421875,
+      "top": 711,
+      "width": 70.5,
+      "x": 159.7421875,
+      "y": 711
+    },
+    "nav": {
+      "bottom": 780,
+      "height": 76,
+      "left": 12,
+      "right": 378,
+      "top": 704,
+      "width": 366,
+      "x": 12,
+      "y": 704
+    }
+  }
+}

@@ -1,0 +1,39 @@
+✔ live-source magnification stays centred at a moved viewport anchor (1.253666ms)
+✔ edge projection reflects radial detail and keeps tangent detail enlarged (1.397834ms)
+✔ drag previews without navigation, commits nearest section once on release (9.369375ms)
+✔ cancel returns to committed selection without opening previewed section (13.125667ms)
+✔ vertical exit cancels a gesture and its subsequent release (1.167209ms)
+✔ reversal continues from current position and does not overshoot (1.976625ms)
+✔ reduced motion suppresses optics while preserving drag release navigation (2.488084ms)
+✔ keyboard click navigates without waiting for animation (2.5075ms)
+✔ resize notification with unchanged geometry does not interrupt a held gesture (1.329375ms)
+✔ release outside the panel cancels even if the last move was missed (0.954ms)
+✔ rapid alternating clicks keep one frame callback and settle on the last selection (4.693416ms)
+✔ a ready but blank optical renderer cannot hide the real selection material (4.962167ms)
+✔ release uses its final position when the last pointermove was not delivered (2.361208ms)
+✔ several pages -> refresh -> continue, updated values and no duplicates (5.79225ms)
+✔ stale refresh cannot overwrite new filters (0.651583ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.590417ms)
+✔ HTML escaping and money are exact, invalid values rejected (0.844792ms)
+✔ detail and transfer form escape personal fields and explain ownership (76.4395ms)
+✔ payment and ETA edits do not rewrite a checkpoint date (11.598833ms)
+✔ separate workspaces hide role choices and discard stale page responses (4.306417ms)
+✔ tracking displays confirmed facts, escapes carrier/track, and labels old source data (1.3005ms)
+✔ manager inbox escapes client content and public cabinet has no manager entry (2.21425ms)
+✔ saved manual theme applies before DOMContentLoaded and ignores system changes (5.277583ms)
+✔ first browser launch follows system even when Telegram SDK exists outside Telegram (1.126833ms)
+✔ Telegram launch hash sets dark before body, host events follow only in auto mode (1.248208ms)
+✔ choice persists, all controls sync, reopening keeps manual priority (1.431834ms)
+✔ blocked storage, invalid stored values and malformed launch data do not crash (2.824291ms)
+✔ one failing or absent host method does not prevent remaining operations (1.021125ms)
+✔ old host header uses supported keyword and no unsupported bottom method (7.486541ms)
+✔ storage event updates another instance and removal resets to auto (1.766334ms)
+✔ circle toggles current appearance in one click and auto restores device theme (0.975334ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 237.2155

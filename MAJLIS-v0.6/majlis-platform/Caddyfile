@@ -1,0 +1,9 @@
+{$APP_DOMAIN} {
+    request_body {
+        max_size 64KB
+    }
+    header Strict-Transport-Security "max-age=31536000"
+    @private path /ready /openapi.json
+    respond @private 404
+    reverse_proxy api:8876
+}

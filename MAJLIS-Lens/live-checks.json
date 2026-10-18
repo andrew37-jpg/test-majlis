@@ -1,0 +1,19 @@
+{
+  "localHealth": 200,
+  "ui.js": {
+    "status": 200,
+    "matchesDeployedSource": true
+  },
+  "app.js": {
+    "status": 200,
+    "matchesDeployedSource": true
+  },
+  "nav-lens.js": {
+    "status": 200,
+    "matchesDeployedSource": true
+  },
+  "style.css": {
+    "status": 200,
+    "matchesDeployedSource": true
+  }
+}

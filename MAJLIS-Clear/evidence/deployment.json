@@ -1,0 +1,13 @@
+{
+  "files": [
+    "web/ui.js",
+    "web/index.html",
+    "web/theme.js",
+    "web/style.css",
+    "web/app.js",
+    "tests/js/theme.test.mjs",
+    "docs/CLEAR.md"
+  ],
+  "settings_unchanged": true,
+  "source_hashes_match": true
+}

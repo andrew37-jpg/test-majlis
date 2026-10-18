@@ -1,0 +1,36 @@
+{
+  "project": "/Users/andreyromanov/Desktop/majlis_bot_test/majlis-platform",
+  "backup": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-next/private-before-v07-1792073279",
+  "restore_before": {
+    "tested_constraint_rejections": 15,
+    "restored_database": "majlis_before_v07_1792073279_test",
+    "tables": 10,
+    "constraints": 31,
+    "row_counts": {
+      "users": 1,
+      "orders": 0,
+      "events": 0,
+      "outbox": 0,
+      "audit_log": 0,
+      "integration_events": 0,
+      "rate_limits": 1,
+      "bot_state": 1,
+      "schema_migrations": 4,
+      "legacy_imports": 0
+    },
+    "data_and_constraints_match": true,
+    "ownership": "Test restore deliberately excludes ownership/ACL; production privileges must be applied separately."
+  },
+  "existing_data_preserved": true,
+  "env_unchanged": true,
+  "real_manager_assigned": false,
+  "migration_names": [
+    "001_initial.sql",
+    "002_ownership_and_events.sql",
+    "003_event_kinds_and_import_map.sql",
+    "004_classify_verified_transfers.sql",
+    "005_scoped_managers_and_tracking.sql",
+    "006_lock_manager_permissions.sql",
+    "007_manager_workspace_and_support.sql"
+  ]
+}

@@ -1,0 +1,28 @@
+Unable to find image 'caddy:2-alpine@sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f' locally
+docker.io/library/caddy@sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f: Pulling from library/caddy
+ace1621be7ff: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+1057d972abea: Pulling fs layer
+2410ed056379: Pulling fs layer
+4b412b23c1b7: Pulling fs layer
+4f4fb700ef54: Already exists
+cb2d3152c6ea: Download complete
+ba471a53b515: Download complete
+2410ed056379: Download complete
+1057d972abea: Download complete
+ace1621be7ff: Download complete
+ace1621be7ff: Pull complete
+2410ed056379: Pull complete
+1057d972abea: Pull complete
+4b412b23c1b7: Download complete
+4b412b23c1b7: Pull complete
+4f4fb700ef54: Pull complete
+Digest: sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f
+Status: Downloaded newer image for caddy@sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f
+{"apps":{"http":{"servers":{"srv0":{"listen":[":443"],"routes":[{"match":[{"host":["example.invalid"]}],"handle":[{"handler":"subroute","routes":[{"handle":[{"handler":"headers","response":{"set":{"Strict-Transport-Security":["max-age=31536000"]}}},{"handler":"request_body","max_size":64000}]},{"handle":[{"handler":"static_response","status_code":404}],"match":[{"path":["/ready","/ops/health","/openapi.json"]}]},{"handle":[{"handler":"reverse_proxy","headers":{"request":{"set":{"X-Majlis-Client-Ip":["{http.request.remote.host}"]}}},"upstreams":[{"dial":"api:8876"}]}]}]}],"terminal":true}]}}}}}
+{"level":"warn","ts":1792333482.7220943,"logger":"caddyfile","msg":"Caddyfile input is not formatted; run 'caddy fmt --overwrite' to fix inconsistencies","file":"/etc/caddy/Caddyfile","line":2}
+{"level":"info","ts":1792333482.7223945,"logger":"http.auto_https","msg":"server is listening only on the HTTPS port but has no TLS connection policies; adding one to enable TLS","server_name":"srv0","https_port":443}
+{"level":"info","ts":1792333482.722412,"logger":"http.auto_https","msg":"enabling automatic HTTP->HTTPS redirects","server_name":"srv0"}
+{"level":"info","ts":1792333482.7226646,"logger":"http","msg":"servers shutting down with eternal grace period"}
+{"level":"info","ts":1792333482.72273,"logger":"tls.cache.maintenance","msg":"started background certificate maintenance","cache":"0x7e91bdae9180"}
+{"level":"info","ts":1792333482.7227435,"logger":"tls.cache.maintenance","msg":"stopped background certificate maintenance","cache":"0x7e91bdae9180"}

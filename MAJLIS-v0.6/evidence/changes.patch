@@ -1,0 +1,1577 @@
+--- v0.5/README.md
++++ v0.6/README.md
+@@ -25,7 +25,7 @@
+ 
+ В Windows выберите `.venv\Scripts\python.exe` в PyCharm и установите те же зависимости. Живой запуск этой версии на Windows пока не проверялся.
+ 
+-Скопируйте `.env.example` в `.env`, заполните BOT_TOKEN локально, сгенерируйте три разные случайные POSTGRES_ADMIN_PASSWORD, POSTGRES_MIGRATION_PASSWORD и POSTGRES_PASSWORD; отдельно сгенерируйте HEALTH_TOKEN (не короче 32 символов). Для паролей используйте буквы, цифры, `_` и `-`; пароль приложения повторите в DATABASE_URL, пароль мигратора — в MIGRATION_DATABASE_URL. Для существующей базы сначала читайте docs/UPGRADE-0.5.md: одной заменой .env права не обновляются. Пример генерации одного значения:
++Скопируйте `.env.example` в `.env`, заполните BOT_TOKEN локально, сгенерируйте три разные случайные POSTGRES_ADMIN_PASSWORD, POSTGRES_MIGRATION_PASSWORD и POSTGRES_PASSWORD; отдельно сгенерируйте HEALTH_TOKEN (не короче 32 символов). Для паролей используйте буквы, цифры, `_` и `-`; пароль приложения повторите в DATABASE_URL, пароль мигратора — в MIGRATION_DATABASE_URL. Для существующей базы сначала читайте docs/UPGRADE-0.6.md: одной заменой .env права не обновляются. Пример генерации одного значения:
+ 
+ ```sh
+ python -c "import secrets; print(secrets.token_urlsafe(32))"
+@@ -43,6 +43,7 @@
+ majlis/http_boundary.py потоковый лимит body, публичный limiter и заголовки
+ majlis/schemas.py       строгие входные модели
+ majlis/services.py      транзакции заказов, история, аудит
++majlis/legacy_import.py нормализованный контракт, dry-run и импорт только в test
+ majlis/database.py      пул PostgreSQL и версионные миграции
+ majlis/bot.py           Bot API, команды, отдельный notification worker
+ majlis/tunnel.py        HTTPS localhost.run, отслеживание смены URL
+@@ -60,7 +61,7 @@
+ 
+ ## Функциональность и границы
+ 
+-Покупатель: собственные заказы, этапы, даты поставки, история, контакт магазина и каталог, если их адреса настроены. Менеджер: создание, смена этапов, партии и клиента, дата, ручная платёжная ссылка разрешённого сервиса. PostgreSQL: индексированные заказы, пользователи, история, аудит, очередь, события интеграций и курсор Telegram.
++Покупатель: собственные заказы, этапы, даты поставки, история, контакт магазина и каталог, если их адреса настроены. Менеджер: создание, редактирование товара и суммы, смена этапов, партии и клиента, дата, ручная платёжная ссылка разрешённого сервиса, её копирование и удаление из кабинета. PostgreSQL: индексированные заказы, пользователи, история, аудит, очередь, события интеграций и курсор Telegram.
+ 
+ Карго, сайт, служба доставки и платёжный провайдер заказчика пока неизвестны. Реальных адаптеров этих сервисов нет. Endpoint интеграций принимает только подписанные события согласованного формата; платёжная ссылка не подтверждает оплату. Словарь этапов доставки нужно утвердить с заказчиком.
+ 
+@@ -79,3 +80,17 @@
+ [Обновление существующей установки](docs/UPGRADE-0.5.md), [данные и границы](docs/PRIVACY.md), [план A01–A10](docs/REMEDIATION-PLAN.md), [проверки](docs/VERIFICATION.md).
+ 
+ Новые исходники не содержат `.env`, данных и токена. Рабочая установка пользователя при подготовке архива не обновлялась. Не запускайте вторую копию того же бота одновременно. PyCharm: откройте папку, где лежит main.py, выберите интерпретатор Python 3.12, установите requirements.lock, заполните локальный .env; Run main.py.
++
++## Продолжение проекта — 0.6
++
++Версия продолжает исходники архива 0.5. Миграции 001/002 сохранены без изменений; 003/004 дополняют текущую схему. Подробности: [обновление 0.6](docs/UPGRADE-0.6.md), [состояние требований](docs/REQUIREMENTS-STATUS.md), [подготовка переноса](docs/LEGACY-MIGRATION.md), [оставшиеся подключения](docs/EXTERNAL-CONNECTIONS.md).
++
++В карточке менеджера можно изменить товар и сумму. При таком изменении старая ссылка убирается из кабинета; реальный счёт у провайдера это не отменяет. Изменения поставки, товара/суммы и ссылки сохраняются отдельными типами истории и в очереди уведомлений, не подменяя дату checkpoint. Повтор сохранения неизменных данных не создаёт повторного события.
++
++Импортёр принимает собственный нормализованный формат, проверяет подтверждение Telegram ID, валюту, часовой пояс и принадлежность истории. Без старой схемы адаптер не создаётся. Запись доступна только как репетиция в отдельной *_test базе; исходная база заказчика не переносилась. Для проверки формата без настройки бота:
++
++```sh
++python -m majlis.legacy_import inspect --file examples/normalized-export.synthetic.json
++```
++
++Результаты этой итерации: 87 Python-тестов, 6 Node-тестов; настоящее локальное HTTP/API и восстановление PostgreSQL проверены отдельно. Реальные Telegram/платежи/сервисы заказчика и рабочее обновление этой версии не проверялись.
+--- v0.5/docs/ARCHITECTURE.md
++++ v0.6/docs/ARCHITECTURE.md
+@@ -45,3 +45,11 @@
+ pagination.js хранит поколение запросов и глубину страниц; обновление заново читает загруженное количество страниц, изменение фильтра сбрасывает выборку, stale-ответы не меняют новую. order-detail.js/order-editor.js — чистые представления, app.js — взаимодействия/Telegram SDK. Нет локального долговременного хранения заказов. Карточка открывается только после нового API-запроса.
+ 
+ HTTP boundary ограничивает поток body до 64 KiB, ставит заголовки на 413/415/500 и обычные ответы. Pre-auth limiter — ограниченная память, непосредственный IP, без доверия forwarded headers; он локален одному процессу. Общий limiter нескольких серверов, RPO/RTO, сроки хранения и стабильное размещение требуют эксплуатационной настройки. Readiness закрыт токеном и Caddy; лёгкий /health публичен и не использует БД.
++
++## Дополнения 0.6
++
++events.kind различает status/transfer/details/payment/commercial/import. Timeline checkpoints использует только status; все типы доступны в общей истории с фильтрацией владельца. 004 размечает подтверждённые записи transfer из 0.5 по соответствующему аудиту, без угадывания по одному тексту.
++
++Коммерческое редактирование и изменения платёжной ссылки используют тот же manager/version/row-lock контракт. Изменения товара или суммы очищают URL в кабинете, но не обращаются к платёжному провайдеру. Notification payload не содержит URL счёта. Существующие API сохранены; Commercial добавлен отдельным endpoint.
++
++legacy_import.py содержит модели входного JSON, чистую проверку, проверку конфликтов и атомарную репетицию. legacy_imports — таблица migrator, недоступная runtime. Импорт не перезаписывает заказы/историю, не отправляет уведомления. Неизвестная историческая принадлежность — generation=0, только менеджер. Дата исходного создания сохраняется только при её явном предоставлении; иначе dry-run предупреждает о дате импорта.
+--- /dev/null
++++ v0.6/docs/EXTERNAL-CONNECTIONS.md
+@@ -0,0 +1,14 @@
++# Оставшиеся внешние подключения
++
++| Подключение | Реализованная граница | Что получить/проверить |
++|---|---|---|
++| Telegram | Бот/меню/Mini App, initData, polling/notify | Локальный токен и выбранный HTTPS; реальный тест с согласованным получателем, iOS/Android; BotFather Main Mini App отдельно при необходимости. |
++| Карго/checkpoints | HMAC endpoint, event_id/sequence, партия→заказы, монотонность | Документация, sandbox, ID партий и словарь событий/отмен/возвратов. Контракт адаптера и источник sequence. |
++| Доставка | Тот же целевой событийный контракт | Подтверждённое название поставщика, трек/order mapping, версии API и sandbox. Слово ASDEC в распознавании не подтверждает CDEK/иной сервис. |
++| Сайт | Общий backend для заказов и подготовленный событийный endpoint | Реальный исходник/документация сайта, способ авторизации клиента и связь order IDs; не выдавать Telegram initData пользователям вне Telegram. |
++| Оплата | Ручные HTTPS-ссылки, copy/revoke в кабинете, история и очередь | Провайдер, product/invoice ID, создание/отмена, подписи webhook, paid/refund/timeout, sandbox и правила бизнес-оплаты. Ссылка/сумма не означают paid. |
++| Старая система | JSON Schema и безопасные inspect/rehearse; приватная mapping-таблица | Реальный старый read-only экспорт и schema, согласованный mapping и cutover. Не использовать прототипную целевую БД вместо старой. |
++| Production | Compose, migrator/runtime, Caddy и readiness | Сервер/домен/сертификат, общие лимиты, backup/retention/алерты, скан образов, эксплуатационная нагрузка. |
++| Референс | Существующий UI с функциональными улучшениями | Полные утверждённые макеты/пользовательские сценарии для приёмки; скриншоты — лишь ограниченный ориентир. |
++
++Без этих данных нельзя подтвердить реальные адаптеры, оплату или миграцию. Новый проект продолжается на базе v0.5; отдельный новый демонстрационный бот не создаётся.
+--- /dev/null
++++ v0.6/docs/LEGACY-MIGRATION.md
+@@ -0,0 +1,46 @@
++# Подготовка переноса, а не выполненная миграция старой базы
++
++Старая схема/дамп/репозиторий заказчика не предоставлены. PostgreSQL текущего приложения — целевая схема НОВОГО бота. Базы прежних локальных тестов и резервные копии прототипа не считаются старой системой заказчика.
++
++## Какие сведения нужны от старой системы
++
++- Read-only экспорт/дамп и схема с версиями, кодировкой, часовым поясом, ограничениями и связями. Доступы/секреты передаются отдельно защищённо, не в JSON или чат.
++- Стабильный ID заказа, номер заказа, клиент и подтверждённое соответствие клиента Telegram ID. Внутренний customer_id не равен Telegram ID по умолчанию.
++- Товар/комплектация, сумма и её единица (рубли/копейки/иная валюта), партия/трек, ETA и значение «подтверждённая дата».
++- Исходная дата создания заказа с часовым поясом, если она хранится; нельзя выводить её из даты импорта.
++- Все фактические состояния/переходы, история с timestamp + timezone, владельцы в момент события, разделение внутренних/клиентских комментариев, отмены/возвраты.
++- Платёжные сервисы, связи invoice/order/customer, срок действия и порядок отмены ссылок, реальные статусы оплат. Старые URL нельзя слепо выдавать новым клиентам.
++- Объёмы, дубли/битые связи, сверочные суммы/количества, требования к архиву и основанию хранения.
++
++## Нормализованный контракт целевого приложения
++
++`docs/normalized-export.schema.json` — JSON Schema собственного ВХОДНОГО контракта, **не описание старой базы**. `examples/normalized-export.synthetic.json` — только вымышленные данные. После получения старой схемы нужен отдельный явный mapping/экспортёр; текущий код не пытается угадать её таблицы или поля.
++
++`schema_version=1`, `source` — стабильное согласованное пространство источника. Каждая запись содержит source_order_id, order в целевых полях, явные currency=RUB и telegram_id_verified=true, согласованный status. Сумма — целые копейки, без автоматического угадывания/конвертации валют. Неизвестный status отклоняется: нужен утверждённый mapping, а не fuzzy-перевод.
++
++source_created_at — исходная дата создания, если известна; явный timezone обязателен. Без неё dry-run выдаёт предупреждение, а created_at новой целевой записи означает время импорта, не предположительную старую дату. imported_at в mapping фиксирует сам перенос отдельно.
++
++История требует явного timezone. Неизвестный владелец сохраняется как неизвестный, поколение 0 — доступ только менеджеру. Для показа покупателю необходимы owner_verified=true, его фактический owner_telegram_id и visible_to_customer=true; они должны совпадать с текущим подтверждённым покупателем. История не перепривязывается произвольно. Payment URL принимается только при явном подтверждении связи и разрешённом HTTPS-домене; лучше опустить неподтверждённые/истёкшие ссылки. Это не подтверждение оплаты у провайдера.
++
++Пределы первого batch: 8 MiB, 1000 заказов, 500 событий на заказ. Нельзя молча обрезать большие истории: заранее разбить согласованно или расширить контракт с проверками. Файлы реального экспорта содержат персональные данные и не должны попадать в исходники/публичные отчёты.
++
++## Dry-run и репетиция
++
++Из папки приложения:
++
++```sh
++python -m majlis.legacy_import inspect --file examples/normalized-export.synthetic.json
++python -m majlis.legacy_import inspect --file PRIVATE_EXPORT.json --check-target
++python -m majlis.legacy_import rehearse --file PRIVATE_EXPORT.json
++python -m majlis.legacy_import rehearse --file PRIVATE_EXPORT.json --apply-test
++```
++
++Первый inspect не читает настройки/БД и не пишет данные. Проверяет формат, дубли внутри файла, обязательные подтверждения. Платёжные ссылки без сверки allowlist не считаются готовыми. --check-target использует мигратор в READ ONLY для поиска конфликтов целевой схемы; прежде примените 001–004. Отчёт выводит только количества, номера строк и коды, не имена/ссылки/ID клиентов.
++
++rehearse без --apply-test — dry-run по отдельной тестовой целевой базе. --apply-test допускается только в БД с суффиксом _test при двух ролях на одной базе. Даже функция записи проверяет current_database(). Рабочий import-командный режим намеренно не добавлен: данных и согласованной процедуры cutover пока нет.
++
++Запись атомарна: при конфликте весь batch откатывается. Существующие заказы не перезаписываются. Пара source/source_order_id сохраняется в приватной legacy_imports; повтор идентичной записи пропускается, другая нагрузка под тем же ID блокируется. Одновременные batches одного источника сериализуются. Изменения менеджера после импорта не заменяются повтором старого экспорта. Уведомления не создаются: репетиция/массовый перенос не должен рассылать старые checkpoints клиентам.
++
++## Реальный переход — ещё не выполнен
++
++Сначала read-only исследование старого источника, mapping, репетиция на копии, сверка всех сущностей/сумм/истории/платежей/прав. Затем согласованный freeze/дельта, backup и restore, план отката, отдельное подтверждение рабочих операций, перенос и приёмка покупателем/менеджером. Идентичность source/order/customer следует подтвердить до запуска. Репетиция synthetic-файла не является переносом базы заказчика.
+--- v0.5/docs/OPERATIONS.md
++++ v0.6/docs/OPERATIONS.md
+@@ -53,15 +53,17 @@
+ python -m pytest -q tests
+ ```
+ 
+-## Репетиция восстановления 0.5
++## Репетиция восстановления 0.6
+ 
+ ```sh
+ python manage.py backup
+ python manage.py restore-test --file data/backups/ИМЯ.dump --target majlis_restore_unique_test
+ ```
+ 
+-Команда создаёт только новую БД с суффиксом `_test`; существующую не перезаписывает. Нет `--clean`. После восстановления сравниваются 9 таблиц, хеши строк, структура ограничений, проверяются 12 фактических нарушений ограничений в rollback. Это малый интеграционный тест, не гарантия больших объёмов. Если источник меняется после dump, сравнение снимков может не совпасть: повторяйте на согласованном snapshot без конкурентной записи. Восстановление умышленно исключает владельцев/ACL; применяйте production-права отдельно.
++Команда создаёт только новую БД с суффиксом `_test`; существующую не перезаписывает. Нет `--clean`. После восстановления сравниваются 10 таблиц, хеши строк, структура ограничений, проверяются 15 фактических нарушений ограничений в rollback. Это малый интеграционный тест, не гарантия больших объёмов. Если источник меняется после dump, сравнение снимков может не совпасть: повторяйте на согласованном snapshot без конкурентной записи. Восстановление умышленно исключает владельцев/ACL; применяйте production-права отдельно.
+ 
+ `--container ИМЯ` позволяет использовать существующий локальный контейнер БД вместо Compose. Применяйте только собственные доверенные резервные копии: PostgreSQL dump может содержать исполняемые SQL-объекты. Тестовую БД после проверки не удаляет автоматика. Расписание, шифрование/вынос копий, retention и алерты требуют настройки инфраструктуры. Секрет HEALTH_TOKEN не публикуйте; он нужен только локальным healthcheck.
+ 
+ Public limiter действует на процесс и непосредственный IP соединения; за туннелем/NAT он может быть общим для нескольких пользователей. Значение PUBLIC_REQUESTS_PER_MINUTE подбирается измерениями. X-Forwarded-For игнорируется намеренно. Для нескольких реплик нужен общий edge limiter и нагрузочная приёмка.
++
++Обновление 0.5 → 0.6: [UPGRADE-0.6.md](UPGRADE-0.6.md). Подготовка старого источника: [LEGACY-MIGRATION.md](LEGACY-MIGRATION.md). Это не команды переноса рабочей базы заказчика.
+--- /dev/null
++++ v0.6/docs/REQUIREMENTS-STATUS.md
+@@ -0,0 +1,19 @@
++# Продолжение текущего проекта — состояние до 0.6
++
++Основа: содержимое MAJLIS-PostgreSQL-MiniApp-v0.5.zip, 56 файлов сверены с SHA-256 manifest. Это начатая реализация НОВОГО бота, а не старая система заказчика. Предыдущие локальные 0.3/0.4, их тестовые БД и резервные копии не признаются старой базой заказчика.
++
++Источник пожеланий: автоматическая «Расшифровка собеседования.md», 00:01–02:48. Распознавание не является выверенной стенограммой; ASDEC не считается подтверждённым названием службы. Сайты/мобильные приложения из последующих минут — будущие отдельные продукты, не повод заменять текущий Telegram-проект.
++
++| Требование | Фактическое состояние v0.5 | Действие текущей итерации |
++|---|---|---|
++| Новый бот + Mini App, PyCharm | Реализованы main.py, bot/api/notify, временный HTTPS и инструкции. Реальный внешний запуск требует локальных ключей. | Сохранить; подтвердить регрессии, обновить инструкции без нового бота. |
++| Кабинет и понятные checkpoints | Реализованы свои заказы, 7 предварительных этапов, пояснения, даты, история, поиск/пагинация. Бизнес-утверждение словаря отсутствует. | Добавить различие между checkpoint и изменением поставки/оплаты, чтобы история не меняла дату checkpoint. |
++| Менеджер: заказы и сроки | Создание и изменение статуса/партии/покупателя/даты есть. Изменение товара/суммы отсутствует; изменения дат не попадали в клиентскую историю. | Редактирование товара/суммы с версией; изменение поставки в историю и очередь. |
++| Уведомления | Status outbox/retry/lease/ownership guard реализованы и тестировались. Реальная доставка не подтверждена. | Использовать существующую очередь также для уточнения даты и ручной ссылки, без реальных отправок в этой итерации. |
++| Платёжные ссылки | Ручная разрешённая HTTPS-ссылка работает; отсутствуют копирование менеджером/явное удаление/создание provider invoice и подтверждение оплаты. | Копирование и удаление; при изменении суммы/товара старую ссылку аннулировать в кабинете. Создание настоящего invoice остаётся зависимым от провайдера. |
++| Карго/служба доставки/сайт | Подписанный endpoint и sequence есть. Реальных adapters нет. Не исправлять выдуманные API. | Сохранить защиту; контракт и checklist входных сведений/приёмки. |
++| Старая база | Старый репозиторий/дамп/схема заказчика не предоставлены. Схема архива — целевая. | Явный нормализованный входной контракт, dry-run, повторяемая репетиция только в *_test. Не утверждать, что старые данные перенесены. |
++| Референс | Два ранее присланных скриншота кабинета — ограниченный ориентир. Полный актуальный reference/макеты отсутствуют. | Сохранять работающие UI-решения; уточнить формы и историю, не объявлять точное соответствие отсутствующему макету. |
++| Аудит A01–A10 | A01/02/03/04/09/10 исправлены в v0.5; роль migrator и restore подготовлены/проверены отдельно. Политика данных/production HTTPS частичны. | Не переделывать их заново; сохранить тесты и проверить совместимость 003. |
++
++Критерии 0.6: baseline v0.5 сохранён, новые сценарии проверены настоящим PostgreSQL и JS-тестами; обратно совместимые поля событий + новые 003/004, исходные 001/002 не редактируются; импорт не перезаписывает существующие заказы и не отправляет уведомления. Реальная миграция, платежи, внешние API и сервер не заявляются завершёнными.
+--- /dev/null
++++ v0.6/docs/UPGRADE-0.6.md
+@@ -0,0 +1,15 @@
++# Обновление текущего нового проекта 0.5 → 0.6
++
++Этот архив продолжает 0.5, не заменяет его другой архитектурой. Рабочая установка и её данные при подготовке пакета не менялись.
++
++1. Сохраните прежние исходники, .env и резервную копию. Проверьте restore-test в новой базе. Не распаковывайте поверх локальных секретов и не запускайте второй polling с тем же токеном.
++2. Если установка ещё 0.4, сначала выполните подготовку ролей/совместимости из UPGRADE-0.5.md. Архив 0.6 не делает административное обновление прав автоматически.
++3. На согласованном окне остановите API/bot/notify и писателей интеграций. Используйте существующие секреты и отдельные runtime/migration роли. Runtime зависимости не изменены относительно 0.5; requirements.lock содержит хеши.
++4. Из новой папки выполните `python -m majlis.cli migrate`. 001/002 идентичны 0.5; 003 добавляет kind и приватную mapping-таблицу, 004 классифицирует лишь подтверждённые аудитом прежние transfer-события. Мигратор проверяет контрольные суммы; не исправляйте ошибку checksum редактированием schema_migrations.
++5. Обновите код целиком в пределах текущего проекта, включая web-модули. JSON события дополнены kind, прежние поля сохранены; старые status-события имеют default status. Публичные прежние endpoint сохранены. Новый /api/orders/commercial доступен менеджеру. Payment принимает пустой URL для удаления.
++6. Запустите main.py в PyCharm с корректной рабочей директорией и .env. Дождитесь успешного публичного /health и настройки Telegram. Откройте свежее меню/отправьте новый /start: старый URL может быть недоступен. Перезагрузите Mini App, чтобы она получила новый JS.
++7. Приёмка на согласованных тестовых аккаунтах: покупатель видит только своё; менеджер меняет сумму/товар и видит удаление старой ссылки; смена срока записывает историю, но не меняет дату checkpoint; копирование/удаление ссылки; передача не раскрывает прежнюю историю. Подтвердите реальную доставку уведомления только тестовому получателю.
++
++Rollback: сохранённый snapshot и прежние исходники нужны до миграции. Не откатывайте вслепую: старый UI не различает новые типы истории и может показывать неверные даты checkpoint. Restore-test создаёт отдельную БД и не переносит production ACL; рабочее восстановление — отдельная согласованная процедура.
++
++Подготовка старой БД заказчика отделена от обновления 0.5: LEGACY-MIGRATION.md. Реального источника нет; `apply-test` не предназначен для рабочей БД. Новые резервные копии сравнивают 10 таблиц и 15 нарушений ограничений.
+--- v0.5/docs/VERIFICATION.md
++++ v0.6/docs/VERIFICATION.md
+@@ -1,16 +1,14 @@
+-# Проверка версии 0.5 — 14–15.10.2026
++# Проверка версии 0.6 — 15.10.2026
+ 
+-Состояние проверяется на отдельной копии и выделенной PostgreSQL-базе с отдельными runtime/migration ролями. Рабочая установка пользователя не обновлялась.
++Основа — 56 исходных файлов 0.5, сверенных по SHA-256. До изменений её полный набор: 65 passed in 6.65s (baseline-v0.5.txt). 001/002 и runtime lock сохранены побайтно.
+ 
+-- 65 Python-тестов прошли, без предупреждений после перехода тестового Starlette-клиента на httpx2. Существующие проверки доступа/транзакций сохранены; новые проверяют владение историей, перенос туда/обратно, последовательность/конкуренцию событий, минимальные права, заголовки, pre-auth лимиты, bounded историю, бота/CLI/туннель и потерю leader connection.
+-- 5 Node-тестов прошли: refresh/more/filter/stale ответы, escaping/деньги и чистые представления карточки/передачи.
+-- На исходной версии переработанные проверки правильного поведения дали 5 failed / 3 passed. Они больше не утверждают проблемное поведение. Имена тестов в итоговом коде отражают правильный результат; baseline лог сохранён в пакете отчёта.
+-- Браузерный стенд с вымышленными данными: 100 → load more 200 → refresh 200 → load more 300. Карточка открывается; изменение ID очищает имя и снимает подтверждение; в помощи видна кнопка выгрузки. Это проверка копии UI с mock API/SDK, не реального Telegram.
+-- Реальный локальный Uvicorn с тестовой базой: HTML/JS-модули 200; public ready 403; internal ready с отдельным health token 200; unsigned bootstrap 401; подписанный покупатель 200; oversized POST 413. Заголовки проверены на ответах.
+-- pg_dump и restore-test: новая БД, 9 таблиц, структура 28 ограничений, хеши данных совпали; 12 нарушений CHECK/UNIQUE/FK отклонены. Dump 0600, в исходники не включён. ACL restore намеренно не переносит: права проверяются отдельно.
+-- Local/server Compose: config --quiet прошёл. Это не развёртывание серверного профиля. Ruff/format/Bandit и JS-синтаксис проверяются финальным набором команд в пакете отчёта; точечные nosec объяснены в SECURITY-SCANNERS.md.
+-- 23 runtime-версии сохранены; добавлены SHA-256 из PyPI. pip download --require-hashes прошёл на текущем macOS/Python 3.12; Windows/другие платформы не проверены.
++- Итоговый Python: **87 passed in 7.76s** в отдельной настоящей PostgreSQL, отдельные runtime/migration роли. Все прежние тесты сохранены; добавлены коммерческие правки, платежи/ETA/history, классификация transfer из 0.5, строгий JSON-контракт, безопасный dry-run, атомарный rollback, конкурентные повторы и права import-map.
++- Node: **6 passed**, включая сохранение нескольких страниц и фильтров, stale responses, escaping/деньги, принадлежность, неизменность checkpoint-даты после payment/ETA.
++- Браузер с mock API/SDK и вымышленными данными: копирование доступно, удаление URL и сохранение товара/120.01 руб. отображаются корректно. Первая отрицательная проверка удаления выявила неверное поле в mock API (url вместо payment_url); после исправления стенда повтор прошёл. Это не проверка Telegram SDK на устройстве и не замена backend-тестов. Скриншот — evidence/ui-reviewed.png.
++- Реальный Uvicorn с тестовой PostgreSQL: HTML/JS 200, public ready 403, health-token ready 200, unsigned bootstrap 401, подписанный fictional buyer 200, oversized body 413; security headers есть. Запросы подписаны фиктивным тестовым токеном, не реальным Telegram.
++- pg_dump/restore-test: новая отдельная база, **10 таблиц, 31 ограничение**, хеши/структура совпали, **15** проверяемых нарушений CHECK/FK/UNIQUE отклонены. Данные — тестовые, включая synthetic import. ACL намеренно исключены. Рабочая база не восстанавливалась.
++- Ruff: ноль замечаний; Bandit с существующими точечными объяснениями nosec: ноль неаннотированных результатов. Это автоматические проверки, не гарантия отсутствия уязвимостей.
+ 
+-Во время разработки исправлены: локальная ошибка имени sql в миграторе (первый прогон имел 27 setup errors), несовпадение текстовых CHECK после restore (данные совпадали; теперь сравнивается структура и реальное поведение), предупреждение TestClient. Они не скрыты в окончательных результатах.
++Команды/машиночитаемые результаты находятся в evidence пакета отчёта. Исторические проверки 0.5 (зависимости, роли, Compose и аудиторский baseline) отмечены отдельно; не выдаются за новое развертывание.
+ 
+-Не подтверждены: реальные Telegram HTTP/SSH-сбои, iOS/Android/Windows, Caddy HTTPS на собственном сервере, внешние API/оплата, высокая нагрузка/несколько реплик, полные аварийные RPO/RTO, восстановление production ACL, юридические сроки хранения. Обновление владельцев рабочей PostgreSQL-базы подготовлено, но не выполнено без отдельного согласования административной операции.
++Не подтверждены: настоящие Telegram-сессии/отправки 0.6, iOS/Android/Windows, рабочие внешние API/платежи, старая схема и миграция заказчика, production HTTPS/ACL/нагрузка, согласованные retention/RPO/RTO.
+--- /dev/null
++++ v0.6/docs/normalized-export.schema.json
+@@ -0,0 +1,223 @@
++{
++  "$defs": {
++    "HistoryRecord": {
++      "additionalProperties": false,
++      "properties": {
++        "status": {
++          "maxLength": 32,
++          "title": "Status",
++          "type": "string"
++        },
++        "note": {
++          "default": "",
++          "maxLength": 500,
++          "title": "Note",
++          "type": "string"
++        },
++        "occurred_at": {
++          "format": "date-time",
++          "title": "Occurred At",
++          "type": "string"
++        },
++        "owner_telegram_id": {
++          "anyOf": [
++            {
++              "exclusiveMinimum": 0,
++              "maximum": 9223372036854775807,
++              "type": "integer"
++            },
++            {
++              "type": "null"
++            }
++          ],
++          "default": null,
++          "title": "Owner Telegram Id"
++        },
++        "owner_verified": {
++          "default": false,
++          "title": "Owner Verified",
++          "type": "boolean"
++        },
++        "visible_to_customer": {
++          "default": false,
++          "title": "Visible To Customer",
++          "type": "boolean"
++        }
++      },
++      "required": [
++        "status",
++        "occurred_at"
++      ],
++      "title": "HistoryRecord",
++      "type": "object"
++    },
++    "ImportRecord": {
++      "additionalProperties": false,
++      "properties": {
++        "source_order_id": {
++          "maxLength": 128,
++          "minLength": 1,
++          "title": "Source Order Id",
++          "type": "string"
++        },
++        "telegram_id_verified": {
++          "const": true,
++          "title": "Telegram Id Verified",
++          "type": "boolean"
++        },
++        "currency": {
++          "const": "RUB",
++          "title": "Currency",
++          "type": "string"
++        },
++        "order": {
++          "$ref": "#/$defs/NewOrder"
++        },
++        "status": {
++          "maxLength": 32,
++          "title": "Status",
++          "type": "string"
++        },
++        "source_created_at": {
++          "anyOf": [
++            {
++              "format": "date-time",
++              "type": "string"
++            },
++            {
++              "type": "null"
++            }
++          ],
++          "default": null,
++          "title": "Source Created At"
++        },
++        "eta_confirmed": {
++          "default": false,
++          "title": "Eta Confirmed",
++          "type": "boolean"
++        },
++        "payment_url": {
++          "default": "",
++          "maxLength": 2000,
++          "title": "Payment Url",
++          "type": "string"
++        },
++        "payment_link_verified": {
++          "default": false,
++          "title": "Payment Link Verified",
++          "type": "boolean"
++        },
++        "history": {
++          "items": {
++            "$ref": "#/$defs/HistoryRecord"
++          },
++          "maxItems": 500,
++          "title": "History",
++          "type": "array"
++        }
++      },
++      "required": [
++        "source_order_id",
++        "telegram_id_verified",
++        "currency",
++        "order",
++        "status"
++      ],
++      "title": "ImportRecord",
++      "type": "object"
++    },
++    "NewOrder": {
++      "additionalProperties": false,
++      "properties": {
++        "number": {
++          "maxLength": 64,
++          "minLength": 1,
++          "title": "Number",
++          "type": "string"
++        },
++        "customer_id": {
++          "exclusiveMinimum": 0,
++          "maximum": 9223372036854775807,
++          "title": "Customer Id",
++          "type": "integer"
++        },
++        "customer_name": {
++          "maxLength": 100,
++          "minLength": 1,
++          "title": "Customer Name",
++          "type": "string"
++        },
++        "item": {
++          "maxLength": 300,
++          "minLength": 1,
++          "title": "Item",
++          "type": "string"
++        },
++        "amount": {
++          "exclusiveMinimum": 0,
++          "maximum": 1000000000000,
++          "title": "Amount",
++          "type": "integer"
++        },
++        "shipment": {
++          "default": "",
++          "maxLength": 100,
++          "title": "Shipment",
++          "type": "string"
++        },
++        "eta": {
++          "anyOf": [
++            {
++              "format": "date",
++              "type": "string"
++            },
++            {
++              "type": "null"
++            }
++          ],
++          "default": null,
++          "title": "Eta"
++        }
++      },
++      "required": [
++        "number",
++        "customer_id",
++        "customer_name",
++        "item",
++        "amount"
++      ],
++      "title": "NewOrder",
++      "type": "object"
++    }
++  },
++  "additionalProperties": false,
++  "properties": {
++    "schema_version": {
++      "title": "Schema Version",
++      "type": "integer"
++    },
++    "source": {
++      "maxLength": 64,
++      "minLength": 1,
++      "pattern": "^[A-Za-z0-9_.-]+$",
++      "title": "Source",
++      "type": "string"
++    },
++    "orders": {
++      "items": {
++        "$ref": "#/$defs/ImportRecord"
++      },
++      "maxItems": 1000,
++      "minItems": 1,
++      "title": "Orders",
++      "type": "array"
++    }
++  },
++  "required": [
++    "schema_version",
++    "source",
++    "orders"
++  ],
++  "title": "ImportPackage",
++  "type": "object"
++}--- /dev/null
++++ v0.6/examples/normalized-export.synthetic.json
+@@ -0,0 +1,32 @@
++{
++  "schema_version": 1,
++  "source": "synthetic_fixture",
++  "orders": [
++    {
++      "source_order_id": "fake-example-1",
++      "telegram_id_verified": true,
++      "currency": "RUB",
++      "order": {
++        "number": "SYNTHETIC-EXAMPLE-1",
++        "customer_id": 3001,
++        "customer_name": "Вымышленный покупатель",
++        "item": "Вымышленный товар",
++        "amount": 12001,
++        "shipment": "SYNTHETIC-CARGO",
++        "eta": "2026-11-10"
++      },
++      "status": "customs",
++      "eta_confirmed": false,
++      "history": [
++        {
++          "status": "confirmed",
++          "note": "Вымышленный checkpoint для проверки контракта",
++          "occurred_at": "2026-10-01T10:00:00+03:00",
++          "owner_telegram_id": 3001,
++          "owner_verified": true,
++          "visible_to_customer": true
++        }
++      ]
++    }
++  ]
++}--- v0.5/majlis/api.py
++++ v0.6/majlis/api.py
+@@ -14,7 +14,7 @@
+ from .database import Database
+ from .domain import Problem, validate_init_data
+ from .http_boundary import HttpBoundary, PublicLimiter
+-from .schemas import Details, Integration, NewOrder, Payment, Status
++from .schemas import Commercial, Details, Integration, NewOrder, Payment, Status
+ 
+ 
+ @asynccontextmanager
+@@ -31,7 +31,7 @@
+ 
+ app = FastAPI(
+     title="MAJLIS API",
+-    version="0.5.0",
++    version="0.6.0",
+     lifespan=lifespan,
+     docs_url=None,
+     redoc_url=None,
+@@ -248,3 +248,9 @@
+             "events": services.serial(events),
+             "next_cursor": events[0]["id"] if len(events) == 100 else None,
+         }
++
++
++@app.post("/api/orders/commercial")
++def commercial(data: Commercial, request: Request, user: Annotated[dict, Depends(manager)]):
++    with request.app.state.db.connection() as db:
++        return services.update_commercial(db, data, user["id"])
+--- /dev/null
++++ v0.6/majlis/legacy_import.py
+@@ -0,0 +1,358 @@
++"""Target-side import contract. No inference of the old DB; writes only in test CLI."""
++
++import argparse
++import hashlib
++import json
++from datetime import datetime
++from pathlib import Path
++from typing import Annotated, Literal
++from urllib.parse import urlsplit
++
++import psycopg
++from psycopg.rows import dict_row
++from pydantic import Field, ValidationError, field_validator, model_validator
++
++from .config import settings
++from .domain import STAGE_MAP, Problem, https_url
++from .schemas import Id, Input, NewOrder
++from .services import add_event, audit, ensure_user
++
++MAX_BYTES = 8 * 1024 * 1024
++
++
++class HistoryRecord(Input):
++    status: str = Field(max_length=32)
++    note: str = Field(default="", max_length=500)
++    occurred_at: datetime
++    owner_telegram_id: Id | None = None
++    owner_verified: bool = Field(default=False, strict=True)
++    visible_to_customer: bool = Field(default=False, strict=True)
++
++    @field_validator("status")
++    @classmethod
++    def known_status(cls, value):
++        if value not in STAGE_MAP:
++            raise ValueError("Map source status explicitly")
++        return value
++
++    @field_validator("occurred_at")
++    @classmethod
++    def explicit_timezone(cls, value):
++        if value.utcoffset() is None:
++            raise ValueError("Timezone required")
++        return value
++
++    @model_validator(mode="after")
++    def ownership(self):
++        if self.owner_telegram_id is not None and not self.owner_verified:
++            raise ValueError("History owner requires explicit verification")
++        if self.visible_to_customer and not self.owner_verified:
++            raise ValueError("Visibility requires verified ownership")
++        return self
++
++
++class ImportRecord(Input):
++    source_order_id: str = Field(min_length=1, max_length=128)
++    telegram_id_verified: Literal[True]
++    currency: Literal["RUB"]
++    order: NewOrder
++    status: str = Field(max_length=32)
++    source_created_at: datetime | None = None
++    eta_confirmed: bool = Field(default=False, strict=True)
++    payment_url: str = Field(default="", max_length=2000)
++    payment_link_verified: bool = Field(default=False, strict=True)
++    history: list[HistoryRecord] = Field(default_factory=list, max_length=500)
++
++    @field_validator("source_created_at")
++    @classmethod
++    def creation_timezone(cls, value):
++        if value is not None and value.utcoffset() is None:
++            raise ValueError("Explicit source timezone required")
++        return value
++
++    @field_validator("telegram_id_verified", mode="before")
++    @classmethod
++    def explicit_verification(cls, value):
++        if type(value) is not bool or value is not True:
++            raise ValueError("Explicit true required")
++        return value
++
++    @field_validator("status")
++    @classmethod
++    def known_status(cls, value):
++        if value not in STAGE_MAP:
++            raise ValueError("Map source status explicitly")
++        return value
++
++    @model_validator(mode="after")
++    def consistency(self):
++        if self.eta_confirmed and not self.order.eta:
++            raise ValueError("Confirmed ETA requires a date")
++        if self.payment_url and not self.payment_link_verified:
++            raise ValueError("Payment URL must be verified or omitted")
++        for event in self.history:
++            if event.visible_to_customer and event.owner_telegram_id != self.order.customer_id:
++                raise ValueError("History visibility must belong to current verified owner")
++        return self
++
++
++class ImportPackage(Input):
++    schema_version: Annotated[int, Field(strict=True)]
++    source: str = Field(min_length=1, max_length=64, pattern=r"^[A-Za-z0-9_.-]+$")
++    orders: list[ImportRecord] = Field(min_length=1, max_length=1000)
++
++    @field_validator("schema_version")
++    @classmethod
++    def supported(cls, value):
++        if value != 1:
++            raise ValueError("Unsupported normalized contract")
++        return value
++
++
++def load_package(path: Path) -> ImportPackage:
++    with path.open("rb") as stream:
++        raw = stream.read(MAX_BYTES + 1)
++    if len(raw) > MAX_BYTES:
++        raise ValueError("Normalized file exceeds 8 MiB")
++    return ImportPackage.model_validate_json(raw)
++
++
++def digest(record: ImportRecord) -> str:
++    return hashlib.sha256(record.model_dump_json().encode()).hexdigest()
++
++
++def inspect_package(package: ImportPackage, conn=None, payment_domains=None) -> dict:
++    """No writes. Report row indices/codes, never raw customer or invoice values."""
++    errors = []
++    warnings = []
++    ids = set()
++    numbers = set()
++    skipped = 0
++    mappings = {}
++    existing = set()
++    if conn:
++        mappings = {
++            row["legacy_id"]: row["payload_hash"]
++            for row in conn.execute(
++                "SELECT legacy_id,payload_hash FROM legacy_imports WHERE source=%s AND legacy_id=ANY(%s)",
++                (package.source, [r.source_order_id for r in package.orders]),
++            ).fetchall()
++        }
++        existing = {
++            row["number"]
++            for row in conn.execute(
++                "SELECT number FROM orders WHERE number=ANY(%s)",
++                ([r.order.number for r in package.orders],),
++            ).fetchall()
++        }
++    for index, record in enumerate(package.orders, 1):
++        if record.source_created_at is None:
++            warnings.append({"row": index, "code": "source_creation_time_not_provided"})
++        if record.source_order_id in ids:
++            errors.append({"row": index, "code": "duplicate_source_id"})
++        if record.order.number in numbers:
++            errors.append({"row": index, "code": "duplicate_number_in_file"})
++        ids.add(record.source_order_id)
++        numbers.add(record.order.number)
++        if record.payment_url:
++            try:
++                https_url(record.payment_url, payment_domains)
++            except Problem:
++                errors.append({"row": index, "code": "unsafe_payment_url"})
++            if payment_domains is None:
++                errors.append({"row": index, "code": "payment_allowlist_required"})
++        previous = mappings.get(record.source_order_id)
++        if previous:
++            if previous == digest(record):
++                skipped += 1
++            else:
++                errors.append({"row": index, "code": "source_id_payload_conflict"})
++        elif record.order.number in existing:
++            errors.append({"row": index, "code": "target_number_exists"})
++    return {
++        "dry_run": True,
++        "target_checked": conn is not None,
++        "valid": not errors,
++        "records": len(package.orders),
++        "already_imported": skipped,
++        "would_insert": len(package.orders) - skipped if not errors else 0,
++        "errors": errors,
++        "warnings": warnings,
++    }
++
++
++def apply_test_package(conn, package: ImportPackage, payment_domains: set[str]) -> dict:
++    """Atomic, append-only, idempotent. Caller/CLI restrict this to an isolated DB."""
++    if not conn.execute("SELECT current_database() AS name").fetchone()["name"].endswith("_test"):
++        raise Problem(400, "Только отдельная тестовая БД.")
++    with conn.transaction():
++        conn.execute("SELECT pg_advisory_xact_lock(742019145,hashtext(%s))", (package.source,))
++        plan = inspect_package(package, conn, payment_domains)
++        if not plan["valid"]:
++            raise Problem(409, "Импорт остановлен: исправьте конфликты по dry-run.")
++        inserted = 0
++        for record in package.orders:
++            mapped = conn.execute(
++                "SELECT order_id FROM legacy_imports WHERE source=%s AND legacy_id=%s",
++                (package.source, record.source_order_id),
++            ).fetchone()
++            if mapped:
++                continue
++            data = record.order
++            ensure_user(conn, {"id": data.customer_id})
++            row = conn.execute(
++                """INSERT INTO orders(number,customer_id,customer_name,item,amount,shipment,status,eta,eta_confirmed,payment_url,created_at)
++                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,COALESCE(%s,now())) RETURNING *""",
++                (
++                    data.number,
++                    data.customer_id,
++                    data.customer_name,
++                    data.item,
++                    data.amount,
++                    data.shipment,
++                    record.status,
++                    data.eta,
++                    record.eta_confirmed,
++                    record.payment_url,
++                    record.source_created_at,
++                ),
++            ).fetchone()
++            for event in sorted(record.history, key=lambda event: event.occurred_at):
++                if event.owner_telegram_id is not None:
++                    ensure_user(conn, {"id": event.owner_telegram_id})
++                generation = 1 if event.visible_to_customer else 0
++                conn.execute(
++                    """INSERT INTO events(order_id,status,note,source,created_at,customer_id,customer_generation,kind)
++                    VALUES (%s,%s,%s,'migration',%s,%s,%s,'status')""",
++                    (
++                        row["id"],
++                        event.status,
++                        event.note,
++                        event.occurred_at,
++                        event.owner_telegram_id,
++                        generation,
++                    ),
++                )
++            add_event(
++                conn,
++                row,
++                "Заказ добавлен из проверенного экспорта. Старые документы и оплаты требуют отдельной сверки.",
++                "migration",
++                kind="import",
++            )
++            audit(conn, None, "import", {}, row)
++            conn.execute(
++                "INSERT INTO legacy_imports(source,legacy_id,payload_hash,order_id) VALUES (%s,%s,%s,%s)",
++                (package.source, record.source_order_id, digest(record), row["id"]),
++            )
++            inserted += 1
++        return {
++            "test_rehearsal": True,
++            "inserted": inserted,
++            "skipped": len(package.orders) - inserted,
++            "notifications_created": 0,
++        }
++
++
++def test_target_urls(cfg):
++    a = urlsplit(cfg.database_url.get_secret_value())
++    b = urlsplit(cfg.migration_database_url.get_secret_value())
++    if (
++        not a.path.endswith("_test")
++        or (a.hostname, a.port, a.path) != (b.hostname, b.port, b.path)
++        or a.username == b.username
++    ):
++        raise ValueError("Репетиция разрешена только в одной отдельной *_test БД с двумя ролями.")
++
++
++def safe_validation_locations(exc: ValidationError) -> list[dict]:
++    known = {
++        "source_created_at",
++        "schema_version",
++        "source",
++        "orders",
++        "order",
++        "source_order_id",
++        "telegram_id_verified",
++        "currency",
++        "status",
++        "eta_confirmed",
++        "payment_url",
++        "payment_link_verified",
++        "history",
++        "customer_id",
++        "customer_name",
++        "item",
++        "number",
++        "amount",
++        "shipment",
++        "eta",
++        "note",
++        "occurred_at",
++        "owner_telegram_id",
++        "owner_verified",
++        "visible_to_customer",
++    }
++    return [
++        {
++            "location": [
++                part if isinstance(part, int) or part in known else "unknown_field"
++                for part in e["loc"]
++            ],
++            "code": e["type"],
++        }
++        for e in exc.errors(include_input=False, include_context=False, include_url=False)[:50]
++    ]
++
++
++def main(argv=None):
++    parser = argparse.ArgumentParser()
++    parser.add_argument("command", choices=["inspect", "rehearse"])
++    parser.add_argument("--file", type=Path, required=True)
++    parser.add_argument("--check-target", action="store_true")
++    parser.add_argument("--apply-test", action="store_true")
++    args = parser.parse_args(argv)
++    if args.apply_test and args.command != "rehearse":
++        raise ValueError("--apply-test допускается только для rehearse")
++    try:
++        package = load_package(args.file)
++    except ValidationError as exc:
++        print(
++            json.dumps(
++                {
++                    "valid": False,
++                    "dry_run": True,
++                    "error": "invalid_normalized_input",
++                    "error_count": exc.error_count(),
++                    "locations": safe_validation_locations(exc),
++                },
++                ensure_ascii=False,
++            )
++        )
++        return 1
++    if not args.check_target and args.command == "inspect":
++        report = inspect_package(package)
++    else:
++        cfg = settings()
++        if args.command == "rehearse":
++            test_target_urls(cfg)
++        with psycopg.connect(
++            cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++        ) as conn:
++            if args.apply_test:
++                report = apply_test_package(conn, package, cfg.payment_domains)
++            else:
++                conn.execute("SET TRANSACTION READ ONLY")
++                report = inspect_package(package, conn, cfg.payment_domains)
++    print(json.dumps(report, ensure_ascii=False))
++    return 0 if report.get("valid", True) else 1
++
++
++if __name__ == "__main__":
++    try:
++        raise SystemExit(main())
++    except (ValueError, OSError, Problem, psycopg.Error):
++        print(
++            "Проверка переноса не завершена. Проверьте локальные настройки, файл и dry-run; данные/реквизиты не выводятся."
++        )
++        raise SystemExit(1) from None
+--- v0.5/majlis/schemas.py
++++ v0.6/majlis/schemas.py
+@@ -50,7 +50,7 @@
+ 
+ 
+ class Payment(Revision):
+-    url: str = Field(min_length=1, max_length=2000)
++    url: str = Field(min_length=0, max_length=2000)
+ 
+ 
+ class Integration(Input):
+@@ -59,3 +59,8 @@
+     status: str = Field(min_length=1, max_length=32)
+ 
+     sequence: Annotated[int | None, Field(strict=True, gt=0, le=9223372036854775807)] = None
++
++
++class Commercial(Revision):
++    item: str = Field(min_length=1, max_length=300)
++    amount: Annotated[int, Field(strict=True, gt=0, le=1000000000000)]
+--- v0.5/majlis/services.py
++++ v0.6/majlis/services.py
+@@ -55,7 +55,7 @@
+     # A buyer receives only events from the CURRENT ownership generation.
+     manager = user is None or user["role"] == "manager"
+     query = sql.SQL(
+-        "SELECT id,order_id,status,note,source,created_at,customer_id,customer_generation FROM events WHERE order_id=%s"
++        "SELECT id,order_id,status,note,source,created_at,customer_id,customer_generation,kind FROM events WHERE order_id=%s"
+     )
+     params = [row["id"]]
+     if not manager:
+@@ -67,9 +67,9 @@
+     return db.execute(query + sql.SQL(" ORDER BY id DESC LIMIT 100"), params).fetchall()[::-1]
+ 
+ 
+-def add_event(db, row, note, source, actor=None):
++def add_event(db, row, note, source, actor=None, kind="status"):
+     return db.execute(
+-        "INSERT INTO events(order_id,status,note,source,actor_id,customer_id,customer_generation) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
++        "INSERT INTO events(order_id,status,note,source,actor_id,customer_id,customer_generation,kind) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+         (
+             row["id"],
+             row["status"],
+@@ -78,6 +78,7 @@
+             actor,
+             row["customer_id"],
+             row["customer_generation"],
++            kind,
+         ),
+     ).fetchone()
+ 
+@@ -162,7 +163,7 @@
+         event_params = [] if user["role"] == "manager" else [user["id"]]
+         event_params.append([row["id"] for row in rows])
+         query = sql.SQL(
+-            "SELECT e.* FROM orders o CROSS JOIN LATERAL (SELECT id,order_id,status,note,source,created_at,customer_id,customer_generation FROM events e WHERE e.order_id=o.id AND {} ORDER BY id DESC LIMIT 100) e WHERE o.id=ANY(%s) ORDER BY e.id"
++            "SELECT e.* FROM orders o CROSS JOIN LATERAL (SELECT id,order_id,status,note,source,created_at,customer_id,customer_generation,kind FROM events e WHERE e.order_id=o.id AND {} ORDER BY id DESC LIMIT 100) e WHERE o.id=ANY(%s) ORDER BY e.id"
+         ).format(scope)
+         for event in db.execute(query, event_params).fetchall():
+             grouped[event["order_id"]].append(event)
+@@ -285,22 +286,64 @@
+         ),
+     ).fetchone()
+     if changed:
+-        add_event(db, row, "Заказ привязан к вашему кабинету", "manager", actor)
++        add_event(db, row, "Заказ привязан к вашему кабинету", "manager", actor, kind="transfer")
++    if not changed and any(old[key] != row[key] for key in ("eta", "eta_confirmed", "shipment")):
++        note = "Данные поставки обновлены. " + (
++            "Дата: "
++            + str(row["eta"])
++            + (" (подтверждена)" if row["eta_confirmed"] else " (ориентировочно)")
++            if row["eta"]
++            else "Дата уточняется."
++        )
++        event = add_event(db, row, note, "manager", actor, kind="details")
++        queue_event(db, row, event, "Поставка уточнена. " + note)
+     audit(db, actor, "transfer" if changed else "details", old, row)
+     return order_json(db, data.order_id)
+ 
+ 
++def queue_event(db, row, event, text):
++    db.execute(
++        "INSERT INTO outbox(event_id,customer_id,text) VALUES (%s,%s,%s)",
++        (event["id"], row["customer_id"], f"Заказ {row['number']}\n{text}"),
++    )
++
++
+ def update_payment(db, data, actor, cfg):
+-    if not cfg.payment_domains:
++    if data.url and not cfg.payment_domains:
+         raise Problem(503, "Платёжный сервис не настроен.")
+-    url = https_url(data.url, cfg.payment_domains)
++    url = https_url(data.url, cfg.payment_domains) if data.url else ""
+     old = get_order(db, data.order_id, lock=True)
+     check_revision(old, data.version)
++    if old["payment_url"] == url:
++        return order_json(db, data.order_id)
+     row = db.execute(
+         "UPDATE orders SET payment_url=%s,version=version+1,updated_at=now() WHERE id=%s RETURNING *",
+         (url, data.order_id),
+     ).fetchone()
+-    audit(db, actor, "payment_link", old, row)
++    note = (
++        "Добавлена ссылка на оплату. Ссылка не подтверждает оплату."
++        if url
++        else "Ссылка на оплату удалена. Уточните оплату у магазина."
++    )
++    event = add_event(db, row, note, "manager", actor, kind="payment")
++    queue_event(db, row, event, note)
++    audit(db, actor, "payment_link" if url else "payment_revoke", old, row)
++    return order_json(db, data.order_id)
++
++
++def update_commercial(db, data, actor):
++    old = get_order(db, data.order_id, lock=True)
++    check_revision(old, data.version)
++    if old["item"] == data.item and old["amount"] == data.amount:
++        return order_json(db, data.order_id)
++    row = db.execute(
++        "UPDATE orders SET item=%s,amount=%s,payment_url='',version=version+1,updated_at=now() WHERE id=%s RETURNING *",
++        (data.item, data.amount, data.order_id),
++    ).fetchone()
++    note = "Товар или сумма заказа уточнены. Прежняя ссылка оплаты в кабинете удалена; уточните актуальную оплату у магазина."
++    event = add_event(db, row, note, "manager", actor, kind="commercial")
++    queue_event(db, row, event, note)
++    audit(db, actor, "commercial", old, row)
+     return order_json(db, data.order_id)
+ 
+ 
+--- v0.5/manage.py
++++ v0.6/manage.py
+@@ -26,6 +26,7 @@
+     "rate_limits",
+     "bot_state",
+     "schema_migrations",
++    "legacy_imports",
+ )
+ 
+ 
+@@ -134,6 +135,22 @@
+             "23503",
+         ),
+     ]
++    probes.extend(
++        [
++            (
++                "INSERT INTO events(order_id,status,note,source,kind) SELECT id,'confirmed','','migration','invalid' FROM orders WHERE number='__restore_probe__'",
++                "23514",
++            ),
++            (
++                "INSERT INTO legacy_imports(source,legacy_id,payload_hash,order_id) VALUES ('synthetic','x','hash',-1)",
++                "23503",
++            ),
++            (
++                "INSERT INTO legacy_imports(source,legacy_id,payload_hash,order_id) SELECT 'synthetic','x','hash',id FROM orders WHERE number='__restore_probe__'; INSERT INTO legacy_imports(source,legacy_id,payload_hash,order_id) SELECT 'synthetic','x','hash',id FROM orders WHERE number='__restore_probe__'",
++                "23505",
++            ),
++        ]
++    )
+     for statement, expected in probes:
+         result = run_db(
+             prefix,
+--- /dev/null
++++ v0.6/migrations/003_event_kinds_and_import_map.sql
+@@ -0,0 +1,13 @@
++-- Existing event fields and 001/002 remain compatible; legacy events default to status.
++ALTER TABLE events ADD COLUMN kind VARCHAR(16) NOT NULL DEFAULT 'status'
++CHECK (kind IN ('status','transfer','details','payment','commercial','import'));
++-- A target-side provenance map, NOT an assumed schema of the old system.
++CREATE TABLE legacy_imports (
++    source VARCHAR(64) NOT NULL,
++    legacy_id VARCHAR(128) NOT NULL,
++    payload_hash VARCHAR(64) NOT NULL,
++    order_id BIGINT NOT NULL REFERENCES orders(id),
++    imported_at TIMESTAMPTZ NOT NULL DEFAULT now(),
++    PRIMARY KEY(source,legacy_id)
++);
++-- Runtime receives no permissions on this table. Test import runs as migrator.
+--- /dev/null
++++ v0.6/migrations/004_classify_verified_transfers.sql
+@@ -0,0 +1,13 @@
++-- Classify only v0.5 transfers proven by the matching audit entry recorded by v0.5.
++-- No old customer DB mapping is inferred, and arbitrary matching notes alone are insufficient.
++UPDATE events e SET kind='transfer'
++WHERE e.kind='status'
++  AND e.source='manager'
++  AND e.note='Заказ привязан к вашему кабинету'
++  AND EXISTS (
++      SELECT 1 FROM audit_log a
++      WHERE a.order_id=e.order_id AND a.action='transfer'
++        AND a.created_at=e.created_at
++        AND a.actor_id IS NOT DISTINCT FROM e.actor_id
++        AND a.after_data->>'customer_generation'=e.customer_generation::text
++  );
+--- v0.5/tests/js/pagination.test.mjs
++++ v0.6/tests/js/pagination.test.mjs
+@@ -42,3 +42,15 @@
+  const manager=detailView(order,stages,true,false);
+  assert.ok(manager.includes('transfer_confirmed'));assert.ok(manager.includes('&lt;img onerror=&quot;x&quot;&gt;'));assert.ok(manager.includes('customer_name'));
+ });
++
++test('payment and ETA edits do not rewrite a checkpoint date',async()=>{
++ const {detailView,eventTitle}=await import('../../web/order-detail.js');
++ const stages=[{code:'confirmed',title:'Checkpoint',description:'Known'}];
++ const order={id:1,number:'TEST',item:'Item',customer_id:1,customer_name:'Name',amount:12001,status:'confirmed',stage:stages[0],eta:'',shipment:'',payment_url:'https://payments.example/fake',events:[{id:1,status:'confirmed',kind:'status',created_at:'2026-10-01T10:00:00+03:00',source:'manager',note:''},{id:2,status:'confirmed',kind:'payment',created_at:'2026-10-14T10:00:00+03:00',source:'manager',note:''}]};
++ const html=detailView(order,stages,true,true);
++ const timeline=html.slice(html.indexOf('<ol'),html.indexOf('</ol>'));
++ assert.ok(!timeline.includes('14 окт.'));
++ assert.equal(eventTitle(order.events[1],stages),'Платёжная ссылка');
++ assert.ok(html.includes('copy-payment')&&html.includes('revoke-payment')&&html.includes('commercial-form'));
++ assert.ok(html.includes('120.01'));
++});
+--- /dev/null
++++ v0.6/tests/test_legacy_import.py
+@@ -0,0 +1,256 @@
++import copy
++import json
++
++import psycopg
++import pytest
++from psycopg.rows import dict_row
++from pydantic import ValidationError
++from test_platform import payload
++
++from majlis.domain import Problem
++from majlis.legacy_import import ImportPackage, apply_test_package, inspect_package, main
++from majlis.legacy_import import test_target_urls as check_target_urls
++from majlis.services import bootstrap
++
++
++def package_data():
++    order = payload()
++    order["number"] = "SYNTHETIC-IMPORT-1"
++    return {
++        "schema_version": 1,
++        "source": "synthetic_fixture",
++        "orders": [
++            {
++                "source_order_id": "fake-1",
++                "telegram_id_verified": True,
++                "currency": "RUB",
++                "order": order,
++                "status": "customs",
++                "history": [
++                    {
++                        "status": "confirmed",
++                        "note": "Visible fictional checkpoint",
++                        "occurred_at": "2026-10-01T10:00:00+03:00",
++                        "owner_telegram_id": 3001,
++                        "owner_verified": True,
++                        "visible_to_customer": True,
++                    },
++                    {
++                        "status": "purchased",
++                        "note": "Unknown fictional owner",
++                        "occurred_at": "2026-10-02T10:00:00+03:00",
++                    },
++                ],
++            }
++        ],
++    }
++
++
++def test_import_atomic_idempotent_and_history_ownership(db, cfg):
++    package = ImportPackage(**package_data())
++    with psycopg.connect(
++        cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++    ) as conn:
++        before = inspect_package(package, conn, cfg.payment_domains)
++        assert before["valid"] and before["would_insert"] == 1
++        assert apply_test_package(conn, package, cfg.payment_domains) == {
++            "test_rehearsal": True,
++            "inserted": 1,
++            "skipped": 0,
++            "notifications_created": 0,
++        }
++        assert apply_test_package(conn, package, cfg.payment_domains)["skipped"] == 1
++    with db.connection() as conn:
++        assert conn.execute("SELECT count(*) AS n FROM outbox").fetchone()["n"] == 0
++        result = bootstrap(conn, {"id": 3001, "role": "buyer"}, cfg)
++        events = result["orders"][0]["events"]
++        assert any(e["note"] == "Visible fictional checkpoint" for e in events)
++        assert not any(e["note"] == "Unknown fictional owner" for e in events)
++        assert result["orders"][0]["status"] == "customs"
++    with psycopg.connect(
++        cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++    ) as conn:
++        assert conn.execute("SELECT count(*) AS n FROM events").fetchone()["n"] == 3
++
++
++def test_conflict_does_not_overwrite_or_partially_insert(db, cfg):
++    package = ImportPackage(**package_data())
++    with psycopg.connect(
++        cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++    ) as conn:
++        apply_test_package(conn, package, cfg.payment_domains)
++    data = package_data()
++    data["orders"][0]["order"]["amount"] = 999
++    second = copy.deepcopy(data["orders"][0])
++    second["source_order_id"] = "fake-2"
++    second["order"]["number"] = "SYNTHETIC-IMPORT-2"
++    data["orders"].append(second)
++    with psycopg.connect(
++        cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++    ) as conn:
++        plan = inspect_package(ImportPackage(**data), conn, cfg.payment_domains)
++        assert not plan["valid"] and plan["errors"][0]["code"] == "source_id_payload_conflict"
++        with pytest.raises(Problem):
++            apply_test_package(conn, ImportPackage(**data), cfg.payment_domains)
++    with db.connection() as conn:
++        assert conn.execute("SELECT count(*) AS n FROM orders").fetchone()["n"] == 1
++        assert conn.execute("SELECT amount FROM orders").fetchone()["amount"] == 12001
++
++
++@pytest.mark.parametrize(
++    "change",
++    [
++        "unverified_id",
++        "internal_id",
++        "unknown_status",
++        "currency",
++        "timezone",
++        "history_owner",
++        "payment",
++    ],
++)
++def test_rejects_ambiguous_mapping(change):
++    data = package_data()
++    row = data["orders"][0]
++    if change == "unverified_id":
++        row["telegram_id_verified"] = False
++    elif change == "internal_id":
++        row["telegram_id_verified"] = 1
++    elif change == "unknown_status":
++        row["status"] = "legacy_unknown_stage"
++    elif change == "currency":
++        row["currency"] = "USD"
++    elif change == "timezone":
++        row["history"][0]["occurred_at"] = "2026-10-01T10:00:00"
++    elif change == "history_owner":
++        row["history"][0]["owner_telegram_id"] = 4001
++    elif change == "payment":
++        row["payment_url"] = "https://payments.example/invoice"
++        row["payment_link_verified"] = False
++    with pytest.raises(ValidationError):
++        ImportPackage(**data)
++
++
++def test_duplicate_ids_and_target_numbers_are_reported(db, cfg):
++    data = package_data()
++    data["orders"].append(copy.deepcopy(data["orders"][0]))
++    report = inspect_package(ImportPackage(**data))
++    assert {x["code"] for x in report["errors"]} == {
++        "duplicate_source_id",
++        "duplicate_number_in_file",
++    }
++    package = ImportPackage(**package_data())
++    with psycopg.connect(
++        cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++    ) as conn:
++        apply_test_package(conn, package, cfg.payment_domains)
++        other = package_data()
++        other["source"] = "another_synthetic_source"
++        assert (
++            inspect_package(ImportPackage(**other), conn, cfg.payment_domains)["errors"][0]["code"]
++            == "target_number_exists"
++        )
++
++
++def test_runtime_cannot_access_import_mapping(db, cfg):
++    with pytest.raises(psycopg.errors.InsufficientPrivilege), db.connection() as conn:
++        conn.execute("SELECT * FROM legacy_imports")
++
++
++def test_dry_run_cli_no_database_and_no_personal_output(tmp_path, capsys):
++    path = tmp_path / "synthetic.json"
++    path.write_text(json.dumps(package_data()))
++    assert main(["inspect", "--file", str(path)]) == 0
++    output = capsys.readouterr().out
++    assert "synthetic" not in output and "3001" not in output and "Покупатель" not in output
++    report = json.loads(output)
++    assert report["dry_run"] and not report["target_checked"]
++
++
++def test_rehearsal_guard_rejects_real_target(cfg):
++    from pydantic import SecretStr
++
++    cfg.database_url = SecretStr("postgresql://app@localhost/majlis")
++    cfg.migration_database_url = SecretStr("postgresql://owner@localhost/majlis")
++    with pytest.raises(ValueError):
++        check_target_urls(cfg)
++
++
++def test_database_failure_rolls_back_entire_import(db, cfg):
++    data = package_data()
++    second = copy.deepcopy(data["orders"][0])
++    second["source_order_id"] = "fake-2"
++    second["order"]["number"] = "FORCE-FAIL"
++    data["orders"].append(second)
++    with (
++        psycopg.connect(
++            cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++        ) as conn,
++        conn.transaction(force_rollback=True),
++    ):
++        conn.execute(
++            "CREATE FUNCTION pg_temp.reject_fixture() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.number='FORCE-FAIL' THEN RAISE EXCEPTION 'fixture database failure'; END IF; RETURN NEW; END $$"
++        )
++        conn.execute(
++            "CREATE TRIGGER reject_fixture BEFORE INSERT ON orders FOR EACH ROW EXECUTE FUNCTION pg_temp.reject_fixture()"
++        )
++        with pytest.raises(psycopg.errors.RaiseException):
++            apply_test_package(conn, ImportPackage(**data), cfg.payment_domains)
++        for table in ["orders", "events", "legacy_imports", "audit_log"]:
++            from psycopg import sql
++
++            assert (
++                conn.execute(
++                    sql.SQL("SELECT count(*) AS n FROM {}").format(sql.Identifier(table))
++                ).fetchone()["n"]
++                == 0
++            )
++
++
++def test_concurrent_duplicate_import_only_inserts_once(db, cfg):
++    from concurrent.futures import ThreadPoolExecutor
++
++    package = ImportPackage(**package_data())
++
++    def run():
++        with psycopg.connect(
++            cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++        ) as conn:
++            return apply_test_package(conn, package, cfg.payment_domains)
++
++    with ThreadPoolExecutor(max_workers=2) as executor:
++        results = list(executor.map(lambda _: run(), range(2)))
++    assert sorted(r["inserted"] for r in results) == [0, 1]
++    with db.connection() as conn:
++        assert conn.execute("SELECT count(*) AS n FROM orders").fetchone()["n"] == 1
++
++
++def test_invalid_export_reports_locations_without_personal_values(tmp_path, capsys):
++    data = package_data()
++    data["orders"][0]["telegram_id_verified"] = False
++    data["orders"][0]["order"]["customer_name"] = "PRIVATE_NOT_FOR_REPORT"
++    path = tmp_path / "invalid.json"
++    path.write_text(json.dumps(data))
++    assert main(["inspect", "--file", str(path)]) == 1
++    raw = capsys.readouterr().out
++    assert "PRIVATE_NOT_FOR_REPORT" not in raw
++    assert json.loads(raw)["locations"][0]["location"] == ["orders", 0, "telegram_id_verified"]
++
++
++def test_import_preserves_explicit_original_creation_time(db, cfg):
++    from datetime import datetime
++
++    data = package_data()
++    data["orders"][0]["source_created_at"] = "2026-09-25T10:00:00+03:00"
++    package = ImportPackage(**data)
++    with psycopg.connect(
++        cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++    ) as conn:
++        assert inspect_package(package)["warnings"] == []
++        apply_test_package(conn, package, cfg.payment_domains)
++        row = conn.execute("SELECT created_at FROM orders").fetchone()
++        assert row["created_at"] == datetime.fromisoformat("2026-09-25T10:00:00+03:00")
++    assert (
++        inspect_package(ImportPackage(**package_data()))["warnings"][0]["code"]
++        == "source_creation_time_not_provided"
++    )
+--- /dev/null
++++ v0.6/tests/test_order_updates.py
+@@ -0,0 +1,137 @@
++from test_platform import created, signed
++
++
++def test_commercial_edit_clears_stale_invoice_and_is_scoped(client, cfg, db):
++    order = created(client, cfg)
++    assert (
++        client.post(
++            "/api/orders/payment",
++            headers=signed(cfg),
++            json={"order_id": order["id"], "version": 1, "url": "https://payments.example/old"},
++        ).status_code
++        == 200
++    )
++    data = {"order_id": order["id"], "version": 2, "item": "Updated item", "amount": 50001}
++    assert (
++        client.post("/api/orders/commercial", headers=signed(cfg, 3001), json=data).status_code
++        == 403
++    )
++    updated = client.post("/api/orders/commercial", headers=signed(cfg), json=data)
++    assert updated.status_code == 200
++    assert updated.json()["payment_url"] == "" and updated.json()["amount"] == 50001
++    assert updated.json()["events"][-1]["kind"] == "commercial"
++    assert client.post("/api/orders/commercial", headers=signed(cfg), json=data).status_code == 409
++    data["version"] = 3
++    assert (
++        client.post("/api/orders/commercial", headers=signed(cfg), json=data).json()["version"] == 3
++    )
++    with db.connection() as conn:
++        assert conn.execute("SELECT count(*) AS n FROM outbox").fetchone()["n"] == 2
++
++
++def test_delivery_change_is_recorded_and_notified_without_checkpoint_change(client, cfg, db):
++    order = created(client, cfg)
++    data = {
++        "order_id": order["id"],
++        "version": 1,
++        "customer_id": 3001,
++        "shipment": "NEW-PARTY",
++        "eta": "2026-11-10",
++        "eta_confirmed": True,
++    }
++    response = client.post("/api/orders/details", headers=signed(cfg), json=data)
++    assert response.status_code == 200
++    assert response.json()["status"] == "confirmed"
++    assert response.json()["events"][-1]["kind"] == "details"
++    with db.connection() as conn:
++        assert conn.execute("SELECT customer_id,text FROM outbox").fetchone()["customer_id"] == 3001
++        assert (
++            conn.execute("SELECT count(*) AS n FROM events WHERE kind='status'").fetchone()["n"]
++            == 1
++        )
++
++
++def test_payment_revoke_allowed_if_provider_disabled_and_noop_no_duplicate(client, cfg, db):
++    order = created(client, cfg)
++    assert (
++        client.post(
++            "/api/orders/payment",
++            headers=signed(cfg),
++            json={
++                "order_id": order["id"],
++                "version": 1,
++                "url": "https://payments.example/invoice-secret-test",
++            },
++        ).status_code
++        == 200
++    )
++    cfg.payment_hosts = ""
++    result = client.post(
++        "/api/orders/payment",
++        headers=signed(cfg),
++        json={"order_id": order["id"], "version": 2, "url": ""},
++    )
++    assert result.status_code == 200 and result.json()["payment_url"] == ""
++    assert result.json()["events"][-1]["kind"] == "payment"
++    assert (
++        client.post(
++            "/api/orders/payment",
++            headers=signed(cfg),
++            json={"order_id": order["id"], "version": 3, "url": ""},
++        ).json()["version"]
++        == 3
++    )
++    with db.connection() as conn:
++        rows = conn.execute("SELECT text FROM outbox").fetchall()
++        assert len(rows) == 2 and all("invoice-secret-test" not in r["text"] for r in rows)
++
++
++def test_invalid_commercial_data_is_rejected(client, cfg):
++    order = created(client, cfg)
++    for amount in [True, 0, 1.5, -1]:
++        assert (
++            client.post(
++                "/api/orders/commercial",
++                headers=signed(cfg),
++                json={"order_id": order["id"], "version": 1, "item": "Valid", "amount": amount},
++            ).status_code
++            == 422
++        )
++
++
++def test_migration_classifies_only_audit_proven_v05_transfers(cfg):
++    from pathlib import Path
++
++    import psycopg
++    from psycopg.rows import dict_row
++
++    with (
++        psycopg.connect(
++            cfg.migration_database_url.get_secret_value(), row_factory=dict_row
++        ) as conn,
++        conn.transaction(force_rollback=True),
++    ):
++        conn.execute("CREATE SCHEMA v05_transfer_rehearsal")
++        conn.execute("SET LOCAL search_path=v05_transfer_rehearsal")
++        for name in [
++            "001_initial.sql",
++            "002_ownership_and_events.sql",
++            "003_event_kinds_and_import_map.sql",
++        ]:
++            conn.execute((Path("migrations") / name).read_text())
++        conn.execute("INSERT INTO users(telegram_id) VALUES (3001),(9001)")
++        conn.execute(
++            "INSERT INTO orders(number,customer_id,customer_name,item,amount,status,customer_generation) VALUES ('V05',3001,'Synthetic','Synthetic',1,'confirmed',2)"
++        )
++        conn.execute(
++            "INSERT INTO events(order_id,status,note,source,actor_id,customer_id,customer_generation) VALUES (1,'confirmed','Заказ привязан к вашему кабинету','manager',9001,3001,2)"
++        )
++        conn.execute(
++            "INSERT INTO events(order_id,status,note,source,actor_id,customer_id,customer_generation) VALUES (1,'confirmed','Other actual checkpoint','manager',9001,3001,2)"
++        )
++        conn.execute(
++            "INSERT INTO audit_log(actor_id,action,order_id,after_data) VALUES (9001,'transfer',1,'{\"customer_generation\":2}')"
++        )
++        conn.execute(Path("migrations/004_classify_verified_transfers.sql").read_text())
++        kinds = conn.execute("SELECT kind FROM events ORDER BY id").fetchall()
++        assert [row["kind"] for row in kinds] == ["transfer", "status"]
+--- v0.5/web/app.js
++++ v0.6/web/app.js
+@@ -208,7 +208,7 @@
+ <span>Этап ${index+1} из ${state.stages.length}</span>
+ <span>${order.status==='delivered'?'Доставка завершена':'По последнему обновлению'}</span>
+ </div>
+-<div class="progress" aria-label="Этап ${index+1} из ${state.stages.length}">${state.stages.map((s,i)=>`<span class="${order.events.some(event=>event.status===s.code)?'done':''} ${s.code===order.status?'current':''}">
++<div class="progress" aria-label="Этап ${index+1} из ${state.stages.length}">${state.stages.map((s,i)=>`<span class="${order.events.some(event=>event.status===s.code&&(!event.kind||event.kind==='status'))?'done':''} ${s.code===order.status?'current':''}">
+ </span>`).join('')}</div>
+ <p class="order-description">${esc(order.stage.description)}</p>
+ <div class="order-bottom">
+@@ -621,6 +621,24 @@
+     await refresh();
+     toast('Изменения сохранены');
+   };
++  const commercial = $('#commercial-form');
++  if (commercial) commercial.onsubmit = e => {
++    e.preventDefault();
++    submit(commercial, () => {
++      const data = new FormData(commercial);
++      return save('/api/orders/commercial', {
++        item: data.get('item'),
++        amount: rublesToKopecks(data.get('rubles'))
++      });
++    });
++  };
++  $('#copy-payment')?.addEventListener('click', () => copy(order.payment_url));
++  $('#revoke-payment')?.addEventListener('click', () => {
++    const form = $('#payment-form');
++    submit(form, () => save('/api/orders/payment', {
++      url: ''
++    }));
++  });
+   const status = $('#status-form');
+   if (status) status.onsubmit = e => {
+     e.preventDefault();
+--- v0.5/web/order-detail.js
++++ v0.6/web/order-detail.js
+@@ -8,14 +8,24 @@
+ import {
+   editForms
+ } from './order-editor.js';
++export function eventTitle(event, stages) {
++  const titles = {
++    transfer: 'Привязка покупателя',
++    details: 'Поставка уточнена',
++    payment: 'Платёжная ссылка',
++    commercial: 'Товар и сумма уточнены',
++    import: 'Перенос данных'
++  };
++  return titles[event.kind] || stages.find(s => s.code === event.status)?.title || event.status;
++}
+ export function detailView(order, stages, isManager, paymentConnected) {
+   const current = stages.findIndex(s => s.code === order.status);
+   const timeline =
+-    `<ol class="timeline">${stages.map((stage,index)=>{const event=order.events.filter(e=>e.status===stage.code).at(-1);return `<li class="${event?'complete':''} ${index===current?'current':''}">
++    `<ol class="timeline">${stages.map((stage,index)=>{const event=order.events.filter(e=>e.status===stage.code&&(!e.kind||e.kind==='status')).at(-1);return `<li class="${event?'complete':''} ${index===current?'current':''}">
+ <div>
+ <strong>${esc(stage.title)}</strong>${index===current?'<span class="pill">Сейчас</span>':''}</div>
+ <p>${esc(stage.description)}</p>
+-<small>${event?dateTime(event.created_at):'Пока не зарегистрирован'}</small>
++<small>${event?dateTime(event.created_at):index===current?'Дата контрольной точки не указана':'Пока не зарегистрирован'}</small>
+ </li>`;}).join('')}</ol>`;
+   const next = stages[current + 1];
+   const payment = order.payment_url ?
+@@ -43,6 +53,6 @@
+ <button class="button" id="copy-question">${icon('chat')} Вопрос о заказе</button>
+ </div>${isManager?editForms(order,stages,paymentConnected):''}<h3>История изменений</h3>
+ <p class="hint">История загружается страницами. Более ранние события можно открыть ниже.</p>${order.events.slice().reverse().map(event=>`<div class="history-item">
+-<strong>${esc(stages.find(s=>s.code===event.status)?.title||event.status)}</strong>${event.note?'<p>'+esc(event.note)+'</p>':''}<small>${isManager?esc(event.customer_id?'Покупатель '+event.customer_id+' · поколение '+event.customer_generation:'Старая история: владелец не подтверждён')+' · ':''}${dateTime(event.created_at)} · ${event.source==='manager'?'Магазин':event.source==='integration'?'Внешняя система':'Обновление'}</small>
++<strong>${esc(eventTitle(event,stages))}</strong>${event.note?'<p>'+esc(event.note)+'</p>':''}<small>${isManager?esc(event.customer_id?'Покупатель '+event.customer_id+' · поколение '+event.customer_generation:'Старая история: владелец не подтверждён')+' · ':''}${dateTime(event.created_at)} · ${event.source==='manager'?'Магазин':event.source==='integration'?'Внешняя система':event.source==='migration'?'Импорт данных':'Обновление'}</small>
+ </div>`).join('')}${order.history_cursor?'<button class="button full" id="history-more">Показать более ранние события</button>':''}`;
+ }
+--- v0.5/web/order-editor.js
++++ v0.6/web/order-editor.js
+@@ -4,6 +4,13 @@
+ export function editForms(order, stages, paymentConnected) {
+   return `<details class="manager-edit">
+ <summary>Изменить заказ</summary>
++<form id="commercial-form" data-order-id="${order.id}" class="form-card">
++<h3>Товар и сумма</h3>
++<label>Товар и комплектация<input name="item" maxlength="300" value="${esc(order.item)}" required></label>
++<label>Сумма, ₽<input name="rubles" inputmode="decimal" value="${(order.amount/100).toFixed(2)}" required></label>
++<p class="form-note">Изменение товара или суммы удалит прежнюю ссылку из кабинета. Сам счёт у провайдера этой операцией не отменяется. Сумма не подтверждает оплату.</p>
++<button class="button full" type="submit">Сохранить товар и сумму</button>
++</form>
+ <form id="status-form" data-order-id="${order.id}" class="form-card">
+ <h3>Этап доставки</h3>
+ <label>Этап<select name="status">${stages.map(s=>`<option value="${s.code}" ${s.code===order.status?'selected':''}>${esc(s.title)}</option>`).join('')}</select>
+@@ -33,7 +40,8 @@
+ </form>
+ <form id="payment-form" data-order-id="${order.id}" class="form-card">
+ <h3>Готовая платёжная ссылка</h3>
+-<label>HTTPS-ссылка<input name="url" type="url" maxlength="2000" required ${!paymentConnected?'disabled':''}>
++${order.payment_url?`<div class="quick-actions"><button type="button" id="copy-payment" class="button">Копировать ссылку</button><button type="button" id="revoke-payment" class="button">Убрать из кабинета</button></div>`:''}
++<label>HTTPS-ссылка<input name="url" type="url" maxlength="2000" value="${esc(order.payment_url)}" required ${!paymentConnected?'disabled':''}>
+ </label>
+ <p class="form-note">${!paymentConnected?'Сервис оплаты ещё не настроен.':'Только разрешённый сервис; подтверждение платежа не подключено.'}</p>
+ <button class="button full" type="submit" ${!paymentConnected?'disabled':''}>Сохранить ссылку</button>

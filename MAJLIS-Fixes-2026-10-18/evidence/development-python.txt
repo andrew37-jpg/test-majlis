@@ -1,0 +1,49 @@
+............................................................F........... [ 64%]
+................F......................                                  [100%]
+=================================== FAILURES ===================================
+___________________ test_concurrent_claim_and_lease_recovery ___________________
+
+db = <majlis.database.Database object at 0x1043de840>
+
+    def test_concurrent_claim_and_lease_recovery(db):
+        queued(db)
+    
+        def claim():
+            with db.connection() as conn:
+                return claim_notification(conn)
+    
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            claims = list(executor.map(lambda _: claim(), range(2)))
+        assert sum(row is not None for row in claims) == 1
+        with db.connection() as conn:
+            conn.execute("UPDATE outbox SET lease_until=now()-interval '1 second'")
+>       assert claim()["attempts"] == 2
+               ^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests/test_platform.py:182: TypeError
+________________ test_public_limit_before_auth_without_database ________________
+
+client = <starlette.testclient.TestClient object at 0x104aafda0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x104aad610>
+
+    def test_public_limit_before_auth_without_database(client, monkeypatch):
+        client.app.state.public_limiter = PublicLimiter(limit=2)
+    
+        def blocked():
+            raise AssertionError("Must not contact DB before rejecting invalid auth")
+    
+        monkeypatch.setattr(client.app.state.db, "connection", blocked)
+>       assert client.get("/api/bootstrap", headers={"X-Forwarded-For": "1.1.1.1"}).status_code == 401
+E       AssertionError: assert 503 == 401
+E        +  where 503 = <Response [503 Service Unavailable]>.status_code
+E        +    where <Response [503 Service Unavailable]> = get('/api/bootstrap', headers={'X-Forwarded-For': '1.1.1.1'})
+E        +      where get = <starlette.testclient.TestClient object at 0x104aafda0>.get
+
+tests/test_security_changes.py:238: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    majlis:observability.py:39 {"event": "limiter_unavailable", "request_id": "85e0307cd7f648bf90a7b074c8b29ace", "error_type": "AssertionError", "frames": [{"file": "http_boundary.py", "line": 105, "function": "__call__"}, {"file": "concurrency.py", "line": 34, "function": "run_in_threadpool"}, {"file": "to_thread.py", "line": 65, "function": "run_sync"}, {"file": "_asyncio.py", "line": 2706, "function": "run_sync_in_worker_thread"}, {"file": "_asyncio.py", "line": 1100, "function": "run"}, {"file": "limiting.py", "line": 23, "function": "shared_allow"}, {"file": "test_security_changes.py", "line": 235, "function": "blocked"}]}
+=========================== short test summary info ============================
+FAILED tests/test_platform.py::test_concurrent_claim_and_lease_recovery - Typ...
+FAILED tests/test_security_changes.py::test_public_limit_before_auth_without_database
+2 failed, 109 passed in 10.75s

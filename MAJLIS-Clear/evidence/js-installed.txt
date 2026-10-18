@@ -1,0 +1,26 @@
+✔ several pages -> refresh -> continue, updated values and no duplicates (5.775292ms)
+✔ stale refresh cannot overwrite new filters (5.182417ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.493792ms)
+✔ HTML escaping and money are exact, invalid values rejected (0.651542ms)
+✔ detail and transfer form escape personal fields and explain ownership (50.643208ms)
+✔ payment and ETA edits do not rewrite a checkpoint date (9.87575ms)
+✔ separate workspaces hide role choices and discard stale page responses (2.077625ms)
+✔ tracking displays confirmed facts, escapes carrier/track, and labels old source data (0.671125ms)
+✔ manager inbox escapes client content and public cabinet has no manager entry (1.17225ms)
+✔ saved manual theme applies before DOMContentLoaded and ignores system changes (5.858458ms)
+✔ first browser launch follows system even when Telegram SDK exists outside Telegram (0.73075ms)
+✔ Telegram launch hash sets dark before body, host events follow only in auto mode (2.782792ms)
+✔ choice persists, all controls sync, reopening keeps manual priority (1.19425ms)
+✔ blocked storage, invalid stored values and malformed launch data do not crash (1.212ms)
+✔ one failing or absent host method does not prevent remaining operations (0.600708ms)
+✔ old host header uses supported keyword and no unsupported bottom method (0.649125ms)
+✔ storage event updates another instance and removal resets to auto (0.717916ms)
+✔ circle toggles current appearance in one click and auto restores device theme (0.729417ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 174.413625

@@ -1,0 +1,63 @@
+{
+  "local": [
+    {
+      "path": "/health",
+      "status": 200,
+      "matchesFile": null,
+      "instanceMatches": true
+    },
+    {
+      "path": "/nav-lens.js",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/ui.js",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    }
+  ],
+  "public": [
+    {
+      "path": "/health",
+      "status": 200,
+      "matchesFile": null,
+      "instanceMatches": true
+    },
+    {
+      "path": "/nav-lens.js",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/ui.js",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    }
+  ],
+  "botMenu": {
+    "ok": true,
+    "type": "web_app",
+    "urlMatchesRuntime": true
+  },
+  "finalLensAfterFocusGuard": {
+    "status": 200,
+    "matchesFile": true
+  }
+}

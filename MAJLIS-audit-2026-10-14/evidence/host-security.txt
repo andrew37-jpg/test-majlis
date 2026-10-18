@@ -1,0 +1,3 @@
+Read-only command: fdesetup status
+Result: FileVault is On.
+This confirms local host disk encryption, not encryption of remote backups.

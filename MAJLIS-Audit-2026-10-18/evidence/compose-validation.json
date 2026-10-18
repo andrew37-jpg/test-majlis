@@ -1,0 +1,14 @@
+{
+  "command": [
+    "docker",
+    "compose",
+    "--env-file",
+    ".env",
+    "-f",
+    "compose.server.yaml",
+    "config",
+    "--quiet"
+  ],
+  "status": 0,
+  "stderr": ""
+}

@@ -1,0 +1,226 @@
+[
+  {
+    "path": ".dockerignore",
+    "sha256": "15654a311a6d3cc019efaf626157d049e158790665a420a7d4ab7b729242d0ef"
+  },
+  {
+    "path": ".env.example",
+    "sha256": "452fb40f33dd450f8cbe87fcf93d68ba94ca40d65f6805e21e3b648aa1429b25"
+  },
+  {
+    "path": ".gitignore",
+    "sha256": "d555157ab6c35f8efd206bddb86d26d8e1a420fb740c8ddc1302c184a46bcca0"
+  },
+  {
+    "path": ".run/MAJLIS PostgreSQL.run.xml",
+    "sha256": "ee698d760ec333ed2f45eba921abb5721f2802fbdb8b5fe0b4a6f88ca2b02455"
+  },
+  {
+    "path": "Caddyfile",
+    "sha256": "65aaa4ec43433bb2075a2d6f6500c1e1817b357bcb296cc9aaca579b11fdcb04"
+  },
+  {
+    "path": "Dockerfile",
+    "sha256": "3814cb801e1a6252155b7ceb817d89e1667cc05c91b8199eab820571926f4dc2"
+  },
+  {
+    "path": "README.md",
+    "sha256": "9d310ef903cd2ee56f193a5623dd76d2c0e021a1e4f727ee88a75c779bfad41b"
+  },
+  {
+    "path": "compose.local.yaml",
+    "sha256": "3a8d9f23a5457455e4df3b73105eee81315c4c0ecea55652bb88abe0237c0b11"
+  },
+  {
+    "path": "compose.server.yaml",
+    "sha256": "98b0daf50cfd20338b8f88460f899c9856c8854c70c206fc7f47c7008c0dd185"
+  },
+  {
+    "path": "docker/Postgres.Dockerfile",
+    "sha256": "b01051b32cd37c5655c3fe85694d02a4c9f552cb1271e35c5c1d0326a3d0d096"
+  },
+  {
+    "path": "docker/initdb/10-app.sh",
+    "sha256": "b4e3bf2b90032c27d9d965bc3b02dba53007e3aadcdeed8e9bea4e1cdf892a2f"
+  },
+  {
+    "path": "docker/upgrade-existing.sql",
+    "sha256": "2a2dd4c880b2529382278fe904041c7f8ffdff7f5272f475a55755f08063229e"
+  },
+  {
+    "path": "docs/ARCHITECTURE.md",
+    "sha256": "56fa0aa420ec6e1593a10e1c6be05745465a8d414a81d4b88fe44c70b4e267d8"
+  },
+  {
+    "path": "docs/INTEGRATIONS.md",
+    "sha256": "81840a7e14b91b4095c097b35ddda4c32352420455224597c66b85788bf05560"
+  },
+  {
+    "path": "docs/OPERATIONS.md",
+    "sha256": "2b8abbdaf58213c026658c51bdebccf3c6a306bad23f62b871968a7e514ee7a3"
+  },
+  {
+    "path": "docs/PRIVACY.md",
+    "sha256": "d4348a71f41597d579439605112c0f1112e443b9376d09facf608af8d4f5bccc"
+  },
+  {
+    "path": "docs/REMEDIATION-PLAN.md",
+    "sha256": "9d96b8be43453319423f74e7efbef034a291ed24450a614f304af60b38fe8df3"
+  },
+  {
+    "path": "docs/SECURITY-SCANNERS.md",
+    "sha256": "5446464bdf8b58a2284bd4c42793e968fe74f4167bb4c817519dee88677f0748"
+  },
+  {
+    "path": "docs/TESTING.md",
+    "sha256": "9543ac5973e94b751b8fcaadd02ca955da3a98e07f8364967284c0d823c457fb"
+  },
+  {
+    "path": "docs/UPGRADE-0.5.md",
+    "sha256": "774ef115c064fbb3b6346970b6c4930a05c53405b0a945ab8f4b7ebf7e615f40"
+  },
+  {
+    "path": "docs/UX-IMPROVEMENTS.md",
+    "sha256": "cf34c668807c781d97f4c102291a82ecfdb9c1dec419edf4d36fda1e57e5fe8a"
+  },
+  {
+    "path": "docs/VERIFICATION.md",
+    "sha256": "1a679b332a875c8efc045e6d5686ab7d04acb650e43dcf8e9e26cdd3fbd5b940"
+  },
+  {
+    "path": "main.py",
+    "sha256": "58924218d64f1cbffbfb7d603959d796cd74bf0d1e8e84c78010812a11f81c34"
+  },
+  {
+    "path": "majlis/__init__.py",
+    "sha256": "3c6ddc58ae746d64f06a591fa6b602574347402a7e60d27420031fbeaf349f21"
+  },
+  {
+    "path": "majlis/api.py",
+    "sha256": "5936e180b2afa8932fc4a32ae156c7d1b3c7b94333e8f6cd5716ae59d25a202f"
+  },
+  {
+    "path": "majlis/bot.py",
+    "sha256": "2ebcfcb360ef5f44dde5270a05e23f8c250f9d3758e34cc1ea99556d573bc686"
+  },
+  {
+    "path": "majlis/cli.py",
+    "sha256": "241737ebcc1065cc42fc884c80193843678ad1d91c55a7e85c8d19231cf109fa"
+  },
+  {
+    "path": "majlis/config.py",
+    "sha256": "4ba46fa5e9ccd01d2f0f8e7cbeca4b8b408f40ed120652d5a06168a6fe2d5537"
+  },
+  {
+    "path": "majlis/database.py",
+    "sha256": "1d59eca2aaef334b9e3fc54995bc965df85a73b98dd04d23fd7c1bdf7a58ee38"
+  },
+  {
+    "path": "majlis/domain.py",
+    "sha256": "9f28929a12aa6ef6298d23505e576fb942fafa0fd39378191d2f124a71e990af"
+  },
+  {
+    "path": "majlis/http_boundary.py",
+    "sha256": "1b483df4c1601e73951cf89ab180c04b5918b4ae93d4d517b42267d46bcf4f19"
+  },
+  {
+    "path": "majlis/network.py",
+    "sha256": "8e2486d2154965a99e11dcb5eb496c37571404c3eb7ce2910a885d01b85c8d66"
+  },
+  {
+    "path": "majlis/schemas.py",
+    "sha256": "9af837c17d835e4249c8d23c396cb796ce11fdc8c2f2a876680f34b7575585d8"
+  },
+  {
+    "path": "majlis/services.py",
+    "sha256": "48a80989ac110bec7b4c779339730b4a9f1aec2c18c3076f889cb2594f290f2b"
+  },
+  {
+    "path": "majlis/tunnel.py",
+    "sha256": "a7e7eff6a5e9b0919375f19f598f447ae17354478756763e0132187677142bee"
+  },
+  {
+    "path": "manage.py",
+    "sha256": "e08b6b9f1a2472da97e28f1a9083eaf63db4856b8643a36f78afb2a5fca24c7a"
+  },
+  {
+    "path": "migrations/001_initial.sql",
+    "sha256": "51d2be5437b73f476ad3bece2817c0f23787df99b2f3e2c03db2471901ba31df"
+  },
+  {
+    "path": "migrations/002_ownership_and_events.sql",
+    "sha256": "d0e87997bbf5342ee68227e48153b70f67b1ed4d755eafb36d4723c1e2b18d62"
+  },
+  {
+    "path": "pyproject.toml",
+    "sha256": "a00e739309887ad7c2f6b983d701fb059e6a2f2e5b58c053a566a887367e219c"
+  },
+  {
+    "path": "requirements-dev.txt",
+    "sha256": "7e7ea2910b397149c0bad7f09252a8878f9ec127906cae62a01f6998201a1c4c"
+  },
+  {
+    "path": "requirements.lock",
+    "sha256": "ec3a10db86ba7cc2b3d4e5945df204a5d5d74da50a73afef350fa1796a2a1968"
+  },
+  {
+    "path": "requirements.txt",
+    "sha256": "e866b649c99849175b6df9e16f160ab65e9b2d191a5db3c6bb6d2e37aeaad241"
+  },
+  {
+    "path": "tests/conftest.py",
+    "sha256": "2b1fbd423fc2f41c4b4ab5cbd698e982466e5156e8881ac18e373086f36da1b9"
+  },
+  {
+    "path": "tests/js/pagination.test.mjs",
+    "sha256": "f0bc58650134a764ca43c71fb8bc4be4f3f6bf1a0570021a355ea70071396bd6"
+  },
+  {
+    "path": "tests/test_operations.py",
+    "sha256": "31e2f14d986dd0db00f5f8a4dfaa0b8effad42b8c2706601a4d5f827a3609c0a"
+  },
+  {
+    "path": "tests/test_platform.py",
+    "sha256": "0241f473dbb1cbeede5dc13e79fab04c1691d1a1e07d0a483f905f1a105c215c"
+  },
+  {
+    "path": "tests/test_regressions.py",
+    "sha256": "486eadd67203d9eb74b1661eb5e36227085fc6aa3f7652e6b52fccdfa6c2a1e3"
+  },
+  {
+    "path": "tests/test_security_changes.py",
+    "sha256": "fb469e332d604e0dadf530baf2e2f4b71959541f2a9da2a31be59156ace57004"
+  },
+  {
+    "path": "web/app.js",
+    "sha256": "69e98695c0aa640ede77d32326ef3102f740a706fba48bd03196def01b39ff21"
+  },
+  {
+    "path": "web/index.html",
+    "sha256": "9c575b4eafc9a8ae9386be0a648eaaa71c04a1306440e2e52e67b3e6e41eb156"
+  },
+  {
+    "path": "web/order-detail.js",
+    "sha256": "2eb09455ba0e31d0039d422bb670edcd277aff6765c6f4d78db7eb6fdc037e89"
+  },
+  {
+    "path": "web/order-editor.js",
+    "sha256": "bb4a6f6a6f40cc70f81ecf0148390444d0d89448c4215d3c31a2a1008757bf41"
+  },
+  {
+    "path": "web/package.json",
+    "sha256": "89c47db7851f89caec72da4f215ebc21cf1e294aeef3b45d2583562d846ab035"
+  },
+  {
+    "path": "web/pagination.js",
+    "sha256": "7803e400ac7cfed7964a8c54043df47de04e903e95e139c0531d913e64cf5dff"
+  },
+  {
+    "path": "web/style.css",
+    "sha256": "a2948c553a86fcfd4a9d607417ab58d7c43aa8772dc9a92bb6cb40ba885726a1"
+  },
+  {
+    "path": "web/ui.js",
+    "sha256": "558304a2f588e700b34b378c48fc8ab8aa72052aa0259a43bb5f6be782109c67"
+  }
+]

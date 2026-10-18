@@ -1,0 +1,56 @@
+[
+  {
+    "lensHidden": false,
+    "nav": {
+      "bottom": 706,
+      "height": 76,
+      "left": 12,
+      "right": 418,
+      "top": 630,
+      "width": 406,
+      "x": 12,
+      "y": 630
+    },
+    "scrollWidth": 430,
+    "viewport": [
+      430,
+      740
+    ]
+  },
+  {
+    "lensHidden": true,
+    "nav": {
+      "bottom": 466,
+      "height": 76,
+      "left": 180,
+      "right": 640,
+      "top": 390,
+      "width": 460,
+      "x": 180,
+      "y": 390
+    },
+    "scrollWidth": 820,
+    "viewport": [
+      820,
+      500
+    ]
+  },
+  {
+    "lensHidden": true,
+    "nav": {
+      "bottom": 810,
+      "height": 76,
+      "left": 12,
+      "right": 378,
+      "top": 734,
+      "width": 366,
+      "x": 12,
+      "y": 734
+    },
+    "scrollWidth": 390,
+    "viewport": [
+      390,
+      844
+    ]
+  }
+]

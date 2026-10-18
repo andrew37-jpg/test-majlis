@@ -1,0 +1,79 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_________________ test_A01_new_shipment_sequence_can_progress __________________
+
+client = <starlette.testclient.TestClient object at 0x10614c740>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...**********'), port=8876, instance_id='test-instance', https_mode='external', auto_start_database=False, db_pool_size=8)
+
+    def test_A01_new_shipment_sequence_can_progress(client,cfg):
+     o=created(client,cfg)
+     assert event(client,cfg,event_id='old-100',shipment='TEST-CARGO',status='purchased',sequence=100).status_code==200
+     o=client.get('/api/orders/'+str(o['id']),headers=signed(cfg)).json()
+     r=client.post('/api/orders/details',headers=signed(cfg),json={'order_id':o['id'],'version':o['version'],'customer_id':3001,'shipment':'NEW-CARGO'})
+     assert r.status_code==200
+     r=event(client,cfg,event_id='new-1',shipment='NEW-CARGO',status='in_transit',sequence=1)
+     assert r.status_code==200
+>    assert r.json()['updated']==1, 'New batch sequence was incorrectly compared with the old batch sequence'
+E    AssertionError: New batch sequence was incorrectly compared with the old batch sequence
+E    assert 0 == 1
+
+test_audit_regressions.py:20: AssertionError
+_________________ test_A02_readiness_rejects_missing_migration _________________
+
+client = <starlette.testclient.TestClient object at 0x1070b4b00>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...**********'), port=8876, instance_id='test-instance', https_mode='external', auto_start_database=False, db_pool_size=8)
+
+    def test_A02_readiness_rejects_missing_migration(client,cfg):
+     with psycopg.connect(cfg.migration_database_url.get_secret_value()) as c:
+      c.execute("DELETE FROM schema_migrations WHERE name='007_manager_workspace_and_support.sql'")
+     try:
+      r=client.get('/ready',headers={'X-Health-Token':cfg.health_token.get_secret_value()})
+>     assert r.status_code==503, f'Missing migration was accepted as ready: {r.status_code}'
+E     AssertionError: Missing migration was accepted as ready: 200
+E     assert 200 == 503
+E      +  where 200 = <Response [200 OK]>.status_code
+
+test_audit_regressions.py:27: AssertionError
+_______ test_A03_notification_accept_then_network_failure_not_duplicated _______
+
+db = <majlis.database.Database object at 0x1072f41d0>
+
+    def test_A03_notification_accept_then_network_failure_not_duplicated(db):
+     queued(db);accepted=[]
+     class API:
+      def send(self,uid,text):
+       accepted.append(uid)
+       if len(accepted)==1:raise bot.TelegramFailure(0)
+     api=API();bot.deliver(db,api)
+     with db.connection() as c:c.execute("UPDATE outbox SET available_at=now()-interval '1 second' WHERE state='pending'")
+     bot.deliver(db,api)
+>    assert len(accepted)==1, 'A response lost after remote acceptance caused a second send'
+E    AssertionError: A response lost after remote acceptance caused a second send
+E    assert 2 == 1
+E     +  where 2 = len([3001, 3001])
+
+test_audit_regressions.py:43: AssertionError
+___________ test_A06_commercial_audit_keeps_before_and_after_amount ____________
+
+client = <starlette.testclient.TestClient object at 0x1073ec290>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...**********'), port=8876, instance_id='test-instance', https_mode='external', auto_start_database=False, db_pool_size=8)
+
+    def test_A06_commercial_audit_keeps_before_and_after_amount(client,cfg):
+     o=created(client,cfg)
+     r=client.post('/api/orders/commercial',headers=signed(cfg),json={'order_id':o['id'],'version':o['version'],'item':'Updated item','amount':13000})
+     assert r.status_code==200
+     with psycopg.connect(cfg.migration_database_url.get_secret_value()) as c:
+      before,after=c.execute("SELECT before_data,after_data FROM audit_log WHERE action='commercial'").fetchone()
+>    assert before.get('amount')==12001 and after.get('amount')==13000, 'Financial change values were omitted from the audit trail'
+E    AssertionError: Financial change values were omitted from the audit trail
+E    assert (None == 12001)
+E     +  where None = <built-in method get of dict object at 0x107412140>('amount')
+E     +    where <built-in method get of dict object at 0x107412140> = {'id': 1, 'eta': None, 'status': 'confirmed', 'version': 1, ...}.get
+
+test_audit_regressions.py:51: AssertionError
+=========================== short test summary info ============================
+FAILED test_audit_regressions.py::test_A01_new_shipment_sequence_can_progress
+FAILED test_audit_regressions.py::test_A02_readiness_rejects_missing_migration
+FAILED test_audit_regressions.py::test_A03_notification_accept_then_network_failure_not_duplicated
+FAILED test_audit_regressions.py::test_A06_commercial_audit_keeps_before_and_after_amount
+4 failed in 0.76s

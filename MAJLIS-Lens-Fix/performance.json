@@ -1,0 +1,6 @@
+{
+  "hidden": true,
+  "material": "transform: scale(1, 1); border-radius: 23px;",
+  "metrics": "{\"frames\":179,\"p50\":33.399999999999636,\"p95\":50.599999999998545,\"max\":84.30000000000109,\"over33\":134}",
+  "nodes": 685
+}

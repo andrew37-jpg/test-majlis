@@ -1,0 +1,88 @@
+name: majlis-server
+x-app: &app
+  build: .
+  restart: unless-stopped
+  environment: &environment
+    ENVIRONMENT: production
+    HTTPS_MODE: external
+    HEALTH_TOKEN: ${HEALTH_TOKEN:?Set HEALTH_TOKEN}
+    BOT_TOKEN: ${BOT_TOKEN:?Set BOT_TOKEN}
+    DATABASE_URL: postgresql://majlis_app:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@db:5432/majlis
+    MANAGER_IDS: ${MANAGER_IDS:-}
+    MINI_APP_URL: https://${APP_DOMAIN:?Set APP_DOMAIN}
+    PORT: 8876
+    CATALOG_URL: ${CATALOG_URL:-}
+    SUPPORT_URL: ${SUPPORT_URL:-}
+    PAYMENT_HOSTS: ${PAYMENT_HOSTS:-}
+    INTEGRATION_SECRET: ${INTEGRATION_SECRET:-}
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: ["ALL"]
+  read_only: true
+  tmpfs: ["/tmp"]
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+services:
+  db:
+    image: majlis-postgres:17
+    build:
+      context: ./docker
+      dockerfile: Postgres.Dockerfile
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: majlis
+      POSTGRES_USER: majlis
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?Set POSTGRES_ADMIN_PASSWORD}
+      MIGRATION_DB_PASSWORD: ${POSTGRES_MIGRATION_PASSWORD:?Set POSTGRES_MIGRATION_PASSWORD}
+      APP_DB_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U majlis -d majlis -Atc \"SELECT 1 FROM pg_roles WHERE rolname='majlis_app'\" | grep -qx 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  migrate:
+    <<: *app
+    restart: "no"
+    environment:
+      <<: *environment
+      MIGRATION_DATABASE_URL: postgresql://majlis_migrator:${POSTGRES_MIGRATION_PASSWORD:?Set POSTGRES_MIGRATION_PASSWORD}@db:5432/majlis
+    command: ["python", "-m", "majlis.cli", "migrate"]
+    depends_on:
+      db: {condition: service_healthy}
+  api:
+    <<: *app
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; import os; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8876/ready',headers={'X-Health-Token':os.environ['HEALTH_TOKEN']}),timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  bot:
+    <<: *app
+    command: ["python", "-m", "majlis.cli", "bot"]
+    depends_on:
+      api: {condition: service_healthy}
+  notify:
+    <<: *app
+    command: ["python", "-m", "majlis.cli", "notify"]
+    depends_on:
+      api: {condition: service_healthy}
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?Set APP_DOMAIN}
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api: {condition: service_healthy}
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

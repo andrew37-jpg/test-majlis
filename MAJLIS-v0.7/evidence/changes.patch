@@ -1,0 +1,2066 @@
+--- installed-before/README.md
++++ v0.7/README.md
+@@ -1,96 +1,65 @@
+-# MAJLIS · Telegram Mini App + PostgreSQL
++# MAJLIS 0.7 · Telegram Mini App и PostgreSQL
+ 
+-Запуск из Telegram: откройте **[@majlis_test_bot](https://t.me/majlis_test_bot)**, отправьте `/start`, затем нажмите **«Открыть кабинет MAJLIS»** или кнопку меню **«Кабинет MAJLIS»**. Бот должен быть запущен, публичный HTTPS-маршрут — доступен.
++Продолжение текущего проекта PyCharm, включая исправление QR-ответов localhost.run. Покупательский и рабочий кабинеты разделены; общедоступного переключателя ролей нет. Правила доступа — на backend.
+ 
+-## Запуск на настроенном компьютере
++## Запуск в настроенном PyCharm
+ 
+-В открытом проекте PyCharm используйте **majlis-platform/main.py** и интерпретатор проекта `.venv`. Нажмите Run. Другие копии этого бота должны быть остановлены.
++Проект: majlis_bot_test/majlis-platform. Выберите конфигурацию **MAJLIS 0.7 — Mini App** и Python 3.12 из .venv проекта, нажмите Run. Docker и сеть должны работать. Вторую копию того же polling-бота не запускайте.
+ 
+-Запуск последовательно поднимает PostgreSQL в Docker, применяет миграции, запускает API, получает временный HTTPS-адрес, проверяет маршрут и настраивает кнопки Telegram. При смене адреса localhost.run меню бота обновляется. **Старые кнопки в уже отправленных сообщениях не меняются:** откройте актуальное меню или отправьте новый `/start`.
++main.py запускает PostgreSQL, применяет миграции, поднимает API, временный HTTPS, bot и отдельный notify worker. Открывайте актуальное меню бота: старые сообщения/окна могут содержать прежний HTTPS-адрес. Stop завершает дочерние процессы, PostgreSQL и Docker volume сохраняются. Не используйте docker compose down -v.
+ 
+-Stop останавливает API, туннель и бот. PostgreSQL остаётся запущенным; данные находятся в Docker volume `majlis-local_postgres_data`. Этот режим требует включённого компьютера, Docker и сети. Стабильный домен и круглосуточная работа требуют размещения на сервере.
++Покупатель открывает обычную кнопку кабинета. Менеджер входит **со своего Telegram ID** через `/manager` после явного назначения; команда отсутствует в общем меню. Рабочий адрес `/manager/` не даёт прав сам по себе. Ввод чужого ID вместо Telegram-авторизации не предусмотрен. Без назначения менеджерский API возвращает 403. Реальный ID покупателя не повышается автоматически.
+ 
+-## Новый компьютер
++## Новый компьютер / отдельная установка
+ 
+-Требуются Python 3.12, Docker с Compose и OpenSSH. Бесплатный временный туннель использует localhost.run; этот сервис пропускает HTTP-трафик приложения через себя. Для другого размещения предусмотрен `HTTPS_MODE=external`.
+-
+-Из папки этого проекта:
++Нужны Python 3.12, Docker с Compose и OpenSSH. В папке приложения:
+ 
+ ```sh
+ python -m venv .venv
+-# macOS/Linux
+ source .venv/bin/activate
+-python -m pip install -r requirements.lock
++python -m pip install --require-hashes -r requirements.lock
+ ```
+ 
+-В Windows выберите `.venv\Scripts\python.exe` в PyCharm и установите те же зависимости. Живой запуск этой версии на Windows пока не проверялся.
++Windows: используйте .venv\Scripts\python.exe; живой запуск Windows не проверялся. requirements.txt также ссылается на requirements.lock.
+ 
+-Скопируйте `.env.example` в `.env`, заполните BOT_TOKEN локально, сгенерируйте три разные случайные POSTGRES_ADMIN_PASSWORD, POSTGRES_MIGRATION_PASSWORD и POSTGRES_PASSWORD; отдельно сгенерируйте HEALTH_TOKEN (не короче 32 символов). Для паролей используйте буквы, цифры, `_` и `-`; пароль приложения повторите в DATABASE_URL, пароль мигратора — в MIGRATION_DATABASE_URL. Для существующей базы сначала читайте docs/UPGRADE-0.6.md: одной заменой .env права не обновляются. Пример генерации одного значения:
++Скопируйте .env.example в .env, заполните BOT_TOKEN локально, задайте отдельные случайные пароли admin/migrator/runtime, соответствующие DATABASE_URL и MIGRATION_DATABASE_URL, HEALTH_TOKEN от 32 символов. Не отправляйте секреты в чат и не включайте их в архивы исходников. Для генерации одного значения:
+ 
+ ```sh
+ python -c "import secrets; print(secrets.token_urlsafe(32))"
+ ```
+ 
+-`MANAGER_IDS` по умолчанию пуст: все пользователи — покупатели. Назначение ID даёт доступ ко всем заказам и их изменению; выполняйте это только для согласованного менеджера. Выбранные пользователем роли не принимаются от клиента. Ключи, пароли, сырые initData и базы не входят в архив исходников.
++Изменение пароля в .env не меняет пароль существующей PostgreSQL. Обновление существующей установки: [UPGRADE-0.7](docs/UPGRADE-0.7.md), для прежней 0.4 также [UPGRADE-0.5](docs/UPGRADE-0.5.md).
++
++## Возможности и доступ
++
++- Покупатель: свои заказы, товар/комплектация, сумма, разрешённая ссылка оплаты, этапы/история/сроки, подтверждённые данные отслеживания и обращение в магазин.
++- Менеджер: назначенные заказы либо явно разрешённый полный доступ, поиск/фильтры, разрешённые правки, лента изменений. Все обращения — только с отдельным can_read_inbox.
++- Сообщения этому боту и обращения из Mini App сохраняются в customer_messages. Личные переписки вне бота недоступны. Вложения представлены типом/подписью; файлы не загружаются. Исходящие ответы менеджера не реализованы.
++- MANAGER_IDS сохраняет прежний явно назначенный глобальный доступ к заказам. Он сам по себе не даёт чтение всех сообщений. Полный новый рабочий аккаунт назначается оператором по подтверждённому ID, не кнопкой в Mini App.
++- Платёжная ссылка не подтверждает оплату. Изменение товара/суммы убирает устаревший URL из кабинета, но не отменяет provider invoice.
++
++[Кабинеты и назначения](docs/CABINETS-AND-ACCESS.md), [источники и отслеживание](docs/WEBSITE-AND-TRACKING.md), [данные пользователя](docs/PRIVACY.md).
+ 
+ ## Структура
+ 
+ ```text
+-main.py                 запуск локальной среды из PyCharm
+-manage.py               backup, inspect, безопасный restore-test и privacy-plan
+-majlis/config.py        настройки, секреты, проверки конфигурации
+-majlis/api.py           FastAPI, авторизация и endpoints
+-majlis/http_boundary.py потоковый лимит body, публичный limiter и заголовки
+-majlis/schemas.py       строгие входные модели
+-majlis/services.py      транзакции заказов, история, аудит
+-majlis/legacy_import.py нормализованный контракт, dry-run и импорт только в test
+-majlis/database.py      пул PostgreSQL и версионные миграции
+-majlis/bot.py           Bot API, команды, отдельный notification worker
+-majlis/tunnel.py        HTTPS localhost.run, отслеживание смены URL
+-majlis/cli.py           отдельные процессы API / bot / migrate
+-migrations/             неизменяемые SQL-миграции с контрольной суммой
+-web/                    Telegram UI; pagination.js, order-detail.js, order-editor.js
+-Dockerfile              контейнер приложения без root
+-compose.local.yaml      локальная база, порт только 127.0.0.1
+-compose.server.yaml     PostgreSQL + миграции + API + бот + HTTPS
+-Caddyfile               HTTPS reverse proxy для своего домена
+-requirements.lock       проверенные версии Python-зависимостей
++main.py                  PyCharm launcher
++manage.py                backup / restore-test / privacy-plan
++majlis/api.py            endpoints и Telegram identity
++majlis/access.py         контекст и назначенные права
++majlis/support.py        обращения, inbox и активность
++majlis/tracking.py       подтверждённые факты и давность данных
++majlis/services.py       транзакции заказов, история, очередь
++majlis/bot.py             команды, приём сообщений, notify worker
++majlis/legacy_import.py   нормализованный контракт и test import
++migrations/              001–004 сохранены; 005–007 дополняют схему
++web/                     UI, отдельные cabinets/workspace/detail/editor/pages
+ ```
+ 
+-Подробности: [архитектура](docs/ARCHITECTURE.md), [эксплуатация и сервер](docs/OPERATIONS.md), [результаты проверки](docs/VERIFICATION.md).
++## Проверки и ограничения
+ 
+-## Функциональность и границы
++Тесты запускаются только с отдельными TEST_DATABASE_URL / TEST_MIGRATION_DATABASE_URL на одной БД с суффиксом _test и разными ролями: [TESTING](docs/TESTING.md). Полный набор: **104 Python**, **9 JavaScript**; интерфейс проверен на 360 px с настоящим тестовым API/PostgreSQL и имитацией Telegram SDK. Это не проверка всех устройств Telegram.
+ 
+-Покупатель: собственные заказы, этапы, даты поставки, история, контакт магазина и каталог, если их адреса настроены. Менеджер: создание, редактирование товара и суммы, смена этапов, партии и клиента, дата, ручная платёжная ссылка разрешённого сервиса, её копирование и удаление из кабинета. PostgreSQL: индексированные заказы, пользователи, история, аудит, очередь, события интеграций и курсор Telegram.
++Сайта/API/карго/платёжного провайдера и старой базы заказчика нет: реальные adapters, синхронизация создания заказов и оплата не подключены. [Точные материалы для подключения](docs/WEBSITE-AND-TRACKING.md). Старые данные заказчика не переносились, схема их базы не угадывалась. Нормализованная репетиция — отдельная возможность.
+ 
+-Карго, сайт, служба доставки и платёжный провайдер заказчика пока неизвестны. Реальных адаптеров этих сервисов нет. Endpoint интеграций принимает только подписанные события согласованного формата; платёжная ссылка не подтверждает оплату. Словарь этапов доставки нужно утвердить с заказчиком.
+-
+-Источники протоколов: [Telegram Mini Apps](https://core.telegram.org/bots/webapps), [psycopg pools](https://www.psycopg.org/psycopg3/docs/advanced/pool.html), [FastAPI Docker](https://fastapi.tiangolo.com/deployment/docker/), [localhost.run](https://localhost.run/docs/cli/).
+-
+-## Доработки интерфейса 0.4
+-
+-Добавлены нижнее меню, серверный поиск и фильтры, светлая/тёмная темы, подсказки по этапам и датам, быстрые кнопки, автообновление и черновик формы. Подробности и идеи следующего этапа: [UX-IMPROVEMENTS.md](docs/UX-IMPROVEMENTS.md).
+-
+-## Исправления аудита — 0.5
+-
+-Передача требует нового имени и явного подтверждения; ссылка оплаты сбрасывается; история хранит поколение владельца. Внешние этапы продвигаются только вперёд по существующему словарю, sequence обязателен в production и опционален в тестовом режиме, ручная коррекция менеджером сохраняется. Runtime-роль отделена от мигратора; audit доступен runtime только на INSERT. Readiness защищён HEALTH_TOKEN и закрыт в Caddy. API ограничивается до авторизации, X-Forwarded-For не используется. Несколько страниц сохраняются при обновлении. История выдаётся страницами; перед открытием карточки права проверяются заново. В помощи доступна ограниченная выгрузка собственных данных.
+-
+-Уведомления отправляет отдельный `python -m majlis.cli notify`; main.py/Compose запускают его автоматически. Во время внешней отправки нет row lock или открытой SQL-транзакции. Передача владельца временно получает 409 под session advisory guard; повторите её после отправки. Доставка уведомлений допускает повтор после аварии; «ровно один раз» не обещается.
+-
+-[Обновление существующей установки](docs/UPGRADE-0.5.md), [данные и границы](docs/PRIVACY.md), [план A01–A10](docs/REMEDIATION-PLAN.md), [проверки](docs/VERIFICATION.md).
+-
+-Новые исходники не содержат `.env`, данных и токена. Рабочая установка пользователя при подготовке архива не обновлялась. Не запускайте вторую копию того же бота одновременно. PyCharm: откройте папку, где лежит main.py, выберите интерпретатор Python 3.12, установите requirements.lock, заполните локальный .env; Run main.py.
+-
+-## Продолжение проекта — 0.6
+-
+-Версия продолжает исходники архива 0.5. Миграции 001/002 сохранены без изменений; 003/004 дополняют текущую схему. Подробности: [обновление 0.6](docs/UPGRADE-0.6.md), [состояние требований](docs/REQUIREMENTS-STATUS.md), [подготовка переноса](docs/LEGACY-MIGRATION.md), [оставшиеся подключения](docs/EXTERNAL-CONNECTIONS.md).
+-
+-В карточке менеджера можно изменить товар и сумму. При таком изменении старая ссылка убирается из кабинета; реальный счёт у провайдера это не отменяет. Изменения поставки, товара/суммы и ссылки сохраняются отдельными типами истории и в очереди уведомлений, не подменяя дату checkpoint. Повтор сохранения неизменных данных не создаёт повторного события.
+-
+-Импортёр принимает собственный нормализованный формат, проверяет подтверждение Telegram ID, валюту, часовой пояс и принадлежность истории. Без старой схемы адаптер не создаётся. Запись доступна только как репетиция в отдельной *_test базе; исходная база заказчика не переносилась. Для проверки формата без настройки бота:
+-
+-```sh
+-python -m majlis.legacy_import inspect --file examples/normalized-export.synthetic.json
+-```
+-
+-Результаты этой итерации: 87 Python-тестов, 6 Node-тестов; настоящее локальное HTTP/API и восстановление PostgreSQL проверены отдельно. Реальные Telegram/платежи/сервисы заказчика и рабочее обновление этой версии не проверялись.
++localhost.run — временный HTTPS, требует включённого компьютера и может менять адрес. Серверный Compose/Caddy подготовлены, но стабильное размещение и BotFather Main Mini App отдельно требуют настройки и приёмки. [OPERATIONS](docs/OPERATIONS.md). Приёмка уведомлений, iOS/Android/Windows, внешние API и рабочие сценарии полного менеджерского аккаунта требуют реальных материалов/назначения.
+--- /dev/null
++++ v0.7/docs/CABINETS-AND-ACCESS.md
+@@ -0,0 +1,46 @@
++# Кабинеты и назначенные права — 0.7
++
++Авторизация остаётся Telegram initData с серверной HMAC-проверкой. Общий адрес UI открывает покупателя по умолчанию; рабочий адрес менеджера отделён. X-MAJLIS-Cabinet выбирает лишь контекст buyer/manager; сервер заново устанавливает доступ на каждом запросе. Покупатель не получает роль по заголовку.
++
++Существующее правило сохранено: только явно перечисленные MANAGER_IDS имеют глобальный доступ. Это прежняя административная настройка, не автоматическое право любого менеджера. Текущий список пользователя не изменяется.
++
++Для остальных менеджеров: manager_access.enabled разрешает кабинет, can_create отдельно разрешает создание. order_managers назначает конкретный заказ; can_edit=false означает только просмотр. Без назначения заказ отсутствует в списке/сводке/поиске/карточке/истории/очереди. Менеджер с can_create получает назначение только на созданный им заказ. В покупательском кабинете этот же человек видит лишь собственные покупки и свою историю текущего поколения, без действий менеджера.
++
++Права нельзя назначить через Mini App, Bot API-команду или runtime SQL UPDATE. Не назначайте реальный ID по догадке. Для выдачи прав оператор с отдельной ролью мигратора должен подтвердить Telegram ID, заказ и объём доступа. Пример SQL параметризованного операторского действия (не запускается автоматически):
++
++```sql
++BEGIN;
++-- :manager_id — предварительно проверенный Telegram ID существующего users.
++INSERT INTO manager_access(telegram_id,can_create) VALUES (:manager_id,false)
++ON CONFLICT(telegram_id) DO NOTHING;
++INSERT INTO order_managers(order_id,manager_id,can_edit)
++VALUES (:order_id,:manager_id,false)
++ON CONFLICT(order_id,manager_id) DO UPDATE SET can_edit=excluded.can_edit;
++COMMIT;
++```
++
++Отзыв: UPDATE manager_access SET enabled=false WHERE telegram_id=:manager_id. Расширение can_edit/can_create требует отдельного решения оператора. Общего переключателя в интерфейсе нет. Переход между отдельными страницами создаёт новый контекст без переноса списков/черновиков. При 403 данные активного кабинета убираются.
++
++Блокирующая проверка назначения выполняется внутри транзакции действия через две миграторские функции с фиксированным SQL, квалифицированными именами таблиц, search_path=pg_catalog и отозванным PUBLIC EXECUTE. Runtime получает только EXECUTE, а не UPDATE таблиц прав. Это позволяет блокировать конкурентный отзыв права до завершения проверенного действия. Права заказов проверяются также при прямых запросах.
++
++Граница: прикладной ACL проверяет API; это не PostgreSQL RLS для каждого Telegram-пользователя. Секрет runtime даёт самой службе доступ к заказам, поэтому он остаётся только на backend. Основание устройства SECURITY DEFINER: [PostgreSQL CREATE FUNCTION](https://www.postgresql.org/docs/17/sql-createfunction.html#SQL-CREATEFUNCTION-SECURITY).
++
++## Уточнение: отдельная учётная запись менеджера
++
++Общего переключателя ролей больше нет. Покупательский адрес `/` не показывает вход менеджера. Рабочий адрес `/manager/` открывает менеджерский контекст; без назначенного Telegram ID API вернёт 403. Ссылка сама по себе не даёт прав. Авторизация берёт ID из подписанных Telegram initData, а не из вручную введённого числа.
++
++Менеджер использует собственный Telegram-аккаунт. Команда `/manager` проверяет отправителя и выдаёт рабочую ссылку только назначенному сотруднику. Команда не включена в общее меню. Если у человека есть оба назначения, его покупки остаются по `/`, рабочие данные — по `/manager/`; общедоступной кнопки выбора роли нет.
++
++`manager_access.all_orders=true` явно назначает полный доступ к заказам. `can_read_inbox=true` отдельно разрешает все обращения клиентов. Даже прежние глобальные MANAGER_IDS не получают доступ ко всем сообщениям без этого флага. Назначение полного рабочего аккаунта требует конкретного подтверждённого ID и решения владельца; текущий ID покупателя не изменяется автоматически.
++
++Лента активности показывает фактически записанные изменения доступных заказов. Обращения — тексты из Mini App и личного чата с этим ботом. Просмотры экранов, личные переписки вне бота, звонки и действия на неподключённом сайте не собираются. Вложения представлены типом и подписью, их файлы не скачиваются. Исходящие ответы менеджера и уведомления о новых обращениях пока не реализованы; реальных отправок клиентам для проверки не выполняют.
++
++Пример согласованного полного назначения (оператор с миграторскими реквизитами; ID уже должен существовать в users):
++
++```sql
++INSERT INTO manager_access(telegram_id,enabled,can_create,all_orders,can_read_inbox)
++VALUES (:verified_manager_id,true,true,true,true)
++ON CONFLICT(telegram_id) DO UPDATE SET enabled=true,can_create=true,all_orders=true,can_read_inbox=true;
++```
++
++Это пример процедуры, не выполненное назначение пользователя. Учётные записи и пароли Telegram не запрашиваются; нужен только подтверждённый числовой ID.
+--- installed-before/docs/PRIVACY.md
++++ v0.7/docs/PRIVACY.md
+@@ -13,3 +13,9 @@
+ Нет browser localStorage/sessionStorage/service worker с заказами. Ответы и fetch используют no-store. Перед открытием карточки сервер заново проверяет права. Уже полученные на устройстве сведения нельзя гарантированно отозвать удалённо; не оставляйте кабинет открытым на чужом устройстве.
+ 
+ Временный HTTP-туннель localhost.run заканчивает TLS у провайдера: он технически обрабатывает initData и ответы кабинета. Это согласованный режим тестирования, а не постоянный production-хостинг. Production требует `ENVIRONMENT=production`, `HTTPS_MODE=external`, постоянный HTTPS-домен и самостоятельно выбранную инфраструктуру. Управление ОС, резервным хранилищем и правовыми условиями остаётся у оператора.
++
++## Обращения 0.7
++
++customer_messages хранит Telegram ID, источник, текст (до 4096 символов), тип, время приёма и идентификаторы для дедупликации. Бот сохраняет только личные сообщения, поступившие ему; команды не превращаются в обращения. Из Mini App отправитель устанавливается сервером. Автоматического уведомления менеджеру/ответа клиенту не добавлено. Файлы и сторонние переписки не загружаются.
++
++Входящие обращения доступны только сотрудникам с отдельным can_read_inbox, они не раскрываются любому менеджеру заказов. Собственная выгрузка включает до 1000 своих обращений. Сроки хранения, удаление/анонимизация сообщений и копий требуют согласованной операторской политики; автоудаления нет. Не сохраняйте секреты в обращениях, предупреждение есть перед отправкой. Смена/отзыв прав и 403 очищают клиентские рабочие данные; это не обещание удалить уже прочитанную сотрудником информацию.
+--- /dev/null
++++ v0.7/docs/UPGRADE-0.7.md
+@@ -0,0 +1,13 @@
++# Обновление установленного нового проекта до 0.7
++
++0.7 продолжает фактическую версию PyCharm 0.6 с исправленным QR-парсером localhost.run. Старые 001–004 неизменны. Новые 005 добавляют назначения/отслеживание, 006 — узкие проверки ACL с блокировкой, 007 — отдельные полные разрешения и обращения. Ничьи реальные права менеджера автоматически не назначаются.
++
++Сначала остановить main.py в PyCharm, сохранить приватную копию кода/.env и pg_dump, проверить restore отдельно; не удалять volume. Обновить текущие файлы, сохраняя .env/data/.venv. Runtime lock прежний. Выполнить python -m majlis.cli migrate и запустить конфигурацию MAJLIS из PyCharm. Открыть свежий кабинет через меню тестового бота. Старые окна могут содержать старый JS и HTTPS-адрес.
++
++Интерфейс по умолчанию открывает покупателя. Менеджер открывает отдельный адрес /manager/ или скрытую команду /manager со своего Telegram ID. Кнопка менеджера у покупателя отсутствует, прямой запрос manager получает 403. Если менеджер также покупатель, собственные покупки доступны отдельно.
++
++API совместим: прежние endpoint/поля сохранены; без X-MAJLIS-Cabinet сохраняется прежнее автоматическое определение контекста для старых клиентов. Новый frontend всегда передаёт контекст. Добавлены permissions/tracking в заказ, available_cabinets/can_create/manager_all в user, отдельный POST /api/orders/tracking. Эти поля не принимаются от клиента как подтверждение прав.
++
++manage.py учитывает три новые таблицы при backup/restore. Восстановление старого 0.6 dump проверяйте исходниками 0.6, затем применяйте новые миграции на копии. Rollback не выполняет DROP таблиц и не подменяет рабочую базу автоматически. Отдельно учитывайте модель доступа старого API при откате.
++
++Приёмка: покупатель/назначенный менеджер/только просмотр/обе роли/отзыв/прямые запросы, трек и история, неизменность платёжных ссылок, свежесть и потеря связи. Истинный сайт/провайдер и устройства проверяются отдельно.
+--- installed-before/docs/VERIFICATION.md
++++ v0.7/docs/VERIFICATION.md
+@@ -1,14 +1,15 @@
+-# Проверка версии 0.6 — 15.10.2026
++# Проверка 0.7 — 15.10.2026
+ 
+-Основа — 56 исходных файлов 0.5, сверенных по SHA-256. До изменений её полный набор: 65 passed in 6.65s (baseline-v0.5.txt). 001/002 и runtime lock сохранены побайтно.
++Основа — фактические 68 исходных файлов проекта PyCharm, зафиксированные до изменений. Старый архив 0.5 не использовался как рабочая основа. Существующие 91 регрессионная проверка сохранены; итог **104 passed in 10.37s**. Добавлены проверки отдельных контекстов, назначений/readonly/отзыва, создания, трека/давности, входящих обращений/дедупликации/выгрузки и скрытой команды менеджера. Внешние Telegram sends изолированы.
+ 
+-- Итоговый Python: **87 passed in 7.76s** в отдельной настоящей PostgreSQL, отдельные runtime/migration роли. Все прежние тесты сохранены; добавлены коммерческие правки, платежи/ETA/history, классификация transfer из 0.5, строгий JSON-контракт, безопасный dry-run, атомарный rollback, конкурентные повторы и права import-map.
+-- Node: **6 passed**, включая сохранение нескольких страниц и фильтров, stale responses, escaping/деньги, принадлежность, неизменность checkpoint-даты после payment/ETA.
+-- Браузер с mock API/SDK и вымышленными данными: копирование доступно, удаление URL и сохранение товара/120.01 руб. отображаются корректно. Первая отрицательная проверка удаления выявила неверное поле в mock API (url вместо payment_url); после исправления стенда повтор прошёл. Это не проверка Telegram SDK на устройстве и не замена backend-тестов. Скриншот — evidence/ui-reviewed.png.
+-- Реальный Uvicorn с тестовой PostgreSQL: HTML/JS 200, public ready 403, health-token ready 200, unsigned bootstrap 401, подписанный fictional buyer 200, oversized body 413; security headers есть. Запросы подписаны фиктивным тестовым токеном, не реальным Telegram.
+-- pg_dump/restore-test: новая отдельная база, **10 таблиц, 31 ограничение**, хеши/структура совпали, **15** проверяемых нарушений CHECK/FK/UNIQUE отклонены. Данные — тестовые, включая synthetic import. ACL намеренно исключены. Рабочая база не восстанавливалась.
+-- Ruff: ноль замечаний; Bandit с существующими точечными объяснениями nosec: ноль неаннотированных результатов. Это автоматические проверки, не гарантия отсутствия уязвимостей.
++Node: **9 passed** — прежняя пагинация/escaping/деньги/история плюс отсутствие role-picker, изоляция контекстов, отслеживание и безопасное отображение обращений.
+ 
+-Команды/машиночитаемые результаты находятся в evidence пакета отчёта. Исторические проверки 0.5 (зависимости, роли, Compose и аудиторский baseline) отмечены отдельно; не выдаются за новое развертывание.
++На стенде localhost:8898 используется настоящий API localhost:8897 и отдельная тестовая PostgreSQL. Только Telegram SDK/initData имитируются фиктивным ключом и разными вымышленными ID покупателя и менеджера. Подтверждены: свой заказ, отсутствие менеджерской ссылки у покупателя, отправка обращения, его отображение менеджеру, лента событий, сохранение трека, API outage с сохранением списка. При 360 px scrollWidth страницы равна 360, карточка не имеет горизонтальной прокрутки; меню из 5 кнопок помещается. Эти измерения не заменяют iOS/Android/Telegram проверку.
+ 
+-Не подтверждены: настоящие Telegram-сессии/отправки 0.6, iOS/Android/Windows, рабочие внешние API/платежи, старая схема и миграция заказчика, production HTTPS/ACL/нагрузка, согласованные retention/RPO/RTO.
++Backup/restore новой схемы: 13 таблиц, 43 ограничения, 2 функции, непустые назначения и обращения; хеши и метаданные совпали, 23 отрицательных constraint probes отклонены. Восстановление только в новой *_test БД, ACL намеренно исключены. Перед рабочим обновлением отдельно восстановлен исходный 0.6 dump в новой базе; старые данные и .env после миграций сохранены.
++
++Ruff/format проходят. Bandit не нашёл неаннотированных результатов; прежние точечные обоснования subprocess/bind сохранены. Runtime lock не менялся. Это не гарантия отсутствия уязвимостей.
++
++Разработка выявила 3 новых отказа PostgreSQL на FOR SHARE без UPDATE-прав; вместо выдачи UPDATE на ACL добавлены узкие миграторские функции. Браузер выявил английскую сетевую ошибку; заменена понятным сообщением. Был конфликт портов тестового стенда и запуск Node из неверной cwd: повторены после исправления окружения, это не скрытые пропуски тестов.
++
++Результаты и скриншоты находятся в evidence отчётного пакета. Не подтверждены реальная внешняя синхронизация/оплата/старая миграция, полный менеджер на настоящем ID без назначения, все устройства и нагрузка/production HTTPS/retention.
+--- /dev/null
++++ v0.7/docs/WEBSITE-AND-TRACKING.md
+@@ -0,0 +1,38 @@
++# Источники данных и подключения — 0.7
++
++## Что подтверждено текущим кодом
++
++Целевая БД приложения — PostgreSQL из DATABASE_URL. Mini App обращается только к API, не к БД. Старый источник заказчика и сайт не предоставлены. Адаптер сайта по выдуманным endpoint/полям не создавался.
++
++| Данные | Текущий источник истины | Допустимое изменение / конфликт |
++|---|---|---|
++| Telegram ID/профиль | Проверенные initData; связь заказа задаёт уполномоченный менеджер | Передача покупателя требует явного подтверждения, поколения истории и сброса старой ссылки |
++| Номер заказа, товар/комплектация, копейки | PostgreSQL, ручная работа менеджера | Версия + row lock, 409 при конфликте; изменения сайта не применяются без договора обмена |
++| Этап доставки | PostgreSQL; ручной менеджер или подписанный событийный endpoint | У автоматики только существующая монотонная последовательность; у менеджера ручная коррекция |
++| Трек и перевозчик | Отдельные ручные подтверждённые поля | Версия + row lock; новых adapters/URL трекинга нет |
++| Ожидаемая дата | Ручная дата менеджера, отдельный флаг подтверждения | Дата без подтверждения — ориентир; внешняя ETA пока не импортируется |
++| Оплата | Ручная разрешённая HTTPS-ссылка | Не равна paid; при смене суммы/товара URL убирается из кабинета; provider invoice не отменяется |
++| Отдельное состояние заказа / оплаты | Не подключено | В ответе not_provided / not_confirmed, не вымышленные состояния |
++
++Сейчас одна запись orders — один заказ с текстовым товаром/комплектацией. shipment — партия карго, не трек-номер. Подписанные события обновляют все связанные с партией заказы. Отдельные SKU/количества/товарные позиции/отправления не моделируются без правил источника.
++
++## Отслеживание и свежесть
++
++Сохраняются tracking_number/carrier/tracking_updated_at для ручного отслеживания. external_updated_at — время приёма допустимого внешнего события текущего или более позднего этапа; это не время физического перемещения у перевозчика. Запоздавший sequence и повтор event_id не освежают данные. Неверное событие откатывает транзакцию. Заказ delivered не откатывается старым автоматическим этапом. Отмены/возвраты отсутствуют в исходном словаре; новые запреты/состояния не выдуманы, необходимы правила заказчика.
++
++После 24 часов без нового принятого события UI предупреждает о давности сведений. Это технический индикатор возраста, не SLA, не доказательство сбоя интеграции или задержки доставки. При отсутствии событий явно указано, что автоматические обновления не поступали. Последнее обновление заказа, ручного трека и внешнего события различаются.
++
++Действующий /api/integrations/events — ВХОДНОЙ целевой контракт приложения, не документированный API сайта. Он принимает event_id, shipment, status, sequence и HMAC(timestamp.raw_body); production требует sequence. Повторы не дублируют историю/очередь. Неполученные события источник может повторить с тем же ID/нагрузкой; другие данные под тем же ID — 409. Протокол 0.6 не изменялся, контрольные суммы прежних payload совместимы. Он обновляет статусы существующих партий, **не синхронизирует создание заказов с сайта**.
++
++Поллинг Mini App каждые 30 секунд обновляет локальные сведения; это не polling перевозчика. Внешний polling/webhook, сетевые таймауты и повторы для website adapter должны опираться на настоящий API. Сейчас исходящих запросов к неизвестному сайту нет.
++
++## Что предоставить для сайта
++
++1. URL сайта, документацию/версию API или исходники backend, sandbox; способ авторизации передать локально, без ключей в чате.
++2. Модель клиента и подтверждённое сопоставление Telegram ID; стабильные order/customer/product/shipment/invoice IDs, валюты и единицы суммы.
++3. Какие сущности authoritative на сайте, какие в MAJLIS; кто создаёт заказ, разрешённые обратные изменения, версии/updated_at и правила конфликтов.
++4. Webhook/подписи/event IDs/порядок/retention replay либо polling/cursor/rate limits/timeout. Формат ошибок и допустимость повторов/idempotency key.
++5. Связь партии с заказами и товарами; известные даты/местоположения/перевозчик; сценарии отмен/возвратов.
++6. Правила счетов/ссылок/paid/refund/expiry и отмены у платёжного провайдера.
++
++До получения материалов не подтверждены реальные адаптеры, внешняя синхронизация заказов и оплата. Нормализованный test import из LEGACY-MIGRATION.md остаётся отдельной подготовкой, не переносом настоящей старой базы.
+--- /dev/null
++++ v0.7/majlis/access.py
+@@ -0,0 +1,79 @@
++"""Server-owned cabinet context. Operators manage grants using the migrator role."""
++
++from .domain import Problem
++
++
++def context(db, user, cfg, cabinet=None):
++    global_access = user["id"] in cfg.managers
++    profile = db.execute(
++        "SELECT can_create,all_orders,can_read_inbox FROM manager_access WHERE telegram_id=%s AND enabled",
++        (user["id"],),
++    ).fetchone()
++    global_access = global_access or bool(profile and profile["all_orders"])
++    allowed = global_access or profile is not None
++    if cabinet not in (None, "buyer", "manager"):
++        raise Problem(400, "Неизвестный кабинет.")
++    if cabinet == "manager" and not allowed:
++        raise Problem(403, "Доступ менеджера не назначен.")
++    role = cabinet or ("manager" if allowed else "buyer")
++    return {
++        **user,
++        "role": role,
++        "cabinet": role,
++        "available_cabinets": ["buyer", "manager"] if allowed else ["buyer"],
++        "manager_all": global_access,
++        "can_read_inbox": role == "manager" and bool(profile and profile["can_read_inbox"]),
++        "can_create": role == "manager"
++        and (global_access or bool(profile and profile["can_create"])),
++    }
++
++
++def scope(user):
++    if user["role"] != "manager":
++        return "customer_id=%s", [user["id"]]
++    if user.get("manager_all", True):
++        return "", []
++    return (
++        "EXISTS (SELECT 1 FROM order_managers a JOIN manager_access m ON m.telegram_id=a.manager_id WHERE a.order_id=orders.id AND a.manager_id=%s AND m.enabled)",
++        [user["id"]],
++    )
++
++
++def check_order(db, row, user, edit=False):
++    if user["role"] != "manager":
++        if edit or row["customer_id"] != user["id"]:
++            raise Problem(404, "Заказ не найден.")
++        return
++    if user.get("manager_all", True):
++        return
++    grant = db.execute(
++        "SELECT public.manager_order_access(%s,%s) AS can_edit", (user["id"], row["id"])
++    ).fetchone()
++    if grant["can_edit"] is None:
++        raise Problem(404, "Заказ не найден.")
++    if edit and not grant["can_edit"]:
++        raise Problem(403, "Заказ доступен только для просмотра.")
++
++
++def permissions(db, row, user):
++    if user["role"] != "manager":
++        return {"edit": False}
++    if user.get("manager_all", True):
++        return {"edit": True}
++    grant = db.execute(
++        "SELECT a.can_edit FROM order_managers a JOIN manager_access m ON m.telegram_id=a.manager_id WHERE a.order_id=%s AND a.manager_id=%s AND m.enabled",
++        (row["id"], user["id"]),
++    ).fetchone()
++    return {"edit": bool(grant and grant["can_edit"])}
++
++
++def list_permissions(db, rows, user):
++    if user["role"] != "manager":
++        return {row["id"]: {"edit": False} for row in rows}
++    if user.get("manager_all", True):
++        return {row["id"]: {"edit": True} for row in rows}
++    grants = db.execute(
++        "SELECT order_id,can_edit FROM order_managers WHERE manager_id=%s AND order_id=ANY(%s)",
++        (user["id"], [row["id"] for row in rows]),
++    ).fetchall()
++    return {row["order_id"]: {"edit": row["can_edit"]} for row in grants}
+--- installed-before/majlis/api.py
++++ v0.7/majlis/api.py
+@@ -9,12 +9,21 @@
+ from fastapi.exceptions import RequestValidationError
+ from fastapi.responses import FileResponse, JSONResponse
+ 
+-from . import services
++from . import access, services, support
+ from .config import ROOT, settings
+ from .database import Database
+ from .domain import Problem, validate_init_data
+ from .http_boundary import HttpBoundary, PublicLimiter
+-from .schemas import Commercial, Details, Integration, NewOrder, Payment, Status
++from .schemas import (
++    Commercial,
++    Details,
++    Integration,
++    NewOrder,
++    Payment,
++    Status,
++    SupportMessage,
++    Tracking,
++)
+ 
+ 
+ @asynccontextmanager
+@@ -31,7 +40,7 @@
+ 
+ app = FastAPI(
+     title="MAJLIS API",
+-    version="0.6.0",
++    version="0.7.0",
+     lifespan=lifespan,
+     docs_url=None,
+     redoc_url=None,
+@@ -71,6 +80,7 @@
+     with request.app.state.db.connection() as db:
+         services.rate_limit(db, user["id"])
+         services.ensure_user(db, user)
++        user = access.context(db, user, settings(), request.headers.get("X-MAJLIS-Cabinet"))
+     return user
+ 
+ 
+@@ -134,20 +144,35 @@
+         raise Problem(404, "Заказ не найден.")
+     with request.app.state.db.connection() as db:
+         row = services.get_order(db, order_id, lock=True)
+-        if user["role"] != "manager" and row["customer_id"] != user["id"]:
+-            raise Problem(404, "Заказ не найден.")
++        access.check_order(db, row, user)
+         return services.order_json(db, order_id, user)
+ 
+ 
+ @app.post("/api/orders", status_code=201)
+ def create(data: NewOrder, request: Request, user: Annotated[dict, Depends(manager)]):
+     with request.app.state.db.connection() as db:
+-        return services.create_order(db, data, user["id"])
++        if not user["can_create"]:
++            raise Problem(403, "Создание заказов не разрешено.")
++        if not user["manager_all"]:
++            profile = db.execute(
++                "SELECT public.manager_create_permission(%s) AS can_create",
++                (user["id"],),
++            ).fetchone()
++            if not profile or not profile["can_create"]:
++                raise Problem(403, "Создание заказов не разрешено.")
++        result = services.create_order(db, data, user["id"])
++        if not user["manager_all"]:
++            db.execute(
++                "INSERT INTO order_managers(order_id,manager_id,can_edit) VALUES (%s,%s,true)",
++                (result["id"], user["id"]),
++            )
++        return result
+ 
+ 
+ @app.post("/api/orders/status")
+ def status(data: Status, request: Request, user: Annotated[dict, Depends(manager)]):
+     with request.app.state.db.connection() as db:
++        access.check_order(db, services.get_order(db, data.order_id, lock=True), user, edit=True)
+         return services.change_status(
+             db, data.order_id, data.status, data.note, "manager", user["id"], data.version
+         )
+@@ -156,12 +181,14 @@
+ @app.post("/api/orders/details")
+ def details(data: Details, request: Request, user: Annotated[dict, Depends(manager)]):
+     with request.app.state.db.connection() as db:
++        access.check_order(db, services.get_order(db, data.order_id, lock=True), user, edit=True)
+         return services.update_details(db, data, user["id"])
+ 
+ 
+ @app.post("/api/orders/payment")
+ def payment(data: Payment, request: Request, user: Annotated[dict, Depends(manager)]):
+     with request.app.state.db.connection() as db:
++        access.check_order(db, services.get_order(db, data.order_id, lock=True), user, edit=True)
+         return services.update_payment(db, data, user["id"], settings())
+ 
+ 
+@@ -207,6 +234,7 @@
+         ).fetchall()
+         return {
+             "user": user,
++            "messages": support.own_messages(db, user["id"]),
+             "orders": [
+                 services.public_order(row, services.order_events(db, row, buyer)) for row in rows
+             ],
+@@ -240,8 +268,7 @@
+         raise Problem(404, "Заказ не найден.")
+     with request.app.state.db.connection() as db:
+         row = services.get_order(db, order_id, lock=True)
+-        if user["role"] != "manager" and row["customer_id"] != user["id"]:
+-            raise Problem(404, "Заказ не найден.")
++        access.check_order(db, row, user)
+         events = services.order_events(db, row, user, before)
+         return {
+             "customer_generation": row["customer_generation"],
+@@ -253,4 +280,58 @@
+ @app.post("/api/orders/commercial")
+ def commercial(data: Commercial, request: Request, user: Annotated[dict, Depends(manager)]):
+     with request.app.state.db.connection() as db:
++        access.check_order(db, services.get_order(db, data.order_id, lock=True), user, edit=True)
+         return services.update_commercial(db, data, user["id"])
++
++
++@app.post("/api/orders/tracking")
++def tracking(data: Tracking, request: Request, user: Annotated[dict, Depends(manager)]):
++    with request.app.state.db.connection() as db:
++        access.check_order(db, services.get_order(db, data.order_id, lock=True), user, edit=True)
++        return services.update_tracking(db, data, user["id"])
++
++
++@app.get("/cabinets.js")
++def cabinets_script():
++    return FileResponse(ROOT / "web/cabinets.js", media_type="text/javascript")
++
++
++@app.get("/manager")
++@app.get("/manager/")
++def manager_index():
++    return FileResponse(ROOT / "web/index.html", media_type="text/html")
++
++
++@app.post("/api/support", status_code=201)
++def create_support(
++    data: SupportMessage, request: Request, user: Annotated[dict, Depends(identity)]
++):
++    with request.app.state.db.connection() as db:
++        return support.create(db, user["id"], data.text, data.idempotency_key)
++
++
++@app.get("/api/manager/inbox")
++def manager_inbox(
++    request: Request,
++    user: Annotated[dict, Depends(manager)],
++    before: Annotated[int | None, Query(gt=0)] = None,
++):
++    with request.app.state.db.connection() as db:
++        db.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
++        return support.inbox(db, user, before)
++
++
++@app.get("/api/manager/activity")
++def manager_activity(
++    request: Request,
++    user: Annotated[dict, Depends(manager)],
++    before: Annotated[int | None, Query(gt=0)] = None,
++):
++    with request.app.state.db.connection() as db:
++        db.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
++        return support.activity(db, user, before)
++
++
++@app.get("/workspace.js")
++def workspace_script():
++    return FileResponse(ROOT / "web/workspace.js", media_type="text/javascript")
+--- installed-before/majlis/bot.py
++++ v0.7/majlis/bot.py
+@@ -84,10 +84,30 @@
+     command = text.strip().split()[0].split("@")[0].lower() if text.strip() else ""
+     with db.connection() as conn:
+         ensure_user(conn, user, started=True)
+-    if command == "/start":
++    if not command.startswith("/"):
++        from .support import from_telegram
++
++        with db.connection() as conn:
++            from_telegram(conn, message)
++        return
++    if command == "/manager":
++        from .access import context
++        from .domain import Problem
++
++        allowed = True
++        with db.connection() as conn:
++            try:
++                context(conn, {"id": user["id"]}, settings(), "manager")
++            except Problem:
++                allowed = False
++        if allowed:
++            api.send(chat["id"], "Рабочее пространство MAJLIS.", url.rstrip("/") + "/manager/")
++        else:
++            api.send(chat["id"], "Раздел недоступен.")
++    elif command == "/start":
+         api.send(
+             chat["id"],
+-            "Добро пожаловать в MAJLIS.\nОткройте кабинет, чтобы следить за заказами и доставкой.\n\nЕсли заказ ещё не привязан, передайте менеджеру ваш Telegram ID: "
++            "Добро пожаловать в MAJLIS.\nОткройте кабинет, чтобы следить за заказами и доставкой.\nСообщения этому боту сохраняются как обращения в магазин.\n\nЕсли заказ ещё не привязан, передайте менеджеру ваш Telegram ID: "
+             + str(user["id"]),
+             url,
+         )
+--- installed-before/majlis/database.py
++++ v0.7/majlis/database.py
+@@ -71,7 +71,7 @@
+             db.execute(sql.SQL("GRANT USAGE ON SCHEMA public TO {}").format(role))
+             db.execute(
+                 sql.SQL(
+-                    "GRANT SELECT ON users,orders,events,outbox,rate_limits,bot_state,integration_events,schema_migrations TO {}"
++                    "GRANT SELECT ON users,orders,events,outbox,rate_limits,bot_state,integration_events,schema_migrations,manager_access,order_managers,customer_messages TO {}"
+                 ).format(role)
+             )
+             db.execute(
+@@ -85,5 +85,13 @@
+                 )
+             )
+             db.execute(
++                sql.SQL("GRANT INSERT ON order_managers,customer_messages TO {}").format(role)
++            )
++            db.execute(
++                sql.SQL(
++                    "GRANT EXECUTE ON FUNCTION public.manager_order_access(BIGINT,BIGINT),public.manager_create_permission(BIGINT) TO {}"
++                ).format(role)
++            )
++            db.execute(
+                 sql.SQL("GRANT USAGE,SELECT ON ALL SEQUENCES IN SCHEMA public TO {}").format(role)
+             )
+--- installed-before/majlis/schemas.py
++++ v0.7/majlis/schemas.py
+@@ -64,3 +64,13 @@
+ class Commercial(Revision):
+     item: str = Field(min_length=1, max_length=300)
+     amount: Annotated[int, Field(strict=True, gt=0, le=1000000000000)]
++
++
++class Tracking(Revision):
++    tracking_number: str = Field(default="", max_length=100)
++    carrier: str = Field(default="", max_length=100)
++
++
++class SupportMessage(Input):
++    text: str = Field(min_length=1, max_length=4096)
++    idempotency_key: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9_-]+$")
+--- installed-before/majlis/services.py
++++ v0.7/majlis/services.py
+@@ -5,6 +5,7 @@
+ from psycopg.errors import UniqueViolation
+ from psycopg.types.json import Jsonb
+ 
++from . import access, tracking
+ from .domain import STAGE_MAP, STAGES, Problem, https_url
+ 
+ 
+@@ -40,6 +41,7 @@
+     data = serial(row)
+     data["eta"] = data["eta"] or ""
+     data["stage"] = STAGE_MAP[row["status"]]
++    data["tracking"] = serial(tracking.snapshot(row))
+     data["events"] = serial(events)
+     data["history_cursor"] = events[0]["id"] if len(events) == 100 else None
+     return data
+@@ -48,7 +50,10 @@
+ def order_json(db, oid, user=None):
+     row = get_order(db, oid)
+     events = order_events(db, row, user)
+-    return public_order(row, events)
++    result = public_order(row, events)
++    if user is not None:
++        result["permissions"] = access.permissions(db, row, user)
++    return result
+ 
+ 
+ def order_events(db, row, user=None, before=None):
+@@ -107,11 +112,8 @@
+ def bootstrap(db, user, cfg, before=None, q="", bucket="all"):
+     if bucket not in ("all", "active", "delivered"):
+         raise Problem(400, "Неизвестный фильтр заказов.")
+-    params = []
+-    clauses = []
+-    if user["role"] != "manager":
+-        clauses.append("customer_id=%s")
+-        params.append(user["id"])
++    constraint, params = access.scope(user)
++    clauses = [constraint] if constraint else []
+     scope = " WHERE " + " AND ".join(clauses) if clauses else ""
+     summary = db.execute(
+         sql.SQL(
+@@ -184,11 +186,17 @@
+         },
+     }
+     if user["role"] == "manager":
+-        result["notifications"] = serial(
+-            db.execute(
+-                "SELECT id,state,attempts,last_error FROM outbox ORDER BY id DESC LIMIT 30"
+-            ).fetchall()
+-        )
++        constraint, notification_params = access.scope(user)
++        query = sql.SQL(
++            "SELECT n.id,n.state,n.attempts,n.last_error FROM outbox n JOIN events e ON e.id=n.event_id JOIN orders ON orders.id=e.order_id "
++        )
++        if constraint:
++            query += sql.SQL("WHERE ") + sql.SQL(constraint)
++        query += sql.SQL(" ORDER BY n.id DESC LIMIT 30")
++        result["notifications"] = serial(db.execute(query, notification_params).fetchall())
++    granted = access.list_permissions(db, rows, user)
++    for item in result["orders"]:
++        item["permissions"] = granted.get(item["id"], {"edit": False})
+     return result
+ 
+ 
+@@ -376,6 +384,8 @@
+             db.execute(
+                 "UPDATE orders SET integration_sequence=%s WHERE id=%s", (data.sequence, row["id"])
+             )
++        if rank[data.status] >= rank[row["status"]]:
++            db.execute("UPDATE orders SET external_updated_at=now() WHERE id=%s", (row["id"],))
+         # The existing delivery vocabulary has no cancel/return states. Only
+         # automated progression is monotonic; manual manager corrections remain.
+         if rank[data.status] <= rank[row["status"]]:
+@@ -396,3 +406,20 @@
+     ).fetchone()
+     if row["requests"] > 120:
+         raise Problem(429, "Слишком много запросов. Повторите через минуту.")
++
++
++def update_tracking(db, data, actor):
++    old = get_order(db, data.order_id, lock=True)
++    check_revision(old, data.version)
++    if old["tracking_number"] == data.tracking_number and old["carrier"] == data.carrier:
++        return order_json(db, data.order_id)
++    row = db.execute(
++        "UPDATE orders SET tracking_number=%s,carrier=%s,tracking_updated_at=now(),updated_at=now(),version=version+1 WHERE id=%s RETURNING *",
++        (data.tracking_number, data.carrier, data.order_id),
++    ).fetchone()
++    event = add_event(
++        db, row, "Магазин уточнил данные отслеживания.", "manager", actor, kind="details"
++    )
++    queue_event(db, row, event, "Магазин уточнил данные отслеживания.")
++    audit(db, actor, "tracking", old, row)
++    return order_json(db, data.order_id)
+--- /dev/null
++++ v0.7/majlis/support.py
+@@ -0,0 +1,111 @@
++"""First-party messages only. No access to users' private Telegram conversations."""
++
++import hashlib
++
++from psycopg import sql
++
++from . import access
++from .domain import Problem
++from .services import serial
++
++
++def create(db, customer_id, text, key):
++    digest = hashlib.sha256(text.encode()).hexdigest()
++    db.execute("SELECT telegram_id FROM users WHERE telegram_id=%s FOR UPDATE", (customer_id,))
++    existing = db.execute(
++        "SELECT id,payload_hash FROM customer_messages WHERE customer_id=%s AND idempotency_key=%s",
++        (customer_id, key),
++    ).fetchone()
++    if existing:
++        if existing["payload_hash"] != digest:
++            raise Problem(
++                409, "Повторное обращение содержит другой текст. Создайте новое обращение."
++            )
++        return {"id": existing["id"], "duplicate": True}
++    recent = db.execute(
++        "SELECT count(*) AS n FROM customer_messages WHERE customer_id=%s AND source='miniapp' AND created_at>now()-interval '10 minutes'",
++        (customer_id,),
++    ).fetchone()["n"]
++    if recent >= 5:
++        raise Problem(429, "Слишком много обращений. Повторите через 10 минут.")
++    row = db.execute(
++        "INSERT INTO customer_messages(customer_id,source,text,idempotency_key,payload_hash) VALUES (%s,'miniapp',%s,%s,%s) RETURNING id",
++        (customer_id, text, key, digest),
++    ).fetchone()
++    return {"id": row["id"], "duplicate": False}
++
++
++def from_telegram(db, message):
++    customer = (message.get("from") or {}).get("id")
++    chat = message.get("chat") or {}
++    mid = message.get("message_id")
++    if (
++        chat.get("type") != "private"
++        or chat.get("id") != customer
++        or type(mid) is not int
++        or mid <= 0
++    ):
++        return
++    kind = next(
++        (key for key in ["photo", "document", "voice", "video"] if key in message),
++        "text" if message.get("text") else "other",
++    )
++    labels = {
++        "photo": "Фотография",
++        "document": "Документ",
++        "voice": "Голосовое сообщение",
++        "video": "Видео",
++        "other": "Сообщение другого типа",
++        "text": "Сообщение",
++    }
++    text = str(message.get("text") or message.get("caption") or labels[kind])[:4096]
++    digest = hashlib.sha256(text.encode()).hexdigest()
++    db.execute(
++        "INSERT INTO customer_messages(customer_id,source,text,kind,telegram_chat_id,telegram_message_id,payload_hash) VALUES (%s,'telegram',%s,%s,%s,%s,%s) ON CONFLICT(telegram_chat_id,telegram_message_id) DO NOTHING",
++        (customer, text, kind, chat["id"], mid, digest),
++    )
++
++
++def inbox(db, user, before=None):
++    if user["role"] != "manager" or not user.get("can_read_inbox"):
++        raise Problem(403, "Доступ к обращениям не назначен.")
++    # Recheck explicit inbox capability; inherited global-order access is insufficient.
++    profile = db.execute(
++        "SELECT telegram_id FROM manager_access WHERE telegram_id=%s AND enabled AND can_read_inbox",
++        (user["id"],),
++    ).fetchone()
++    if not profile:
++        raise Problem(403, "Доступ к обращениям не назначен.")
++    query = sql.SQL(
++        "SELECT m.id,m.customer_id,u.first_name,m.source,m.kind,m.text,m.created_at FROM customer_messages m JOIN users u ON u.telegram_id=m.customer_id"
++    )
++    params = []
++    if before:
++        query += sql.SQL(" WHERE m.id<%s")
++        params.append(before)
++    rows = db.execute(query + sql.SQL(" ORDER BY m.id DESC LIMIT 51"), params).fetchall()
++    return {"items": serial(rows[:50]), "next_cursor": rows[49]["id"] if len(rows) > 50 else None}
++
++
++def activity(db, user, before=None):
++    constraint, params = access.scope(user)
++    query = sql.SQL(
++        "SELECT e.id,orders.id AS order_id,orders.number,e.kind,e.status,e.note,e.source,e.created_at FROM events e JOIN orders ON orders.id=e.order_id"
++    )
++    clauses = [constraint] if constraint else []
++    if before:
++        clauses.append("e.id<%s")
++        params.append(before)
++    if clauses:
++        query += sql.SQL(" WHERE ") + sql.SQL(" AND ".join(clauses))
++    rows = db.execute(query + sql.SQL(" ORDER BY e.id DESC LIMIT 51"), params).fetchall()
++    return {"items": serial(rows[:50]), "next_cursor": rows[49]["id"] if len(rows) > 50 else None}
++
++
++def own_messages(db, uid):
++    return serial(
++        db.execute(
++            "SELECT id,source,kind,text,created_at FROM customer_messages WHERE customer_id=%s ORDER BY id DESC LIMIT 1000",
++            (uid,),
++        ).fetchall()
++    )
+--- /dev/null
++++ v0.7/majlis/tracking.py
+@@ -0,0 +1,21 @@
++"""Only known local facts; no guessed provider location, payment, or order lifecycle."""
++
++from datetime import UTC, datetime, timedelta
++
++
++def snapshot(row):
++    external = row.get("external_updated_at")
++    return {
++        "scope": "order_and_cargo_batch",
++        "shipment": row["shipment"],
++        "number": row.get("tracking_number", ""),
++        "carrier": row.get("carrier", ""),
++        "updated_at": row.get("tracking_updated_at"),
++        "external_updated_at": external,
++        "external_state": "not_received"
++        if not external
++        else ("stale" if datetime.now(UTC) - external > timedelta(hours=24) else "received"),
++        "stale_after_hours": 24,
++        "payment_state": "not_confirmed",
++        "order_state": "not_provided",
++    }
+--- installed-before/manage.py
++++ v0.7/manage.py
+@@ -27,6 +27,9 @@
+     "bot_state",
+     "schema_migrations",
+     "legacy_imports",
++    "manager_access",
++    "order_managers",
++    "customer_messages",
+ )
+ 
+ 
+@@ -101,6 +104,23 @@
+     if res.returncode:
+         raise RuntimeError("Не удалось проверить ограничения БД.")
+     result["constraints"] = json.loads(res.stdout)
++    res = run_db(
++        prefix,
++        [
++            "psql",
++            "-U",
++            "majlis",
++            "-d",
++            name,
++            "-At",
++            "-c",
++            "SELECT coalesce(json_agg(json_build_object('name',p.proname,'args',pg_get_function_identity_arguments(p.oid),'definer',p.prosecdef,'config',p.proconfig,'source',p.prosrc) ORDER BY p.proname),'[]') FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public'",
++        ],
++        stdout=subprocess.PIPE,
++    )
++    if res.returncode:
++        raise RuntimeError("Не удалось проверить функции БД.")
++    result["functions"] = json.loads(res.stdout)
+     return result
+ 
+ 
+@@ -151,6 +171,40 @@
+             ),
+         ]
+     )
++    probes.extend(
++        [
++            ("INSERT INTO manager_access(telegram_id) VALUES (-1)", "23503"),
++            ("INSERT INTO order_managers(order_id,manager_id) VALUES (-1,-1)", "23503"),
++            (
++                "INSERT INTO manager_access(telegram_id) VALUES (9223372036854775000); INSERT INTO manager_access(telegram_id) VALUES (9223372036854775000)",
++                "23505",
++            ),
++            (
++                "INSERT INTO manager_access(telegram_id) VALUES (9223372036854775000); INSERT INTO order_managers(order_id,manager_id,can_edit) SELECT id,9223372036854775000,NULL FROM orders WHERE number='__restore_probe__'",
++                "23502",
++            ),
++        ]
++    )
++    probes.extend(
++        [
++            (
++                "INSERT INTO customer_messages(customer_id,source,text,payload_hash) VALUES (-1,'miniapp','x','hash')",
++                "23503",
++            ),
++            (
++                "INSERT INTO customer_messages(customer_id,source,text,payload_hash) VALUES (9223372036854775000,'invalid','x','hash')",
++                "23514",
++            ),
++            (
++                "INSERT INTO customer_messages(customer_id,source,text,payload_hash) VALUES (9223372036854775000,'miniapp','','hash')",
++                "23514",
++            ),
++            (
++                "INSERT INTO customer_messages(customer_id,source,text,payload_hash,idempotency_key) VALUES (9223372036854775000,'miniapp','x','hash','same'); INSERT INTO customer_messages(customer_id,source,text,payload_hash,idempotency_key) VALUES (9223372036854775000,'miniapp','x','hash','same')",
++                "23505",
++            ),
++        ]
++    )
+     for statement, expected in probes:
+         result = run_db(
+             prefix,
+@@ -288,6 +342,7 @@
+                 "restored_database": target,
+                 "tables": len(TABLES),
+                 "constraints": len(after["constraints"]),
++                "functions": len(after["functions"]),
+                 "row_counts": {t: after[t]["count"] for t in TABLES},
+                 "data_and_constraints_match": True,
+                 "ownership": "Test restore deliberately excludes ownership/ACL; production privileges must be applied separately.",
+--- /dev/null
++++ v0.7/migrations/005_scoped_managers_and_tracking.sql
+@@ -0,0 +1,16 @@
++CREATE TABLE manager_access (
++ telegram_id BIGINT PRIMARY KEY REFERENCES users(telegram_id),
++ enabled BOOLEAN NOT NULL DEFAULT true,
++ can_create BOOLEAN NOT NULL DEFAULT false
++);
++CREATE TABLE order_managers (
++ order_id BIGINT NOT NULL REFERENCES orders(id),
++ manager_id BIGINT NOT NULL REFERENCES manager_access(telegram_id),
++ can_edit BOOLEAN NOT NULL DEFAULT false,
++ PRIMARY KEY(order_id,manager_id)
++);
++CREATE INDEX order_managers_manager ON order_managers(manager_id,order_id);
++ALTER TABLE orders ADD COLUMN tracking_number VARCHAR(100) NOT NULL DEFAULT '';
++ALTER TABLE orders ADD COLUMN carrier VARCHAR(100) NOT NULL DEFAULT '';
++ALTER TABLE orders ADD COLUMN tracking_updated_at TIMESTAMPTZ;
++ALTER TABLE orders ADD COLUMN external_updated_at TIMESTAMPTZ;
+--- /dev/null
++++ v0.7/migrations/006_lock_manager_permissions.sql
+@@ -0,0 +1,18 @@
++-- Runtime must not gain UPDATE on access tables just to lock their rows.
++-- Fixed SQL, pinned search_path, no dynamic queries or caller supplied identifiers.
++CREATE FUNCTION public.manager_order_access(manager_id BIGINT, target_order BIGINT)
++RETURNS BOOLEAN LANGUAGE SQL VOLATILE SECURITY DEFINER SET search_path=pg_catalog
++AS $$
++ SELECT a.can_edit FROM public.order_managers a
++ JOIN public.manager_access m ON m.telegram_id=a.manager_id
++ WHERE a.order_id=target_order AND a.manager_id=manager_order_access.manager_id
++ AND m.enabled FOR SHARE OF a,m
++$$;
++REVOKE ALL ON FUNCTION public.manager_order_access(BIGINT,BIGINT) FROM PUBLIC;
++CREATE FUNCTION public.manager_create_permission(manager_id BIGINT)
++RETURNS BOOLEAN LANGUAGE SQL VOLATILE SECURITY DEFINER SET search_path=pg_catalog
++AS $$
++ SELECT m.can_create FROM public.manager_access m
++ WHERE m.telegram_id=manager_id AND m.enabled FOR SHARE OF m
++$$;
++REVOKE ALL ON FUNCTION public.manager_create_permission(BIGINT) FROM PUBLIC;
+--- /dev/null
++++ v0.7/migrations/007_manager_workspace_and_support.sql
+@@ -0,0 +1,17 @@
++ALTER TABLE manager_access ADD COLUMN all_orders BOOLEAN NOT NULL DEFAULT false;
++ALTER TABLE manager_access ADD COLUMN can_read_inbox BOOLEAN NOT NULL DEFAULT false;
++CREATE TABLE customer_messages (
++ id BIGSERIAL PRIMARY KEY,
++ customer_id BIGINT NOT NULL REFERENCES users(telegram_id),
++ source TEXT NOT NULL CHECK (source IN ('miniapp','telegram')),
++ text TEXT NOT NULL CHECK (char_length(text) BETWEEN 1 AND 4096),
++ kind TEXT NOT NULL DEFAULT 'text' CHECK(kind IN ('text','photo','document','voice','video','other')),
++ telegram_chat_id BIGINT,
++ telegram_message_id BIGINT,
++ idempotency_key VARCHAR(64),
++ payload_hash TEXT NOT NULL,
++ created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
++ UNIQUE(telegram_chat_id,telegram_message_id),
++ UNIQUE(customer_id,idempotency_key)
++);
++CREATE INDEX customer_messages_customer ON customer_messages(customer_id,id DESC);
+--- installed-before/tests/js/pagination.test.mjs
++++ v0.7/tests/js/pagination.test.mjs
+@@ -54,3 +54,36 @@
+  assert.ok(html.includes('copy-payment')&&html.includes('revoke-payment')&&html.includes('commercial-form'));
+  assert.ok(html.includes('120.01'));
+ });
++
++test('separate workspaces hide role choices and discard stale page responses',async()=>{
++ const {cabinetView}=await import('../../web/cabinets.js');
++ assert.ok(!cabinetView({role:'buyer',available_cabinets:['buyer']}).includes('data-cabinet="manager"'));
++ assert.ok(cabinetView({role:'manager',available_cabinets:['buyer','manager'],manager_all:false}).includes('Только назначенные'));
++ assert.ok(!cabinetView({role:'manager',available_cabinets:['buyer','manager']}).includes('data-cabinet'));
++ let release;const pending=new Promise(r=>release=r);
++ const pages=new OrderPages(async query=>{const cabinet=new URLSearchParams(query).get('cabinet');if(cabinet==='manager')await pending;return {orders:[{id:cabinet==='manager'?10:20}],user:{id:1,role:cabinet},next_cursor:null};});
++ const stale=pages.refresh({q:'',bucket:'all',cabinet:'manager'});pages.clear();
++ await pages.refresh({q:'',bucket:'all',cabinet:'buyer'});release();
++ assert.equal(await stale,null);assert.deepEqual(pages.value.orders,[{id:20}]);
++});
++
++test('tracking displays confirmed facts, escapes carrier/track, and labels old source data',async()=>{
++ const {detailView}=await import('../../web/order-detail.js');
++ const stages=[{code:'confirmed',title:'Confirmed',description:'Known'}];
++ const order={id:1,number:'1',item:'Item',amount:12001,status:'confirmed',stage:stages[0],eta:'',shipment:'Batch',payment_url:'',events:[],updated_at:'2026-10-15T10:00:00Z',tracking:{number:'<script>',carrier:'<img onerror=x>',external_state:'stale',external_updated_at:'2026-10-01T10:00:00Z'}};
++ const html=detailView(order,stages,false,false);
++ assert.ok(html.includes('&lt;script&gt;')&&!html.includes('<script>'));
++ assert.ok(html.includes('более 24 часов')&&html.includes('Статус оплаты: не подтверждён'));
++ assert.ok(!html.includes('tracking-form'));
++ assert.ok(detailView(order,stages,true,false).includes('tracking-form'));
++});
++
++test('manager inbox escapes client content and public cabinet has no manager entry',async()=>{
++ const {feedView,supportForm}=await import('../../web/workspace.js');
++ const {cabinetView}=await import('../../web/cabinets.js');
++ const html=feedView('inbox',{items:[{id:1,customer_id:3001,first_name:'<img onerror=x>',text:'</p><script>alert(1)</script>',kind:'text',source:'miniapp',created_at:'2026-10-15T10:00:00Z'}]},[],()=>'<h1>Inbox</h1>');
++ assert.ok(!html.includes('<script>')&&!html.includes('<img'));
++ assert.ok(html.includes('&lt;script&gt;'));
++ assert.ok(!cabinetView({role:'buyer',available_cabinets:['buyer','manager']}).includes('Менеджер'));
++ assert.ok(!supportForm({text:'</textarea><script>'}).includes('</textarea><script>'));
++});
+--- /dev/null
++++ v0.7/tests/test_cabinets_tracking.py
+@@ -0,0 +1,252 @@
++import hashlib
++import hmac
++import json
++import time
++
++import psycopg
++from test_platform import created, payload, signed
++
++
++def grant(cfg, uid, oid=None, edit=False, create=False, enabled=True):
++    with psycopg.connect(cfg.migration_database_url.get_secret_value()) as c:
++        c.execute("INSERT INTO users(telegram_id) VALUES (%s) ON CONFLICT DO NOTHING", (uid,))
++        c.execute(
++            "INSERT INTO manager_access(telegram_id,enabled,can_create) VALUES (%s,%s,%s) ON CONFLICT(telegram_id) DO UPDATE SET enabled=excluded.enabled,can_create=excluded.can_create",
++            (uid, enabled, create),
++        )
++        if oid is not None:
++            c.execute(
++                "INSERT INTO order_managers(order_id,manager_id,can_edit) VALUES (%s,%s,%s) ON CONFLICT(order_id,manager_id) DO UPDATE SET can_edit=excluded.can_edit",
++                (oid, uid, edit),
++            )
++
++
++def cabinet(cfg, uid, role):
++    return {**signed(cfg, uid), "X-MAJLIS-Cabinet": role}
++
++
++def test_cabinet_switch_scopes_global_manager_and_prevents_buyer_elevation(client, cfg):
++    first = created(client, cfg)
++    own = payload()
++    own.update(number="MANAGER-OWN", customer_id=9001)
++    second = client.post("/api/orders", headers=signed(cfg), json=own).json()
++    buyer = cabinet(cfg, 9001, "buyer")
++    result = client.get("/api/bootstrap", headers=buyer).json()
++    assert [o["id"] for o in result["orders"]] == [second["id"]]
++    assert result["user"]["available_cabinets"] == ["buyer", "manager"]
++    assert result["user"]["can_create"] is False
++    assert result["orders"][0]["permissions"] == {"edit": False}
++    assert client.get("/api/orders/" + str(first["id"]), headers=buyer).status_code == 404
++    assert client.post("/api/orders", headers=buyer, json=payload()).status_code == 403
++    assert client.get("/api/bootstrap", headers=cabinet(cfg, 3001, "manager")).status_code == 403
++    assert client.get("/api/bootstrap", headers=cabinet(cfg, 3001, "root")).status_code == 400
++    result = client.get("/api/bootstrap", headers=cabinet(cfg, 9001, "manager")).json()
++    assert len(result["orders"]) == 2 and result["user"]["can_create"]
++
++
++def test_scoped_manager_reads_only_assigned_orders_and_queue(client, cfg):
++    first = created(client, cfg)
++    own = payload()
++    own.update(number="OTHER", customer_id=3002)
++    other = client.post("/api/orders", headers=signed(cfg), json=own).json()
++    client.post(
++        "/api/orders/status",
++        headers=signed(cfg),
++        json={"order_id": first["id"], "version": 1, "status": "purchased"},
++    )
++    client.post(
++        "/api/orders/status",
++        headers=signed(cfg),
++        json={"order_id": other["id"], "version": 1, "status": "purchased"},
++    )
++    grant(cfg, 8001, first["id"])
++    headers = cabinet(cfg, 8001, "manager")
++    result = client.get("/api/bootstrap", headers=headers).json()
++    assert result["summary"]["total"] == 1 and len(result["notifications"]) == 1
++    assert (
++        result["orders"][0]["id"] == first["id"] and not result["orders"][0]["permissions"]["edit"]
++    )
++    assert client.get("/api/orders/" + str(first["id"]), headers=headers).status_code == 200
++    for suffix in ["", "/history"]:
++        assert (
++            client.get("/api/orders/" + str(other["id"]) + suffix, headers=headers).status_code
++            == 404
++        )
++    assert client.post("/api/orders", headers=headers, json=payload()).status_code == 403
++    assert (
++        client.post(
++            "/api/orders/status",
++            headers=headers,
++            json={"order_id": first["id"], "version": 2, "status": "customs"},
++        ).status_code
++        == 403
++    )
++    assert (
++        client.get("/api/bootstrap", headers={**headers}, params={"q": "OTHER"}).json()["orders"]
++        == []
++    )
++
++
++def test_each_mutation_enforces_assignment_and_readonly_permissions(client, cfg):
++    order = created(client, cfg)
++    grant(cfg, 8002, order["id"])
++    mutation = {
++        "status": {"status": "purchased"},
++        "commercial": {"item": "Changed", "amount": 100},
++        "details": {"customer_id": 3001, "customer_name": "Name"},
++        "payment": {"url": "https://payments.example/invoice"},
++        "tracking": {"tracking_number": "T1", "carrier": "Carrier"},
++    }
++    for path, extra in mutation.items():
++        data = {"order_id": order["id"], "version": 1, **extra}
++        assert (
++            client.post(
++                "/api/orders/" + path, headers=cabinet(cfg, 8002, "manager"), json=data
++            ).status_code
++            == 403
++        )
++        assert (
++            client.post(
++                "/api/orders/" + path, headers=cabinet(cfg, 3001, "buyer"), json=data
++            ).status_code
++            == 403
++        )
++    grant(cfg, 8002, order["id"], edit=True)
++    data = {"order_id": order["id"], "version": 1, "tracking_number": "T1", "carrier": "Carrier"}
++    assert (
++        client.post(
++            "/api/orders/tracking", headers=cabinet(cfg, 8002, "manager"), json=data
++        ).status_code
++        == 200
++    )
++    grant(cfg, 8002, enabled=False)
++    assert (
++        client.get(
++            "/api/orders/" + str(order["id"]), headers=cabinet(cfg, 8002, "manager")
++        ).status_code
++        == 403
++    )
++
++
++def test_scoped_create_assigns_only_creator_and_manager_can_also_be_buyer(client, cfg):
++    grant(cfg, 8003, create=True)
++    data = payload()
++    data["customer_id"] = 8003
++    result = client.post("/api/orders", headers=cabinet(cfg, 8003, "manager"), json=data)
++    assert result.status_code == 201
++    for role in ["buyer", "manager"]:
++        rows = client.get("/api/bootstrap", headers=cabinet(cfg, 8003, role)).json()["orders"]
++        assert len(rows) == 1 and rows[0]["permissions"]["edit"] == (role == "manager")
++    grant(cfg, 8004)
++    assert (
++        client.get("/api/bootstrap", headers=cabinet(cfg, 8004, "manager")).json()["orders"] == []
++    )
++
++
++def test_tracking_revision_idempotence_and_no_payment_claim(client, cfg, db):
++    order = created(client, cfg)
++    oid = order["id"]
++    data = {
++        "order_id": oid,
++        "version": 1,
++        "tracking_number": "<TRACK&1>",
++        "carrier": "Confirmed carrier",
++    }
++    r = client.post("/api/orders/tracking", headers=signed(cfg), json=data)
++    assert r.status_code == 200
++    order = r.json()
++    assert order["version"] == 2 and order["tracking"]["number"] == "<TRACK&1>"
++    assert order["tracking"]["external_state"] == "not_received" and order["tracking"]["updated_at"]
++    assert (
++        order["tracking"]["payment_state"] == "not_confirmed"
++        and order["tracking"]["order_state"] == "not_provided"
++    )
++    data["version"] = 2
++    assert (
++        client.post("/api/orders/tracking", headers=signed(cfg), json=data).json()["version"] == 2
++    )
++    data["version"] = 1
++    assert client.post("/api/orders/tracking", headers=signed(cfg), json=data).status_code == 409
++    buyer = client.get("/api/orders/" + str(oid), headers=signed(cfg, 3001)).json()
++    assert buyer["tracking"]["carrier"] == "Confirmed carrier" and not buyer["permissions"]["edit"]
++    with db.connection() as c:
++        assert c.execute("SELECT count(*) AS n FROM outbox").fetchone()["n"] == 1
++    assert client.get("/api/orders/" + str(oid), headers=signed(cfg, 3002)).status_code == 404
++
++
++def event(client, cfg, value):
++    stamp = str(int(time.time()))
++    body = json.dumps(value).encode()
++    sig = hmac.new(
++        cfg.integration_secret.get_secret_value().encode(),
++        stamp.encode() + b"." + body,
++        hashlib.sha256,
++    ).hexdigest()
++    return client.post(
++        "/api/integrations/events",
++        content=body,
++        headers={
++            "Content-Type": "application/json",
++            "X-Event-Timestamp": stamp,
++            "X-Event-Signature": sig,
++        },
++    )
++
++
++def test_external_tracking_replay_out_of_order_and_staleness(client, cfg):
++    order = created(client, cfg)
++    oid = order["id"]
++    data = {
++        "event_id": "tracking-1",
++        "shipment": "TEST-CARGO",
++        "status": "delivered",
++        "sequence": 2,
++    }
++    assert event(client, cfg, data).json()["updated"] == 1
++    assert event(client, cfg, data).json()["duplicate"]
++    late = {**data, "event_id": "late", "status": "purchased", "sequence": 1}
++    assert event(client, cfg, late).json()["updated"] == 0
++    result = client.get("/api/orders/" + str(oid), headers=signed(cfg, 3001)).json()
++    assert result["status"] == "delivered" and result["tracking"]["external_state"] == "received"
++    assert result["tracking"]["payment_state"] == "not_confirmed"
++    bad = {**data, "event_id": "invalid", "status": "not-a-known-status"}
++    assert event(client, cfg, bad).status_code == 400
++    with psycopg.connect(cfg.migration_database_url.get_secret_value()) as c:
++        c.execute(
++            "UPDATE orders SET external_updated_at=now()-interval '25 hours' WHERE id=%s", (oid,)
++        )
++    result = client.get("/api/orders/" + str(oid), headers=signed(cfg, 3001)).json()
++    assert result["tracking"]["external_state"] == "stale" and result["status"] == "delivered"
++    assert event(client, cfg, data).json()["duplicate"]
++    assert (
++        client.get("/api/orders/" + str(oid), headers=signed(cfg, 3001)).json()["tracking"][
++            "external_state"
++        ]
++        == "stale"
++    )
++
++
++def test_runtime_cannot_edit_acl_and_permission_check_locks_revocation(client, cfg):
++    import pytest
++
++    order = created(client, cfg)
++    grant(cfg, 8005, order["id"], edit=True)
++    with psycopg.connect(cfg.database_url.get_secret_value()) as conn:
++        with pytest.raises(psycopg.errors.InsufficientPrivilege):
++            conn.execute("UPDATE manager_access SET can_create=true WHERE telegram_id=8005")
++        conn.rollback()
++        with pytest.raises(psycopg.errors.InsufficientPrivilege):
++            conn.execute("UPDATE order_managers SET can_edit=true")
++        conn.rollback()
++        assert (
++            conn.execute(
++                "SELECT public.manager_order_access(%s,%s)", (8005, order["id"])
++            ).fetchone()[0]
++            is True
++        )
++        with psycopg.connect(cfg.migration_database_url.get_secret_value()) as operator:
++            operator.execute("SET LOCAL lock_timeout='200ms'")
++            with pytest.raises(psycopg.errors.LockNotAvailable):
++                operator.execute("UPDATE manager_access SET enabled=false WHERE telegram_id=8005")
++    grant(cfg, 8005, enabled=False)
++    assert client.get("/api/bootstrap", headers=cabinet(cfg, 8005, "manager")).status_code == 403
+--- /dev/null
++++ v0.7/tests/test_support_workspace.py
+@@ -0,0 +1,150 @@
++from types import SimpleNamespace
++
++import psycopg
++from test_cabinets_tracking import cabinet, grant
++from test_platform import created, signed
++
++
++def allow_inbox(cfg, uid, all_orders=False):
++    grant(cfg, uid)
++    with psycopg.connect(cfg.migration_database_url.get_secret_value()) as c:
++        c.execute(
++            "UPDATE manager_access SET can_read_inbox=true,all_orders=%s WHERE telegram_id=%s",
++            (all_orders, uid),
++        )
++
++
++def test_buyer_request_is_idempotent_private_and_cannot_spoof_customer(client, cfg, db):
++    data = {"text": "Вопрос о моём заказе <script>", "idempotency_key": "request-key-00001"}
++    a = client.post("/api/support", headers=signed(cfg, 3001), json=data)
++    b = client.post("/api/support", headers=signed(cfg, 3001), json=data)
++    assert a.status_code == 201 and b.json() == {"id": a.json()["id"], "duplicate": True}
++    assert (
++        client.post(
++            "/api/support", headers=signed(cfg, 3001), json={**data, "text": "Different"}
++        ).status_code
++        == 409
++    )
++    assert (
++        client.post(
++            "/api/support", headers=signed(cfg, 3001), json={**data, "customer_id": 3002}
++        ).status_code
++        == 422
++    )
++    assert client.get("/api/manager/inbox", headers=signed(cfg, 3001)).status_code == 403
++    assert client.get("/api/manager/activity", headers=signed(cfg, 3001)).status_code == 403
++    mine = client.get("/api/me/export", headers=signed(cfg, 3001)).json()["messages"]
++    assert len(mine) == 1 and mine[0]["text"] == data["text"]
++    assert client.get("/api/me/export", headers=signed(cfg, 3002)).json()["messages"] == []
++    with db.connection() as c:
++        assert c.execute("SELECT count(*) AS n FROM customer_messages").fetchone()["n"] == 1
++
++
++def test_inbox_requires_separate_explicit_permission_even_for_global_manager(client, cfg):
++    client.post(
++        "/api/support",
++        headers=signed(cfg, 3001),
++        json={"text": "Request", "idempotency_key": "request-0001"},
++    )
++    assert client.get("/api/manager/inbox", headers=signed(cfg)).status_code == 403
++    allow_inbox(cfg, 8006, all_orders=True)
++    result = client.get("/api/manager/inbox", headers=cabinet(cfg, 8006, "manager"))
++    assert result.status_code == 200 and result.json()["items"][0]["customer_id"] == 3001
++    assert client.get("/api/manager/inbox", headers=cabinet(cfg, 8006, "buyer")).status_code == 403
++    with psycopg.connect(cfg.migration_database_url.get_secret_value()) as c:
++        c.execute("UPDATE manager_access SET can_read_inbox=false WHERE telegram_id=8006")
++    assert (
++        client.get("/api/manager/inbox", headers=cabinet(cfg, 8006, "manager")).status_code == 403
++    )
++
++
++def test_manager_activity_obeys_order_assignments(client, cfg):
++    order = created(client, cfg)
++    grant(cfg, 8007)
++    assert (
++        client.get("/api/manager/activity", headers=cabinet(cfg, 8007, "manager")).json()["items"]
++        == []
++    )
++    grant(cfg, 8007, order["id"])
++    assert (
++        client.get("/api/manager/activity", headers=cabinet(cfg, 8007, "manager")).json()["items"][
++            0
++        ]["order_id"]
++        == order["id"]
++    )
++    allow_inbox(cfg, 8008, all_orders=True)
++    result = client.get("/api/bootstrap", headers=cabinet(cfg, 8008, "manager")).json()
++    assert result["summary"]["total"] == 1 and result["user"]["manager_all"]
++
++
++def test_support_limit_keeps_retry_safe(client, cfg):
++    for n in range(5):
++        assert (
++            client.post(
++                "/api/support",
++                headers=signed(cfg, 3001),
++                json={"text": str(n), "idempotency_key": "request-key-" + str(n)},
++            ).status_code
++            == 201
++        )
++    assert (
++        client.post(
++            "/api/support",
++            headers=signed(cfg, 3001),
++            json={"text": "overflow", "idempotency_key": "request-key-6"},
++        ).status_code
++        == 429
++    )
++    assert client.post(
++        "/api/support",
++        headers=signed(cfg, 3001),
++        json={"text": "0", "idempotency_key": "request-key-0"},
++    ).json()["duplicate"]
++
++
++def test_bot_records_only_direct_messages_once_and_no_external_send(db, cfg):
++    from majlis.bot import respond
++
++    calls = []
++    api = SimpleNamespace(send=lambda *args: calls.append(args))
++    msg = {
++        "from": {"id": 3001, "first_name": "Fictional"},
++        "chat": {"id": 3001, "type": "private"},
++        "message_id": 17,
++        "text": "Question",
++    }
++    respond(db, api, msg, "https://example.com")
++    respond(db, api, msg, "https://example.com")
++    respond(
++        db,
++        api,
++        {**msg, "message_id": 18, "chat": {"id": -1, "type": "group"}},
++        "https://example.com",
++    )
++    assert calls == []
++    with db.connection() as c:
++        rows = c.execute("SELECT customer_id,text FROM customer_messages").fetchall()
++        assert rows == [{"customer_id": 3001, "text": "Question"}]
++
++
++def test_manager_entry_command_checks_actual_sender_and_is_not_publicly_listed(db, cfg):
++    from majlis.bot import respond
++
++    calls = []
++    api = SimpleNamespace(send=lambda *args: calls.append(args))
++    msg = {
++        "from": {"id": 3001},
++        "chat": {"id": 3001, "type": "private"},
++        "message_id": 1,
++        "text": "/manager",
++    }
++    respond(db, api, msg, "https://example.com/")
++    assert calls[-1] == (3001, "Раздел недоступен.")
++    allow_inbox(cfg, 8009, all_orders=True)
++    respond(
++        db,
++        api,
++        {**msg, "from": {"id": 8009}, "chat": {"id": 8009, "type": "private"}},
++        "https://example.com/",
++    )
++    assert calls[-1][0] == 8009 and calls[-1][2] == "https://example.com/manager/"
+--- installed-before/web/app.js
++++ v0.7/web/app.js
+@@ -1,3 +1,10 @@
++import {
++  supportForm,
++  feedView as workspaceFeed
++} from './workspace.js';
++import {
++  cabinetView
++} from './cabinets.js';
+ import {
+   detailView
+ } from './order-detail.js';
+@@ -16,11 +23,18 @@
+ const $ = selector => document.querySelector(selector);
+ const tg = window.Telegram?.WebApp;
+ const ui = {
++  cabinet: location.pathname.startsWith('/manager') ? 'manager' : 'buyer',
+   section: 'orders',
+   filters: {
+     q: '',
+-    bucket: 'all'
++    bucket: 'all',
++    cabinet: 'buyer'
+   },
++  supportDraft: {
++    text: '',
++    key: ''
++  },
++  feeds: {},
+   draft: {},
+   dirty: false
+ };
+@@ -31,7 +45,8 @@
+   requestNumber = 0,
+   controller = null,
+   searchTimer, toastTimer, mutating = false;
+-const pages = new OrderPages((query, signal) => api('/api/bootstrap?' + query, null, signal));
++const pages = new OrderPages((query, signal) => api('/api/bootstrap?' + query, null, signal,
++  new URLSearchParams(query).get('cabinet') || ui.cabinet));
+ const manager = () => state?.user.role === 'manager';
+ 
+ function haptic(type = 'selection') {
+@@ -62,22 +77,31 @@
+   el.className = type;
+   el.hidden = !text;
+ }
+-async function api(path, body, signal) {
++async function api(path, body, signal, cabinet = ui.cabinet) {
+   const timeout = typeof AbortSignal.timeout === 'function' ? AbortSignal.timeout(15000) :
+     undefined;
+   const merged = signal && timeout && typeof AbortSignal.any === 'function' ? AbortSignal.any([
+     signal, timeout
+   ]) : signal || timeout;
+-  const response = await fetch(path, {
+-    cache: 'no-store',
+-    method: body ? 'POST' : 'GET',
+-    headers: {
+-      'Content-Type': 'application/json',
+-      'X-Telegram-Init-Data': tg?.initData || ''
+-    },
+-    body: body ? JSON.stringify(body) : undefined,
+-    signal: merged
+-  });
++  let response;
++  try {
++    response = await fetch(path, {
++      cache: 'no-store',
++      method: body ? 'POST' : 'GET',
++      headers: {
++        'Content-Type': 'application/json',
++        'X-Telegram-Init-Data': tg?.initData || '',
++        'X-MAJLIS-Cabinet': cabinet
++      },
++      body: body ? JSON.stringify(body) : undefined,
++      signal: merged
++    });
++  } catch (error) {
++    if (error.name === 'AbortError') throw error;
++    throw new Error(error.name === 'TimeoutError' ?
++      'Сервер не ответил вовремя. Повторите запрос.' :
++      'Нет соединения с сервером. Проверьте сеть и повторите запрос.');
++  }
+   let result;
+   try {
+     result = await response.json();
+@@ -96,6 +120,13 @@
+   detailNumber++;
+   pages.clear();
+   state = null;
++  ui.feeds = {};
++  ui.draft = {};
++  ui.supportDraft = {
++    text: '',
++    key: ''
++  };
++  feedRequest++;
+   document.querySelectorAll('dialog[open]').forEach(d => d.close());
+   $('#navigation').hidden = true;
+   $('#app').innerHTML =
+@@ -147,7 +178,13 @@
+ function navigation() {
+   const sections = manager() ? [
+     ['orders', 'box', 'Заказы'],
+-    ['new', 'plus', 'Добавить'],
++    ['activity', 'clock', 'Активность'],
++    ...(state.user.can_read_inbox ? [
++      ['inbox', 'chat', 'Обращения']
++    ] : []),
++    ...(state.user.can_create ? [
++      ['new', 'plus', 'Добавить']
++    ] : []),
+     ['help', 'help', 'Помощь']
+   ] : [
+     ['orders', 'box', 'Заказы'],
+@@ -165,6 +202,7 @@
+   ui.section = section;
+   haptic();
+   render();
++  if (['activity', 'inbox'].includes(section)) loadFeed(section);
+   window.scrollTo({
+     top: 0,
+     behavior: 'instant'
+@@ -226,30 +264,18 @@
+   return `<section class="empty">
+ <div class="empty-icon">${icon('box')}</div>
+ <span class="eyebrow">Начнём знакомство</span>
+-<h2>Здесь появятся ваши заказы</h2>
+-<p>${manager()?'Добавьте первый заказ и укажите Telegram ID покупателя.':'После оформления магазин привяжет заказ к вашему Telegram. Здесь появятся этапы и дата поставки.'}</p>
+-<button class="button primary" data-section="${manager()?'new':'help'}">${manager()?'Добавить заказ':'Как найти мой заказ?'} ${icon('arrow')}</button>${!manager()?'<button class="button" data-section="catalog">Открыть каталог</button>':''}</section>`;
++<h2>${manager()?'Нет назначенных заказов':'Здесь появятся ваши заказы'}</h2>
++<p>${manager()?(state.user.can_create?'Добавьте заказ или получите назначение на существующий.':'Руководитель назначит вам заказы. Другие заказы не отображаются.'):'После оформления магазин привяжет заказ к вашему Telegram. Здесь появятся этапы и дата поставки.'}</p>
++<button class="button primary" data-section="${manager()&&state.user.can_create?'new':'help'}">${manager()?(state.user.can_create?'Добавить заказ':'О доступе к заказам'):'Как найти мой заказ?'} ${icon('arrow')}</button>${!manager()?'<button class="button" data-section="catalog">Открыть каталог</button>':''}</section>`;
+ }
+ 
+ function ordersView() {
+   const summary = counts();
+   const cards = state.orders.map(orderCard).join('') || emptyOrders();
+-  return `${intro(manager()?'Заказы магазина':`Здравствуйте, ${esc(state.user.first_name||'покупатель')}`,manager()?'Поиск, доставка и работа с покупателями.':'Ваши заказы — рядом, на каждом этапе.')}<section class="overview">
+-<div>
+-<span class="eyebrow">${manager()?'Сводка магазина':'Сопровождение заказа'}</span>
+-<h2>${summary.active?'Следующий этап —<br>всегда на виду.':'От заказа<br>до получения.'}</h2>
+-<p>Статусы, история и дата поставки в одном кабинете.</p>
+-</div>
+-<div class="summary-grid">
+-<div>
+-<strong>${summary.active}</strong>
+-<span>В работе</span>
+-</div>
+-<div>
+-<strong>${summary.delivered}</strong>
+-<span>Получены</span>
+-</div>
+-</div>
++  return `${intro(manager()?(state.user.manager_all?'Заказы магазина':'Назначенные заказы'):'Мои заказы',manager()?'Работайте с заказами в пределах назначенного доступа.':'Доставка, история и оплата ваших заказов.')}<section class="compact-summary" aria-label="Сводка заказов">
++<div><strong>${summary.total}</strong><span>Всего</span></div>
++<div><strong>${summary.active}</strong><span>В работе</span></div>
++<div><strong>${summary.delivered}</strong><span>Получены</span></div>
+ </section>${filters()}<div class="section-heading">
+ <h2>${manager()?'Заказы':'Мои заказы'}</h2>
+ <span>${summary.matching} найдено</span>
+@@ -296,7 +322,7 @@
+ <summary>${title}</summary>
+ <p>${text}</p>
+ </details>`).join('')}</section>
+-</div>${manager()?integrationsView():''}`;
++</div>${manager()?integrationsView():supportForm(ui.supportDraft)}`;
+ }
+ 
+ function integrationsView() {
+@@ -347,7 +373,10 @@
+     end: focus.selectionEnd
+   } : null;
+   $('#app').innerHTML = ui.section === 'catalog' ? catalogView() : ui.section === 'help' ?
+-    helpView() : ui.section === 'new' && manager() ? newOrderView() : ordersView();
++    helpView() : ['activity', 'inbox'].includes(ui.section) && manager() ? workspaceFeed(ui.section,
++      ui.feeds[ui.section], state.stages, intro) : ui.section === 'new' && manager() ?
++    newOrderView() : ordersView();
++  $('#app').insertAdjacentHTML('afterbegin', cabinetView(state.user));
+   $('#preview-notice').hidden = !state.demo;
+   $('#foot-mode').textContent = 'Обновлено ' + dateTime(state.updated_at);
+   navigation();
+@@ -365,8 +394,12 @@
+ }
+ 
+ function bind() {
++
+   $('#export-data')?.addEventListener('click', exportData);
+-  $('#refresh')?.addEventListener('click', () => refresh(true));
++  $('#refresh')?.addEventListener('click', () => ['activity', 'inbox'].includes(ui.section) ?
++    loadFeed(ui.section) : refresh(true));
++  $('#feed-more')?.addEventListener('click', () => loadFeed(ui.section, true));
++  bindSupport();
+   document.querySelectorAll('[data-section]').forEach(b => b.onclick = () => navigate(b.dataset
+     .section));
+   document.querySelectorAll('[data-link]').forEach(b => b.onclick = () => link(b.dataset.link));
+@@ -382,7 +415,8 @@
+   $('#reset-filters')?.addEventListener('click', () => {
+     ui.filters = {
+       q: '',
+-      bucket: 'all'
++      bucket: 'all',
++      cabinet: ui.cabinet
+     };
+     refresh();
+   });
+@@ -413,7 +447,8 @@
+         ui.section = 'orders';
+         ui.filters = {
+           q: '',
+-          bucket: 'all'
++          bucket: 'all',
++          cabinet: ui.cabinet
+         };
+         await refresh();
+         toast('Заказ создан');
+@@ -433,12 +468,34 @@
+   const number = ++requestNumber;
+   controller?.abort();
+   controller = new AbortController();
++  ui.filters.cabinet = ui.cabinet;
+   busy = true;
+   connection('Обновляем заказы…', 'updating');
+   $('#refresh')?.classList.add('spinning');
+   try {
+     const result = await pages.refresh(ui.filters, controller.signal);
+     if (!result || number !== requestNumber) return;
++    const changed = state && (state.user.id !== result.user.id || state.user.role !== result.user
++      .role || state.user.can_read_inbox !== result.user.can_read_inbox || state.user
++      .manager_all !== result.user.manager_all);
++    if (changed) {
++      ui.feeds = {};
++      feedRequest++;
++      detailNumber++;
++      ui.draft = {};
++      ui.supportDraft = {
++        text: '',
++        key: ''
++      };
++      setDirty(false);
++      document.querySelectorAll('dialog[open]').forEach(d => d.close());
++    }
++    if (!result.user.can_read_inbox) {
++      delete ui.feeds.inbox;
++      if (ui.section === 'inbox') ui.section = 'orders';
++    }
++    if (result.user.role !== 'manager' && ['activity', 'inbox', 'new'].includes(ui.section)) ui
++      .section = 'orders';
+     state = result;
+     connection();
+     render();
+@@ -448,6 +505,25 @@
+     if (error.status === 401) {
+       connection();
+       expire();
++    } else if (error.status === 403) {
++      detailNumber++;
++      pages.clear();
++      state = null;
++      ui.feeds = {};
++      feedRequest++;
++      ui.draft = {};
++      ui.supportDraft = {
++        text: '',
++        key: ''
++      };
++      document.querySelectorAll('dialog[open]').forEach(d => d.close());
++      $('#navigation').hidden = true;
++      connection('Доступ к кабинету изменён.', 'warning');
++      $('#app').innerHTML =
++        '<section class="empty"><h2>Доступ ограничен</h2><p>Назначение менеджера изменено. Можно открыть свой кабинет покупателя.</p><button id="buyer-entry" class="button primary">Кабинет покупателя</button></section>';
++      $('#buyer-entry').onclick = () => {
++        location.assign('/');
++      };
+     } else if (state) {
+       connection('Не удалось обновить. Показаны ранее загруженные данные.', 'warning');
+       toast(error.message);
+@@ -563,7 +639,8 @@
+   }
+   if (!state || generation !== detailNumber || !order) return;
+   haptic('impact');
+-  $('#detail-content').innerHTML = detailView(order, state.stages, manager(), state.integrations
++  $('#detail-content').innerHTML = detailView(order, state.stages, manager() && order.permissions
++    ?.edit !== false, state.integrations
+     .payments !== 'not_connected');
+   $('#detail-dialog').showModal();
+   $('#detail-dialog').scrollTop = 0;
+@@ -588,7 +665,8 @@
+       }
+       order.events = [...page.events, ...order.events];
+       order.history_cursor = page.next_cursor;
+-      $('#detail-content').innerHTML = detailView(order, state.stages, manager(), state
++      $('#detail-content').innerHTML = detailView(order, state.stages, manager() && order
++        .permissions?.edit !== false, state
+         .integrations.payments !== 'not_connected');
+       bindDetail(order);
+     } catch (error) {
+@@ -639,6 +717,12 @@
+       url: ''
+     }));
+   });
++  const tracking = $('#tracking-form');
++  if (tracking) tracking.onsubmit = e => {
++    e.preventDefault();
++    submit(tracking, () => save('/api/orders/tracking', Object.fromEntries(new FormData(
++      tracking))));
++  };
+   const status = $('#status-form');
+   if (status) status.onsubmit = e => {
+     e.preventDefault();
+@@ -776,3 +860,64 @@
+     else toast(error.message);
+   }
+ }
++
++
++function bindSupport() {
++  const form = $('#support-form');
++  if (!form) return;
++  form.oninput = () => {
++    const text = form.elements.text.value;
++    if (text !== ui.supportDraft.text) ui.supportDraft.key = '';
++    ui.supportDraft.text = text;
++    setDirty(true);
++  };
++  form.onsubmit = e => {
++    e.preventDefault();
++    submit(form, async () => {
++      const text = form.elements.text.value.trim();
++      if (!text) throw new Error('Напишите вопрос.');
++      ui.supportDraft.key ||= crypto.randomUUID();
++      const result = await api('/api/support', {
++        text,
++        idempotency_key: ui.supportDraft.key
++      });
++      ui.supportDraft = {
++        text: '',
++        key: ''
++      };
++      setDirty(false);
++      render();
++      toast('Обращение №' + result.id + ' сохранено для магазина.');
++    });
++  };
++}
++let feedRequest = 0;
++async function loadFeed(section, more = false) {
++  if (ui.feedBusy) return;
++  const number = ++feedRequest;
++  ui.feedBusy = true;
++  try {
++    const cursor = more ? ui.feeds[section]?.next_cursor : null;
++    const result = await api('/api/manager/' + section + (cursor ? '?before=' + cursor : ''));
++    if (number !== feedRequest || ui.section !== section) return;
++    const items = more ? [...(ui.feeds[section]?.items || []), ...result.items] : result.items;
++    ui.feeds[section] = {
++      ...result,
++      items: [...new Map(items.map(item => [item.id, item])).values()]
++    };
++    render();
++  } catch (error) {
++    if (ui.section !== section) return;
++    if (error.status === 401) expire();
++    else if (error.status === 403) refresh();
++    else {
++      ui.feeds[section] = {
++        ...(ui.feeds[section] || {}),
++        error: error.message
++      };
++      render();
++    }
++  } finally {
++    ui.feedBusy = false;
++  }
++}
+--- /dev/null
++++ v0.7/web/cabinets.js
+@@ -0,0 +1,3 @@
++export function cabinetView(user) {
++  return `<section class="cabinet-bar" aria-label="Кабинет"><div><span class="eyebrow">MAJLIS</span><strong>${user.role==='manager'?'Рабочий кабинет менеджера':'Личный кабинет покупателя'}</strong>${user.role==='manager'?`<small>${user.manager_all?'Все заказы — доступ назначен':'Только назначенные вам заказы'}</small>`:''}</div></section>`;
++}
+--- installed-before/web/order-detail.js
++++ v0.7/web/order-detail.js
+@@ -31,6 +31,7 @@
+   const payment = order.payment_url ?
+     `<p>Откроется страница платёжного сервиса. Наличие ссылки не подтверждает оплату.</p><button id="open-payment" class="button primary">Открыть страницу оплаты ${icon('link')}</button>` :
+     '<p>Платёжная ссылка ещё не добавлена.</p>';
++  const tracking = order.tracking || {};
+   return `<div class="dialog-top">
+ <button class="order-number copy-inline" data-copy="${esc(order.number)}">${esc(order.number)} ${icon('copy')}</button>
+ <button class="close-dialog icon-button" aria-label="Закрыть">${icon('close')}</button>
+@@ -46,7 +47,18 @@
+ <p>${order.eta?(order.eta_confirmed?'Подтверждённая дата':'Ориентировочная дата — может уточняться'):'Магазин добавит дату после уточнения.'}</p>
+ </div>
+ </div>
+-<h3>Путь заказа</h3>${timeline}<section class="payment-block">
++<section class="tracking-panel" aria-label="Отслеживание">
++<h3>Отслеживание</h3><dl class="tracking-facts">
++<div><dt>Партия карго</dt><dd>${esc(order.shipment||'Не указана')}</dd></div>
++<div><dt>Трек-номер</dt><dd>${tracking.number?`<button class="copy-inline" data-copy="${esc(tracking.number)}">${esc(tracking.number)} ${icon('copy')}</button>`:'Не указан'}</dd></div>
++<div><dt>Перевозчик</dt><dd>${esc(tracking.carrier||'Не указан')}</dd></div>
++<div><dt>Данные заказа обновлены</dt><dd>${order.updated_at?dateTime(order.updated_at):'Дата не указана'}</dd></div>
++<div><dt>Автоматическое обновление</dt><dd>${tracking.external_updated_at?dateTime(tracking.external_updated_at):'Обновления не поступали'}</dd></div>
++</dl><p class="hint">Статусы относятся к заказу и его партии.</p>
++${tracking.external_state==='stale'?'<p class="freshness-warning" role="status">Нет нового подтверждённого внешнего события более 24 часов. Это не подтверждает задержку доставки; уточните сведения у магазина.</p>':''}
++<p class="hint">${tracking.external_updated_at?'Показаны последние полученные сведения.':'Автоматические обновления пока не поступали; показаны данные магазина.'}</p>
++<p class="hint">Состояние заказа отдельно от доставки пока не указано. Статус оплаты: не подтверждён.</p>
++</section><h3>Путь заказа</h3>${timeline}<section class="payment-block">
+ <h3>Оплата</h3>${payment}</section>
+ <div class="quick-actions">
+ <button class="button" data-copy="${esc(order.number)}">${icon('copy')} Номер заказа</button>
+--- installed-before/web/order-editor.js
++++ v0.7/web/order-editor.js
+@@ -11,6 +11,12 @@
+ <p class="form-note">Изменение товара или суммы удалит прежнюю ссылку из кабинета. Сам счёт у провайдера этой операцией не отменяется. Сумма не подтверждает оплату.</p>
+ <button class="button full" type="submit">Сохранить товар и сумму</button>
+ </form>
++<form id="tracking-form" data-order-id="${order.id}" class="form-card">
++<h3>Отслеживание</h3>
++<label>Трек-номер<input name="tracking_number" maxlength="100" value="${esc(order.tracking?.number||'')}"></label>
++<label>Перевозчик<input name="carrier" maxlength="100" value="${esc(order.tracking?.carrier||'')}"></label>
++<p class="form-note">Укажите только подтверждённые данные. Это ручное уточнение, а не подключение перевозчика.</p>
++<button type="submit" class="button full">Сохранить отслеживание</button></form>
+ <form id="status-form" data-order-id="${order.id}" class="form-card">
+ <h3>Этап доставки</h3>
+ <label>Этап<select name="status">${stages.map(s=>`<option value="${s.code}" ${s.code===order.status?'selected':''}>${esc(s.title)}</option>`).join('')}</select>
+--- installed-before/web/style.css
++++ v0.7/web/style.css
+@@ -1619,3 +1619,166 @@
+   background: var(--blue);
+   opacity: 1
+ }
++
++/* Cabinet context remains visible on narrow screens. */
++.cabinet-bar {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 16px;
++  padding: 18px;
++  border: 1px solid var(--line);
++  border-radius: 22px;
++  margin-bottom: 22px;
++  background: var(--paper)
++}
++
++.cabinet-bar strong,
++.cabinet-bar small {
++  display: block
++}
++
++.cabinet-bar strong {
++  font-size: 18px;
++  margin: 6px 0
++}
++
++.cabinet-bar small {
++  color: var(--muted)
++}
++
++.cabinet-tabs {
++  display: flex;
++  gap: 4px;
++  padding: 4px;
++  border-radius: 16px;
++  background: var(--bg)
++}
++
++.cabinet-tabs button {
++  border: 0;
++  border-radius: 12px;
++  background: transparent;
++  color: inherit;
++  padding: 10px;
++  min-height: 44px;
++  font: inherit;
++  cursor: pointer
++}
++
++.cabinet-tabs button[aria-pressed="true"] {
++  background: var(--blue);
++  color: #fff
++}
++
++.tracking-panel {
++  margin: 24px 0;
++  padding: 18px;
++  border-radius: 20px;
++  border: 1px solid var(--line)
++}
++
++.tracking-facts {
++  display: grid;
++  gap: 14px;
++  margin: 18px 0
++}
++
++.tracking-facts div {
++  display: grid;
++  grid-template-columns: 1fr 1fr;
++  gap: 12px
++}
++
++.tracking-facts dt {
++  color: var(--muted)
++}
++
++.tracking-facts dd {
++  margin: 0;
++  overflow-wrap: anywhere;
++  min-width: 0
++}
++
++.freshness-warning {
++  padding: 14px;
++  border-radius: 14px;
++  background: #fff1d6;
++  color: #76520d
++}
++
++@media(max-width:520px) {
++  .cabinet-bar {
++    align-items: stretch;
++    flex-direction: column
++  }
++
++  .cabinet-tabs button {
++    flex: 1
++  }
++
++  .tracking-facts div {
++    grid-template-columns: 1fr
++  }
++
++  .tracking-facts {
++    gap: 18px
++  }
++}
++
++.compact-summary {
++  display: grid;
++  grid-template-columns: repeat(3, minmax(0, 1fr));
++  gap: 8px;
++  margin-bottom: 20px
++}
++
++.compact-summary>div {
++  padding: 16px 8px;
++  background: var(--paper);
++  border: 1px solid var(--line);
++  border-radius: 18px;
++  text-align: center;
++  min-width: 0
++}
++
++.compact-summary strong {
++  display: block;
++  font-size: 26px;
++  color: var(--blue)
++}
++
++.compact-summary span {
++  font-size: 13px;
++  color: var(--muted)
++}
++
++:root[data-theme=dark] .cabinet-tabs button[aria-pressed=true] {
++  color: #101623
++}
++
++.activity-list {
++  display: grid;
++  gap: 16px
++}
++
++.message-text {
++  white-space: pre-wrap;
++  overflow-wrap: anywhere
++}
++
++.activity-list .section-heading {
++  align-items: flex-start;
++  flex-wrap: wrap;
++  gap: 8px
++}
++
++.activity-list .section-heading small {
++  color: var(--muted)
++}
++
++.bottom-nav button {
++  min-width: 0;
++  flex: 1 1 0;
++  padding: 10px 3px
++}
+--- installed-before/web/ui.js
++++ v0.7/web/ui.js
+@@ -35,6 +35,7 @@
+     q: filters.q.trim(),
+     bucket: filters.bucket
+   });
++  if (filters.cabinet) params.set('cabinet', filters.cabinet);
+   if (before) params.set('before', before);
+   return params.toString();
+ }
+--- /dev/null
++++ v0.7/web/workspace.js
+@@ -0,0 +1,17 @@
++import {
++  escapeHtml as esc,
++  dateTime
++} from './ui.js';
++import {
++  eventTitle
++} from './order-detail.js';
++export function supportForm(draft) {
++  return `<section class="form-card"><h2>Обратиться в магазин</h2><p>Сообщение появится в кабинете сотрудников с назначенным доступом. Пароли, банковские реквизиты и коды сюда не отправляйте.</p><form id="support-form"><label>Ваш вопрос<textarea name="text" maxlength="4096" required>${esc(draft.text)}</textarea></label><button class="button primary full" type="submit">Отправить обращение</button></form></section>`;
++}
++export function feedView(section, feed, stages, intro) {
++  const title = section === 'inbox' ? 'Обращения клиентов' : 'Активность клиентов';
++  const subtitle = section === 'inbox' ? 'Сообщения, отправленные в бот и через кабинет MAJLIS.' :
++    'Изменения заказов в пределах вашего доступа.';
++  const rows = feed?.items || [];
++  return `${intro(title,subtitle)}${feed?.error?`<p class="freshness-warning" role="status">${esc(feed.error)}</p>`:''}${!feed?'<p role="status">Загружаем…</p>':!rows.length?'<section class="empty compact"><h2>Записей пока нет</h2><p>Здесь появятся новые события.</p></section>':`<div class="activity-list">${rows.map(item=>`<article class="form-card"><div class="section-heading"><strong>${section==='inbox'?esc(item.first_name||'Клиент')+' · ID '+item.customer_id:`Заказ ${esc(item.number)}`}</strong><small>${dateTime(item.created_at)}</small></div><h3>${section==='inbox'?(item.source==='telegram'?'Сообщение в бот':'Обращение из кабинета'):esc(eventTitle(item,stages))}</h3><p class="message-text">${esc(section==='inbox'?item.text:item.note||'Этап уточнён')}</p>${section==='activity'?`<button class="button" data-order="${item.order_id}">Открыть заказ</button>`:`<small>${esc(item.kind==='text'?'Текст':item.kind==='voice'?'Голосовое сообщение — файл не загружается':item.kind)}</small>`}</article>`).join('')}</div>`}${feed?.next_cursor?'<button id="feed-more" class="button full">Загрузить более ранние</button>':''}`;
++}

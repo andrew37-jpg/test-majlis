@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f6fa"><title>MAJLIS · Мои заказы</title><link rel="stylesheet" href="/style.css"><script src="https://telegram.org/js/telegram-web-app.js" defer></script><script type="module" src="/app.js"></script></head>
+<body>
+<header class="header"><a class="brand" href="/" aria-label="Majlis, главная"><span class="brand-mark">m</span><span>majlis<span class="brand-dot">.</span></span></a><span class="header-caption">Рядом на каждом этапе</span><button id="support-top" class="icon-button" aria-label="Открыть помощь"></button></header>
+<div id="preview-notice" hidden>Тестовый просмотр · вымышленные заказы</div>
+<div id="connection" role="status" hidden></div>
+<main id="app" aria-live="polite"><div class="skeleton" role="status"><span class="sr-only">Загружаем кабинет…</span><div></div><div></div><div></div></div></main>
+<footer><span>MAJLIS · Сопровождение заказов</span><span id="foot-mode"></span></footer>
+<nav id="navigation" class="bottom-nav" aria-label="Разделы приложения" hidden></nav>
+<div id="toast" role="status" hidden></div>
+<dialog id="detail-dialog" aria-labelledby="detail-title"><div id="detail-content"></div></dialog>
+<dialog id="info-dialog" aria-labelledby="info-title"><div class="dialog-top"><span class="eyebrow">MAJLIS</span><button class="close-dialog icon-button" aria-label="Закрыть">×</button></div><h2 id="info-title"></h2><p id="info-text"></p><button class="close-dialog button primary">Понятно</button></dialog>
+</body></html>

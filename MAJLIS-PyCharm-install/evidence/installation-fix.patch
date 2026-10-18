@@ -1,0 +1,70 @@
+--- v0.6/majlis/tunnel.py
++++ installed/majlis/tunnel.py
+@@ -19,6 +19,10 @@
+ 
+ 
+ def accepted_url(line: str) -> str | None:
++    # Service includes a long ANSI QR code after the address. Bound the whole
++    # event separately, then scan only the short registration prefix.
++    if len(line) > 131072:
++        return None
+     try:
+         event = json.loads(line)
+     except (ValueError, TypeError):
+@@ -26,10 +30,11 @@
+     if not isinstance(event, dict) or event.get("type") != "v1.tcpip_forward.register.accepted":
+         return None
+     data = event.get("data")
+-    if not isinstance(data, str) or len(data) > 4096:
++    if not isinstance(data, str) or len(data) > 65536:
+         return None
+     match = re.search(
+-        r"https://[a-zA-Z0-9-]+\.(?:lhr\.life|lhr\.rocks|localhost\.run)(?![a-zA-Z0-9_.-])", data
++        r"https://[a-zA-Z0-9-]+\.(?:lhr\.life|lhr\.rocks|localhost\.run)(?![a-zA-Z0-9_.-])",
++        data[:4096],
+     )
+     return match.group(0) if match else None
+ 
+--- v0.6/tests/test_tunnel_registration.py
++++ installed/tests/test_tunnel_registration.py
+@@ -0,0 +1,30 @@
++import json
++import unittest
++
++from majlis.tunnel import accepted_url
++
++
++class RegistrationTests(unittest.TestCase):
++    def event(self, data):
++        return json.dumps({"type": "v1.tcpip_forward.register.accepted", "data": data})
++
++    def test_realistic_qr_payload_keeps_https_address(self):
++        data = (
++            "dbe23b54b4dc45.lhr.life tunneled with tls termination, https://dbe23b54b4dc45.lhr.life\r\nOpen your tunnel with QR:\r\n"
++            + "\x1b[7m  \x1b[0m" * 1200
++        )
++        self.assertGreater(len(data), 4096)
++        self.assertEqual(accepted_url(self.event(data)), "https://dbe23b54b4dc45.lhr.life")
++
++    def test_large_payload_is_rejected(self):
++        self.assertIsNone(accepted_url(self.event("https://example.lhr.life\n" + "x" * 70000)))
++
++    def test_untrusted_domain_is_rejected(self):
++        self.assertIsNone(accepted_url(self.event("https://example.lhr.life.attacker.example")))
++
++    def test_url_outside_prefix_is_rejected(self):
++        self.assertIsNone(accepted_url(self.event("x" * 5000 + " https://example.lhr.life")))
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- v0.6/requirements.txt
++++ installed/requirements.txt
+@@ -1,6 +1 @@
+-fastapi>=0.115,<1
+-uvicorn>=0.34,<1
+-psycopg[binary,pool]>=3.2,<4
+-pydantic-settings>=2.7,<3
+-httpx>=0.28,<1
+-truststore>=0.10,<1
++-r requirements.lock

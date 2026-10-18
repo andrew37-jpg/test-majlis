@@ -1,0 +1,51 @@
+{
+  "project": "/Users/andreyromanov/Desktop/majlis_bot_test/majlis-platform",
+  "files": [
+    {
+      "file": "web/nav-lens.js",
+      "before": "339864e255a2146b4bbbcb442e6ba36fcd2ee7711dc7fb40d7a1330adc76ee64",
+      "after": "4c3b8be2ee374661fcfb152b360dc4bba70d2ba6fb006078617d184572862db5",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "web/ui.js",
+      "before": "7fe855c0a7c3458a0efad9fe06865fe4dcbb2de125a3e492637bbdce30778107",
+      "after": "5dfb6f9d57a250b44cd8605d700fa86b29c4d24b261853e622d808b241dbfff8",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "web/style.css",
+      "before": "b5367c907997ce37ff72579d4d821cb0d894306bea5b114980c9fd87da69cea5",
+      "after": "ba90fd2ac370171f337b9ea658fd432ee1e7f7329ae03366522620930795e927",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "docs/NAVIGATION-LENS.md",
+      "before": "31335a6514e98e8bf4188475d6f02ec0ebe6cf19740ee6268dd8dcfc7dfb976c",
+      "after": "9434b38759d94cd331de1dd92dd9f1ddaf05a4461de0cd31cbd725d5ff7208f4",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "tests/js/navigation.test.mjs",
+      "before": "13d6c0809837d93ab293eadba20c4f022bab96b53874b9193a4e880137993144",
+      "after": "3982caa2681f561fc429c293e58119cc0a42128f5e042d7510e9aae6eb027150",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "tests/js/lens-projection.test.mjs",
+      "before": "3d6394329539ad27d35eb356817765ca7870bbf680f89f24e4434c70f4d38985",
+      "after": "3effeaaefda0b1455080653962fc31c6c9bc625ac79cd1ab09dd3de73c355e83",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "tests/js/menu-fit.test.mjs",
+      "before": null,
+      "after": "c5a49aa9204cbec3c9e4945b55f53c795ba71a7d6ad816dfa729fc4587490163",
+      "matchesTestedSource": true
+    }
+  ],
+  "envUnchanged": true,
+  "backendChanged": false,
+  "deployedAt": "2026-10-16T18:07:11.617625+03:00",
+  "finalizedAt": "2026-10-16T18:19:35.901250+03:00"
+}

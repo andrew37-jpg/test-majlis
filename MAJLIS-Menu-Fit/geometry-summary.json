@@ -1,0 +1,46 @@
+{
+  "light": {
+    "samples": 481,
+    "maxLensOverflow": 0,
+    "maxMaterialOverflow": 0,
+    "maxButtonShift": 0,
+    "lensHeights": [
+      62
+    ],
+    "rAFMedianMs": 16.69999999999705,
+    "maxRafIntervalMs": 18.70000000000438
+  },
+  "dark": {
+    "samples": 481,
+    "maxLensOverflow": 0,
+    "maxMaterialOverflow": 0,
+    "maxButtonShift": 0,
+    "lensHeights": [
+      62
+    ],
+    "rAFMedianMs": 16.699999999999715,
+    "maxRafIntervalMs": 18.800000000000594
+  },
+  "manager-320": {
+    "samples": 481,
+    "maxLensOverflow": 0,
+    "maxMaterialOverflow": 0,
+    "maxButtonShift": 0,
+    "lensHeights": [
+      62
+    ],
+    "rAFMedianMs": 16.69999999999705,
+    "maxRafIntervalMs": 18.800000000002814
+  },
+  "final": {
+    "samples": 481,
+    "maxLensOverflow": 0,
+    "maxMaterialOverflow": 0,
+    "maxButtonShift": 0,
+    "lensHeights": [
+      62
+    ],
+    "rAFMedianMs": 16.699999999999715,
+    "maxRafIntervalMs": 18.70000000000016
+  }
+}

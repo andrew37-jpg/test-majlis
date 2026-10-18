@@ -1,0 +1,9 @@
+{
+  "publicHealth": 200,
+  "instanceMatches": true,
+  "publicLensAsset": 200,
+  "assetMatches": true,
+  "telegramMenuReadOK": true,
+  "menuType": "web_app",
+  "menuMatchesCurrentURL": true
+}

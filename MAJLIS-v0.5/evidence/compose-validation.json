@@ -1,0 +1,10 @@
+{
+  "compose.local.yaml": {
+    "exit_code": 0,
+    "stderr": ""
+  },
+  "compose.server.yaml": {
+    "exit_code": 0,
+    "stderr": ""
+  }
+}

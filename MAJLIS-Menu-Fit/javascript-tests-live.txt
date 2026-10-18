@@ -1,0 +1,44 @@
+✔ background projection stays aligned without scaling the panel (1.3895ms)
+✔ edge projection reflects radial detail and keeps tangent detail enlarged (1.061208ms)
+✔ rest and held lens match each active button, including extreme sections (2.118208ms)
+✔ deformation remains within the row, keeps its vertical centre and never grows in height (18.33425ms)
+✔ layout height is taken from measured buttons, not inferred from tab width (0.428875ms)
+✔ drag previews without navigation, commits nearest section once on release (9.065375ms)
+✔ cancel returns to committed selection without opening previewed section (7.131292ms)
+✔ vertical exit cancels a gesture and its subsequent release (1.306167ms)
+✔ reversal continues from current position and does not overshoot (3.142625ms)
+✔ reduced motion suppresses optics while preserving drag release navigation (2.368458ms)
+✔ keyboard click navigates without waiting for animation (2.134708ms)
+✔ resize notification with unchanged geometry does not interrupt a held gesture (1.723ms)
+✔ release outside the panel cancels even if the last move was missed (1.015959ms)
+✔ rapid alternating clicks keep one frame callback and settle on the last selection (3.489083ms)
+✔ a ready but blank optical renderer cannot hide the real selection material (2.359709ms)
+✔ release uses its final position when the last pointermove was not delivered (1.891708ms)
+✔ holding and moving never scales the real material outside the button row (1.644541ms)
+✔ off-centre press stays centred on its button until a drag is recognised (2.604458ms)
+✔ several pages -> refresh -> continue, updated values and no duplicates (6.164208ms)
+✔ stale refresh cannot overwrite new filters (0.862167ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.50725ms)
+✔ HTML escaping and money are exact, invalid values rejected (1.014708ms)
+✔ detail and transfer form escape personal fields and explain ownership (62.9335ms)
+✔ payment and ETA edits do not rewrite a checkpoint date (9.316333ms)
+✔ separate workspaces hide role choices and discard stale page responses (1.93025ms)
+✔ tracking displays confirmed facts, escapes carrier/track, and labels old source data (0.708792ms)
+✔ manager inbox escapes client content and public cabinet has no manager entry (1.313583ms)
+✔ saved manual theme applies before DOMContentLoaded and ignores system changes (6.248084ms)
+✔ first browser launch follows system even when Telegram SDK exists outside Telegram (1.82675ms)
+✔ Telegram launch hash sets dark before body, host events follow only in auto mode (2.7625ms)
+✔ choice persists, all controls sync, reopening keeps manual priority (1.800916ms)
+✔ blocked storage, invalid stored values and malformed launch data do not crash (1.738417ms)
+✔ one failing or absent host method does not prevent remaining operations (1.040208ms)
+✔ old host header uses supported keyword and no unsupported bottom method (0.775334ms)
+✔ storage event updates another instance and removal resets to auto (1.872ms)
+✔ circle toggles current appearance in one click and auto restores device theme (1.188709ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 195.015542

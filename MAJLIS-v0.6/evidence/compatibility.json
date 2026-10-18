@@ -1,0 +1,15 @@
+{
+  "base_archive": "MAJLIS-PostgreSQL-MiniApp-v0.5.zip",
+  "base_archive_sha256": "d9a7136ccc508e8548695c63f1f7828262c7a9129cdd9b453717d1c5c033bbbe",
+  "unchanged_files": [
+    "migrations/002_ownership_and_events.sql",
+    "migrations/001_initial.sql",
+    "requirements.lock"
+  ],
+  "new_migrations": [
+    "migrations/003_event_kinds_and_import_map.sql",
+    "migrations/004_classify_verified_transfers.sql"
+  ],
+  "live_installation_updated": false,
+  "old_customer_database_migrated": false
+}

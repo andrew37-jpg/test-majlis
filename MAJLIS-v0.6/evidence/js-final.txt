@@ -1,0 +1,14 @@
+✔ several pages -> refresh -> continue, updated values and no duplicates (4.773625ms)
+✔ stale refresh cannot overwrite new filters (3.822167ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.346625ms)
+✔ HTML escaping and money are exact, invalid values rejected (0.580167ms)
+✔ detail and transfer form escape personal fields and explain ownership (51.997208ms)
+✔ payment and ETA edits do not rewrite a checkpoint date (9.464833ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 161.894667

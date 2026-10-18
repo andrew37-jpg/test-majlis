@@ -1,0 +1,58 @@
+{
+  "local": [
+    {
+      "path": "/health",
+      "status": 200,
+      "matchesFile": null,
+      "instanceMatches": true
+    },
+    {
+      "path": "/ui.js",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/nav-lens.js?v=menu-fit-v4",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    }
+  ],
+  "public": [
+    {
+      "path": "/health",
+      "status": 200,
+      "matchesFile": null,
+      "instanceMatches": true
+    },
+    {
+      "path": "/ui.js",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/nav-lens.js?v=menu-fit-v4",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null
+    }
+  ],
+  "menu": {
+    "ok": true,
+    "urlMatchesRuntime": true
+  }
+}

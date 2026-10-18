@@ -1,0 +1,38 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/andreyromanov/Desktop/Запись экрана 2026-10-16 в 6.32.13 PM.mov':
+  Metadata:
+    major_brand     : qt  
+    minor_version   : 0
+    compatible_brands: qt  
+    creation_time   : 2026-10-16T15:32:14.000000Z
+    com.apple.quicktime.author: ReplayKitRecording
+    com.apple.quicktime.full-frame-rate-playback-intent: 1
+  Duration: 00:00:09.48, start: 0.000000, bitrate: 12582 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Main) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 2940x1912, 12505 kb/s, 54.13 fps, 60 tbr, 600 tbn (default)
+      Metadata:
+        creation_time   : 2026-10-16T15:32:14.000000Z
+        handler_name    : Core Media Video
+        vendor_id       : [0][0][0][0]
+        encoder         : H.264
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> mjpeg (native))
+Press [q] to stop, [?] for help
+Output #0, image2, to 'outputs/MAJLIS-Fluid-Motion/current-before.jpg':
+  Metadata:
+    major_brand     : qt  
+    minor_version   : 0
+    compatible_brands: qt  
+    com.apple.quicktime.full-frame-rate-playback-intent: 1
+    com.apple.quicktime.author: ReplayKitRecording
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: mjpeg, yuv420p(pc, bt709, progressive), 1560x508, q=2-31, 200 kb/s, 0.12 fps, 0.12 tbn (default)
+      Metadata:
+        creation_time   : 2026-10-16T15:32:14.000000Z
+        handler_name    : Core Media Video
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 mjpeg
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/200000 buffer size: 0 vbv_delay: N/A
+[image2 @ 0x142f18bb0] The specified filename 'outputs/MAJLIS-Fluid-Motion/current-before.jpg' does not contain an image sequence pattern or a pattern is invalid.
+[image2 @ 0x142f18bb0] Use a pattern such as %03d for an image sequence or use the -update option (with -frames:v 1 if needed) to write a single image.
+[out#0/image2 @ 0x142f21a30] video:92KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame=    1 fps=0.6 q=9.2 Lsize=N/A time=00:00:08.00 bitrate=N/A speed=5.03x    

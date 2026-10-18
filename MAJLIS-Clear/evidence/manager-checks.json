@@ -1,0 +1,64 @@
+{
+  "sections": [
+    {
+      "current": "activity",
+      "heading": "Активность клиентов",
+      "indicators": 1,
+      "overflow": 360
+    },
+    {
+      "current": "inbox",
+      "heading": "Обращения клиентов",
+      "indicators": 1,
+      "overflow": 360
+    },
+    {
+      "current": "new",
+      "heading": "Новый заказ",
+      "indicators": 1,
+      "overflow": 360
+    },
+    {
+      "current": "help",
+      "heading": "Помощь",
+      "indicators": 1,
+      "overflow": 360
+    },
+    {
+      "current": "orders",
+      "heading": "Заказы магазина",
+      "indicators": 1,
+      "overflow": 360
+    }
+  ],
+  "resize": [
+    {
+      "delta": 0,
+      "navScroll": 294,
+      "navWidth": 294,
+      "overflow": 320,
+      "width": 320
+    },
+    {
+      "delta": 0,
+      "navScroll": 404,
+      "navWidth": 404,
+      "overflow": 430,
+      "width": 430
+    },
+    {
+      "delta": 0,
+      "navScroll": 458,
+      "navWidth": 458,
+      "overflow": 900,
+      "width": 900
+    },
+    {
+      "delta": 0,
+      "navScroll": 334,
+      "navWidth": 334,
+      "overflow": 360,
+      "width": 360
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 808B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#2 ...
+
+#3 [auth] library/python:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#2 DONE 2.3s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 99B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#5 resolve docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 168.41kB 0.0s done
+#6 DONE 0.0s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [3/7] COPY requirements.lock ./requirements.lock
+#8 CACHED
+
+#9 [4/7] RUN python -m pip install --no-cache-dir --require-hashes -r requirements.lock     && python -m pip uninstall --yes pip     && rm -rf /usr/local/lib/python3.12/ensurepip     && useradd --uid 10001 --create-home app
+#9 2.371 Collecting annotated-doc==0.0.5 (from -r requirements.lock (line 2))
+#9 3.192   Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#9 3.366 Collecting annotated-types==0.8.0 (from -r requirements.lock (line 5))
+#9 3.517   Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#9 3.794 Collecting anyio==4.15.1 (from -r requirements.lock (line 8))
+#9 3.944   Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#9 4.535 Collecting certifi==2026.7.22 (from -r requirements.lock (line 11))
+#9 4.707   Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+#9 5.091 Collecting click==8.5.0 (from -r requirements.lock (line 14))
+#9 5.271   Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#9 5.868 Collecting fastapi==0.143.1 (from -r requirements.lock (line 17))
+#9 6.033   Downloading fastapi-0.143.1-py3-none-any.whl (144 kB)
+#9 6.310 Collecting h11==0.16.0 (from -r requirements.lock (line 20))
+#9 6.512   Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#9 6.857 Collecting httpcore==1.0.9 (from -r requirements.lock (line 23))
+#9 7.051   Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#9 7.386 Collecting httpx==0.28.1 (from -r requirements.lock (line 26))
+#9 7.551   Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#9 7.765 Collecting idna==3.20 (from -r requirements.lock (line 29))
+#9 7.936   Downloading idna-3.20-py3-none-any.whl (69 kB)
+#9 8.283 Collecting opentelemetry-api==1.45.1 (from -r requirements.lock (line 32))
+#9 8.436   Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+#9 8.690 Collecting psycopg==3.3.6 (from -r requirements.lock (line 35))
+#9 9.182   Downloading psycopg-3.3.6-py3-none-any.whl (215 kB)
+#9 10.15 Collecting psycopg-binary==3.3.6 (from -r requirements.lock (line 38))
+#9 10.35   Downloading psycopg_binary-3.3.6-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (6.8 MB)
+#9 12.71      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.8/6.8 MB 2.9 MB/s eta 0:00:00
+#9 12.91 Collecting psycopg-pool==3.3.3 (from -r requirements.lock (line 105))
+#9 13.07   Downloading psycopg_pool-3.3.3-py3-none-any.whl (40 kB)
+#9 13.54 Collecting pydantic==2.14.1 (from -r requirements.lock (line 108))
+#9 13.70   Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+#9 15.91 Collecting pydantic-core==2.50.1 (from -r requirements.lock (line 111))
+#9 16.07   Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (2.0 MB)
+#9 16.45      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 5.6 MB/s eta 0:00:00
+#9 16.63 Collecting pydantic-settings==2.16.0 (from -r requirements.lock (line 249))
+#9 16.79   Downloading pydantic_settings-2.16.0-py3-none-any.whl (80 kB)
+#9 17.11 Collecting python-dotenv==1.2.4 (from -r requirements.lock (line 252))
+#9 17.26   Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+#9 17.45 Collecting starlette==1.8.0 (from -r requirements.lock (line 255))
+#9 17.60   Downloading starlette-1.8.0-py3-none-any.whl (79 kB)
+#9 17.98 Collecting truststore==0.10.5 (from -r requirements.lock (line 258))
+#9 18.15   Downloading truststore-0.10.5-py3-none-any.whl (19 kB)
+#9 18.31 Collecting typing-extensions==4.16.0 (from -r requirements.lock (line 261))
+#9 18.48   Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#9 18.65 Collecting typing-inspection==0.4.4 (from -r requirements.lock (line 264))
+#9 18.82   Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#9 19.14 Collecting uvicorn==0.54.0 (from -r requirements.lock (line 267))
+#9 19.30   Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+#9 19.63 Installing collected packages: typing-extensions, truststore, python-dotenv, psycopg-binary, idna, h11, click, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, psycopg-pool, psycopg, opentelemetry-api, httpcore, anyio, starlette, pydantic, httpx, pydantic-settings, fastapi
+#9 23.48 Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 click-8.5.0 fastapi-0.143.1 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 opentelemetry-api-1.45.1 psycopg-3.3.6 psycopg-binary-3.3.6 psycopg-pool-3.3.3 pydantic-2.14.1 pydantic-core-2.50.1 pydantic-settings-2.16.0 python-dotenv-1.2.4 starlette-1.8.0 truststore-0.10.5 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
+#9 23.48 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#9 24.40 
+#9 24.40 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+#9 24.40 [notice] To update, run: pip install --upgrade pip
+#9 27.75 Found existing installation: pip 25.0.1
+#9 27.84 Uninstalling pip-25.0.1:
+#9 28.07   Successfully uninstalled pip-25.0.1
+#9 28.09 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#9 DONE 28.5s
+
+#10 [5/7] COPY --chown=app:app majlis ./majlis
+#10 DONE 0.1s
+
+#11 [6/7] COPY --chown=app:app migrations ./migrations
+#11 DONE 0.1s
+
+#12 [7/7] COPY --chown=app:app web ./web
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 3.4s done
+#13 exporting manifest sha256:7c3e9f83a152629e0b534fd2a7bd774a11b3c059f616f6dc75a525ed9cdd92e1 done
+#13 exporting config sha256:8601401fc23c53250196e5c0ebd9b07f46f20690cbe20306e2648824c2cbc50b done
+#13 exporting attestation manifest sha256:41d2590f115260b51d1cfd2865e68530a6268a21236ba9ca7d126d6c6d249aec done
+#13 exporting manifest list sha256:6de09d49febe687f15220b94392bfe149595f5d7bcc41fa9cd489669530fc926 done
+#13 naming to docker.io/library/majlis-platform:audit-fixes-20261018 done
+#13 unpacking to docker.io/library/majlis-platform:audit-fixes-20261018
+#13 unpacking to docker.io/library/majlis-platform:audit-fixes-20261018 0.7s done
+#13 DONE 4.3s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/hgc7dfwfzoiwc3ijc7nyms5ih

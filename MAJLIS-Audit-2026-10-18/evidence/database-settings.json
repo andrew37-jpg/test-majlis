@@ -1,0 +1,7 @@
+{
+  "server_version": "17.11",
+  "statement_timeout": "0",
+  "lock_timeout": "0",
+  "idle_in_transaction_session_timeout": "0",
+  "superuser": false
+}

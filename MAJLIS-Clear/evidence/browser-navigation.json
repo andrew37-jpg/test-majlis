@@ -1,0 +1,85 @@
+{
+  "fast": [
+    {
+      "current": "orders",
+      "indicators": 1,
+      "section": "Мои заказы",
+      "target": 19,
+      "x": 45.809471130371094
+    },
+    {
+      "current": "help",
+      "indicators": 1,
+      "section": "Помощь",
+      "target": 253.6640625,
+      "x": 238.8223419189453
+    },
+    {
+      "current": "catalog",
+      "indicators": 1,
+      "section": "Каталог",
+      "target": 136.328125,
+      "x": 144.5364990234375
+    },
+    {
+      "current": "orders",
+      "indicators": 1,
+      "section": "Мои заказы",
+      "target": 19,
+      "x": 27.96016311645508
+    },
+    {
+      "current": "catalog",
+      "indicators": 1,
+      "section": "Каталог",
+      "target": 136.328125,
+      "x": 127.50069427490234
+    },
+    {
+      "current": "help",
+      "indicators": 1,
+      "section": "Помощь",
+      "target": 253.6640625,
+      "x": 245.14939880371097
+    },
+    {
+      "current": "orders",
+      "indicators": 1,
+      "section": "Мои заказы",
+      "target": 19,
+      "x": 36.511940002441406
+    }
+  ],
+  "resize": [
+    {
+      "delta": 0,
+      "indicator": 1,
+      "overflow": 320,
+      "width": 320
+    },
+    {
+      "delta": 0,
+      "indicator": 1,
+      "overflow": 360,
+      "width": 360
+    },
+    {
+      "delta": 0,
+      "indicator": 1,
+      "overflow": 430,
+      "width": 430
+    },
+    {
+      "delta": 0,
+      "indicator": 1,
+      "overflow": 1024,
+      "width": 1024
+    },
+    {
+      "delta": 0,
+      "indicator": 1,
+      "overflow": 390,
+      "width": 390
+    }
+  ]
+}

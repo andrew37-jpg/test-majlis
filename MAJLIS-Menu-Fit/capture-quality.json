@@ -1,0 +1,14 @@
+{
+  "light": {
+    "frames": 101,
+    "durationSeconds": 7.4615,
+    "averageSamplingFps": 13.402130938819273,
+    "interpolated": false
+  },
+  "dark": {
+    "frames": 104,
+    "durationSeconds": 7.4755,
+    "averageSamplingFps": 13.778342585780216,
+    "interpolated": false
+  }
+}

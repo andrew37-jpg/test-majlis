@@ -1,0 +1,7 @@
+-r requirements.txt
+pytest>=8,<10
+
+ruff==0.17.0
+bandit==1.9.4
+coverage==7.16.2
+httpx2==2.13.1

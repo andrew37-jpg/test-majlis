@@ -1,0 +1,30 @@
+[
+  {
+    "url": "http://127.0.0.1:8876/health",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8876/ui.js",
+    "status": 200,
+    "matchesFile": true
+  },
+  {
+    "url": "http://127.0.0.1:8876/nav-lens.js?v=fluid-motion-v5",
+    "status": 200,
+    "matchesFile": true
+  },
+  {
+    "url": "https://a603780d4bf56a.lhr.life/health",
+    "status": 200
+  },
+  {
+    "url": "https://a603780d4bf56a.lhr.life/ui.js",
+    "status": 200,
+    "matchesFile": true
+  },
+  {
+    "url": "https://a603780d4bf56a.lhr.life/nav-lens.js?v=fluid-motion-v5",
+    "status": 200,
+    "matchesFile": true
+  }
+]

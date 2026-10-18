@@ -1,0 +1,20 @@
+[
+  {
+    "attempt": 1,
+    "healthStatus": 200,
+    "instanceMatches": true,
+    "ui.js": {
+      "status": 200,
+      "matchesFile": true
+    },
+    "nav-lens.js?v=dom-optics-v3": {
+      "status": 200,
+      "matchesFile": true
+    },
+    "style.css": {
+      "status": 200,
+      "matchesFile": true
+    },
+    "menuMatches": true
+  }
+]

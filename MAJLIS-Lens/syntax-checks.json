@@ -1,0 +1,38 @@
+[
+  {
+    "file": "ui.js",
+    "exit": 0
+  },
+  {
+    "file": "cabinets.js",
+    "exit": 0
+  },
+  {
+    "file": "theme.js",
+    "exit": 0
+  },
+  {
+    "file": "workspace.js",
+    "exit": 0
+  },
+  {
+    "file": "pagination.js",
+    "exit": 0
+  },
+  {
+    "file": "nav-lens.js",
+    "exit": 0
+  },
+  {
+    "file": "order-editor.js",
+    "exit": 0
+  },
+  {
+    "file": "order-detail.js",
+    "exit": 0
+  },
+  {
+    "file": "app.js",
+    "exit": 0
+  }
+]

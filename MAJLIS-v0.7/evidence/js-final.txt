@@ -1,0 +1,17 @@
+✔ several pages -> refresh -> continue, updated values and no duplicates (5.202084ms)
+✔ stale refresh cannot overwrite new filters (3.923208ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.3395ms)
+✔ HTML escaping and money are exact, invalid values rejected (0.433583ms)
+✔ detail and transfer form escape personal fields and explain ownership (48.108708ms)
+✔ payment and ETA edits do not rewrite a checkpoint date (8.813375ms)
+✔ separate workspaces hide role choices and discard stale page responses (1.578833ms)
+✔ tracking displays confirmed facts, escapes carrier/track, and labels old source data (0.602792ms)
+✔ manager inbox escapes client content and public cabinet has no manager entry (0.912334ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 157.934833

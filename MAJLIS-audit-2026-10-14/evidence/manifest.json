@@ -1,0 +1,154 @@
+[
+  {
+    "path": "requirements.txt",
+    "sha256": "e866b649c99849175b6df9e16f160ab65e9b2d191a5db3c6bb6d2e37aeaad241"
+  },
+  {
+    "path": "compose.server.yaml",
+    "sha256": "37fe5ead2c5b93441f1e404a39a6be23e123985b42bfea6cf82e7c696642e295"
+  },
+  {
+    "path": "Dockerfile",
+    "sha256": "3814cb801e1a6252155b7ceb817d89e1667cc05c91b8199eab820571926f4dc2"
+  },
+  {
+    "path": "compose.local.yaml",
+    "sha256": "c62b9175dd686e2868742383a1399bdd72cd519794e6afdef923cf372d20bde8"
+  },
+  {
+    "path": "README.md",
+    "sha256": "393018cad8020ee3e4b858adda8ed8ddd6629ff3550fa2fa6586b03f143f9ff4"
+  },
+  {
+    "path": "Caddyfile",
+    "sha256": "a51727cfbe039e63b02b8472984b979852b4afb651a3eb7535c14572e7f30616"
+  },
+  {
+    "path": ".dockerignore",
+    "sha256": "15654a311a6d3cc019efaf626157d049e158790665a420a7d4ab7b729242d0ef"
+  },
+  {
+    "path": "requirements-dev.txt",
+    "sha256": "8636f9ab1a075be9f3039e2a6471837259c4f36b625bcaf7a3d9a1edd2419c6d"
+  },
+  {
+    "path": ".gitignore",
+    "sha256": "d555157ab6c35f8efd206bddb86d26d8e1a420fb740c8ddc1302c184a46bcca0"
+  },
+  {
+    "path": "manage.py",
+    "sha256": "ef72c739802559bcd24b7cd92412e4c7e1fec6a3eee725c588ecfb1e4c5c096a"
+  },
+  {
+    "path": ".env.example",
+    "sha256": "6e4da77778cf0442daf1597e45f212199c935b4ec9986600addedde37df9c059"
+  },
+  {
+    "path": "main.py",
+    "sha256": "3d9442ba93d8a483c39d1554f5c8199913ac805fddafee385ceddae0eb37f7b5"
+  },
+  {
+    "path": "requirements.lock",
+    "sha256": "b45de6c371355c47340e03f95adfddd5056217a093f881511894755c622bd65f"
+  },
+  {
+    "path": "majlis/services.py",
+    "sha256": "4f7e2e296daab4ba3c5017ade6e84513d66511fc1ebcbff0180bf88460cb62fa"
+  },
+  {
+    "path": "majlis/config.py",
+    "sha256": "bbe2137dc23ef57d1971856d935c8c114daddb67f63d41f76bc5f30eb9252216"
+  },
+  {
+    "path": "majlis/domain.py",
+    "sha256": "8fb2768662b0df1ac83f92ebaa88909f0f1f615e0bdcfad9a53896c6e80df8c3"
+  },
+  {
+    "path": "majlis/database.py",
+    "sha256": "073282eaf3113e45a565031cda25751298bb91a4e7c628f725919cd342a3fbc2"
+  },
+  {
+    "path": "majlis/__init__.py",
+    "sha256": "3c6ddc58ae746d64f06a591fa6b602574347402a7e60d27420031fbeaf349f21"
+  },
+  {
+    "path": "majlis/tunnel.py",
+    "sha256": "00a6b11da2e5d8e561b55bc438bd141cdf35cd41bf256c4fe6a53b3eded49b80"
+  },
+  {
+    "path": "majlis/api.py",
+    "sha256": "f0979f2a34dfad5b7a2a798cac149b1f811a7769a6011e9782419d24bf345407"
+  },
+  {
+    "path": "majlis/bot.py",
+    "sha256": "7ef3aafe99b7d821655d50c39f2edc1a0faf2449b39bf5970ce8ad5a8e83218d"
+  },
+  {
+    "path": "majlis/schemas.py",
+    "sha256": "93c8c3abfaa8f55083d1d6be7391e33600df28f0c8ab3327efd93848a05cabad"
+  },
+  {
+    "path": "majlis/cli.py",
+    "sha256": "e8c92b7a677759c2b7540807171075cf1be02b19dd2533513a944a48c93bbd7d"
+  },
+  {
+    "path": "majlis/network.py",
+    "sha256": "15c3efdaec13d1ca3330438f9a6a06fdbb0b8ad9d16109ba525952a0fddf50b4"
+  },
+  {
+    "path": "migrations/001_initial.sql",
+    "sha256": "51d2be5437b73f476ad3bece2817c0f23787df99b2f3e2c03db2471901ba31df"
+  },
+  {
+    "path": "docker/Postgres.Dockerfile",
+    "sha256": "b01051b32cd37c5655c3fe85694d02a4c9f552cb1271e35c5c1d0326a3d0d096"
+  },
+  {
+    "path": "web/ui.js",
+    "sha256": "486544dcc33a72a3ffcba92368c62115436882c8dad87d85b0d67879b9a4d9db"
+  },
+  {
+    "path": "web/index.html",
+    "sha256": "9c575b4eafc9a8ae9386be0a648eaaa71c04a1306440e2e52e67b3e6e41eb156"
+  },
+  {
+    "path": "web/style.css",
+    "sha256": "e76eea381a185b9a81c31a178f9ec89dfc19a77cf1b11ed55e9fe2378267141e"
+  },
+  {
+    "path": "web/app.js",
+    "sha256": "c6ad9e6d5f3bb2859cac1b039a33290ec48c2285bcbfa15b5f653fad2b14cd2b"
+  },
+  {
+    "path": "tests/conftest.py",
+    "sha256": "0d4654eeabf48314e54fd6aff8506e4c9a04195dc0a0f028872406f364d9d338"
+  },
+  {
+    "path": "tests/test_platform.py",
+    "sha256": "0f499a936d4919cb12c18950f8d50d5ae12681525f7e00f0a116b16cf5a69f40"
+  },
+  {
+    "path": "docs/ARCHITECTURE.md",
+    "sha256": "d78ac1a5b4fc8221f3d7ae85fcd94225816d296cf82f0be0c5a0a24348747eca"
+  },
+  {
+    "path": "docs/OPERATIONS.md",
+    "sha256": "bc2dcd8e587d41554db95bf5b17c5c645ff4cad6645899d710c168911d32f1cd"
+  },
+  {
+    "path": "docs/VERIFICATION.md",
+    "sha256": "1d6ffcb33625ed5d0ac779eaafd7e13c75fb06e45b32152e2d24886605513aa0"
+  },
+  {
+    "path": "docs/UX-IMPROVEMENTS.md",
+    "sha256": "cf34c668807c781d97f4c102291a82ecfdb9c1dec419edf4d36fda1e57e5fe8a"
+  },
+  {
+    "path": ".run/MAJLIS PostgreSQL.run.xml",
+    "sha256": "41d1bdbc8ff3c5c63cc87cc76f0980b9d63c68558bda348ffcbfdfedcb731687"
+  },
+  {
+    "path": "docker/initdb/10-app.sh",
+    "sha256": "b9806728bd6455f672f904e50377d7296eea03c688e8e4236031fa865f376b0c"
+  }
+]

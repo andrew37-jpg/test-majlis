@@ -1,0 +1,23 @@
+[
+  {
+    "command": "python manage.py backup --container majlis-local-db-1 --file /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal.dump",
+    "exit_code": 0,
+    "seconds": 0.546,
+    "stdout": "Резервная копия: /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal.dump\n",
+    "stderr": ""
+  },
+  {
+    "command": "python manage.py inspect-backup --container majlis-local-db-1 --file /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal.dump",
+    "exit_code": 0,
+    "seconds": 0.386,
+    "stdout": "Архив читается; это не проверка восстановления.\n",
+    "stderr": ""
+  },
+  {
+    "command": "python manage.py restore-test --container majlis-local-db-1 --file /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-remediation/rehearsal.dump --target majlis_restore_1792010869_test",
+    "exit_code": 1,
+    "seconds": 1.662,
+    "stdout": "Операция не завершена: Снимки не совпадают. При активной записи в источник повторите проверку на согласованном snapshot.\n",
+    "stderr": ""
+  }
+]

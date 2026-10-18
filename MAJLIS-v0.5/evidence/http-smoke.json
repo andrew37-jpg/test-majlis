@@ -1,0 +1,41 @@
+{
+  "/": {
+    "status": 200,
+    "security_headers": true
+  },
+  "/app.js": {
+    "status": 200,
+    "security_headers": true
+  },
+  "/pagination.js": {
+    "status": 200,
+    "security_headers": true
+  },
+  "/order-detail.js": {
+    "status": 200,
+    "security_headers": true
+  },
+  "/order-editor.js": {
+    "status": 200,
+    "security_headers": true
+  },
+  "/ready": {
+    "status": 403,
+    "security_headers": true
+  },
+  "/api/bootstrap": {
+    "status": 401,
+    "security_headers": true
+  },
+  "internal_ready": {
+    "status": 200
+  },
+  "signed_buyer": {
+    "status": 200,
+    "role": "buyer"
+  },
+  "oversized": {
+    "status": 413,
+    "security_headers": true
+  }
+}

@@ -1,0 +1,69 @@
+Collecting annotated-doc==0.0.5 (from -r requirements.lock (line 2))
+  Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+Collecting annotated-types==0.8.0 (from -r requirements.lock (line 5))
+  Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Collecting anyio==4.15.1 (from -r requirements.lock (line 8))
+  Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132.1/132.1 kB 279.7 kB/s eta 0:00:00
+Collecting certifi==2026.7.22 (from -r requirements.lock (line 11))
+  Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 137.0/137.0 kB 1.4 MB/s eta 0:00:00
+Collecting click==8.5.0 (from -r requirements.lock (line 14))
+  Downloading click-8.5.0-py3-none-any.whl (125 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 125.3/125.3 kB 1.5 MB/s eta 0:00:00
+Collecting fastapi==0.143.1 (from -r requirements.lock (line 17))
+  Downloading fastapi-0.143.1-py3-none-any.whl (144 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 144.7/144.7 kB 738.4 kB/s eta 0:00:00
+Collecting h11==0.16.0 (from -r requirements.lock (line 20))
+  Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Collecting httpcore==1.0.9 (from -r requirements.lock (line 23))
+  Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 2.0 MB/s eta 0:00:00
+Collecting httpx==0.28.1 (from -r requirements.lock (line 26))
+  Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.5/73.5 kB 1.7 MB/s eta 0:00:00
+Collecting idna==3.20 (from -r requirements.lock (line 29))
+  Downloading idna-3.20-py3-none-any.whl (69 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 69.6/69.6 kB 442.6 kB/s eta 0:00:00
+Collecting opentelemetry-api==1.45.1 (from -r requirements.lock (line 32))
+  Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.3/60.3 kB 1.5 MB/s eta 0:00:00
+Collecting psycopg==3.3.6 (from -r requirements.lock (line 35))
+  Downloading psycopg-3.3.6-py3-none-any.whl (215 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 215.5/215.5 kB 1.7 MB/s eta 0:00:00
+Collecting psycopg-binary==3.3.6 (from -r requirements.lock (line 38))
+  Downloading psycopg_binary-3.3.6-cp312-cp312-macosx_11_0_arm64.whl (4.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 2.4 MB/s eta 0:00:00
+Collecting psycopg-pool==3.3.3 (from -r requirements.lock (line 105))
+  Downloading psycopg_pool-3.3.3-py3-none-any.whl (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.3/40.3 kB 4.5 MB/s eta 0:00:00
+Collecting pydantic==2.14.1 (from -r requirements.lock (line 108))
+  Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 488.1/488.1 kB 6.1 MB/s eta 0:00:00
+Collecting pydantic-core==2.50.1 (from -r requirements.lock (line 111))
+  Downloading pydantic_core-2.50.1-cp312-cp312-macosx_11_0_arm64.whl (2.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 4.3 MB/s eta 0:00:00
+Collecting pydantic-settings==2.16.0 (from -r requirements.lock (line 249))
+  Downloading pydantic_settings-2.16.0-py3-none-any.whl (80 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 80.4/80.4 kB 11.4 MB/s eta 0:00:00
+Collecting python-dotenv==1.2.4 (from -r requirements.lock (line 252))
+  Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+Collecting starlette==1.8.0 (from -r requirements.lock (line 255))
+  Downloading starlette-1.8.0-py3-none-any.whl (79 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 79.6/79.6 kB 10.0 MB/s eta 0:00:00
+Collecting truststore==0.10.5 (from -r requirements.lock (line 258))
+  Downloading truststore-0.10.5-py3-none-any.whl (19 kB)
+Collecting typing-extensions==4.16.0 (from -r requirements.lock (line 261))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 2.7 MB/s eta 0:00:00
+Collecting typing-inspection==0.4.4 (from -r requirements.lock (line 264))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Collecting uvicorn==0.54.0 (from -r requirements.lock (line 267))
+  Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 87.4/87.4 kB 4.9 MB/s eta 0:00:00
+Installing collected packages: typing-extensions, truststore, python-dotenv, psycopg-binary, idna, h11, click, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, psycopg-pool, psycopg, opentelemetry-api, httpcore, anyio, starlette, pydantic, httpx, pydantic-settings, fastapi
+Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 click-8.5.0 fastapi-0.143.1 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 opentelemetry-api-1.45.1 psycopg-3.3.6 psycopg-binary-3.3.6 psycopg-pool-3.3.3 pydantic-2.14.1 pydantic-core-2.50.1 pydantic-settings-2.16.0 python-dotenv-1.2.4 starlette-1.8.0 truststore-0.10.5 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit-2026-10-18/install-venv/bin/python -m pip install --upgrade pip
+No broken requirements found.

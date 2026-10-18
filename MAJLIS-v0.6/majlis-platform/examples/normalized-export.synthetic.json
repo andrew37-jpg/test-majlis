@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "source": "synthetic_fixture",
+  "orders": [
+    {
+      "source_order_id": "fake-example-1",
+      "telegram_id_verified": true,
+      "currency": "RUB",
+      "order": {
+        "number": "SYNTHETIC-EXAMPLE-1",
+        "customer_id": 3001,
+        "customer_name": "Вымышленный покупатель",
+        "item": "Вымышленный товар",
+        "amount": 12001,
+        "shipment": "SYNTHETIC-CARGO",
+        "eta": "2026-11-10"
+      },
+      "status": "customs",
+      "eta_confirmed": false,
+      "history": [
+        {
+          "status": "confirmed",
+          "note": "Вымышленный checkpoint для проверки контракта",
+          "occurred_at": "2026-10-01T10:00:00+03:00",
+          "owner_telegram_id": 3001,
+          "owner_verified": true,
+          "visible_to_customer": true
+        }
+      ]
+    }
+  ]
+}

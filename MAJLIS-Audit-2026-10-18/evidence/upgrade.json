@@ -1,0 +1,15 @@
+{
+  "migrations": 7,
+  "preservedOrder": [
+    "UPGRADE-TEST",
+    12345,
+    1
+  ],
+  "preservedHistory": [
+    [
+      "Original history",
+      3001,
+      1
+    ]
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "project": "/Users/andreyromanov/Desktop/majlis_bot_test/majlis-platform",
+  "files": [
+    {
+      "file": "web/ui.js",
+      "before": "5dfb6f9d57a250b44cd8605d700fa86b29c4d24b261853e622d808b241dbfff8",
+      "after": "e0628557a6b4ea9456efc9f771b157d2c597a2e1b02c24d3f3e7d049b9f7a0d4",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "web/nav-lens.js",
+      "before": "4c3b8be2ee374661fcfb152b360dc4bba70d2ba6fb006078617d184572862db5",
+      "after": "097e9a15ea194da80ffdaa7180297170f1720a6ede9b79aa390e26d9158e85c7",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "tests/js/navigation.test.mjs",
+      "before": "3982caa2681f561fc429c293e58119cc0a42128f5e042d7510e9aae6eb027150",
+      "after": "4941d2910c578423baf3df4a4a9bbc05dcb920360f4bfc523fde977a519e96f1",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "docs/NAVIGATION-LENS.md",
+      "before": "9434b38759d94cd331de1dd92dd9f1ddaf05a4461de0cd31cbd725d5ff7208f4",
+      "after": "f1b529f439e54ec6dcbad174ff9904019ff0190bca3948c1990a7fb4183bc85c",
+      "matchesTestedSource": true
+    }
+  ],
+  "envUnchanged": true,
+  "backendChanged": false
+}

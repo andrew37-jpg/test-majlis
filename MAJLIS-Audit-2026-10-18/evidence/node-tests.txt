@@ -1,0 +1,46 @@
+✔ background projection stays aligned without scaling the panel (2.451125ms)
+✔ edge projection reflects radial detail and keeps tangent detail enlarged (1.768334ms)
+✔ rest and held lens match each active button, including extreme sections (2.813041ms)
+✔ deformation remains within the row, keeps its vertical centre and never grows in height (25.988541ms)
+✔ layout height is taken from measured buttons, not inferred from tab width (0.233167ms)
+✔ drag previews without navigation, commits nearest section once on release (11.077834ms)
+✔ cancel returns to committed selection without opening previewed section (3.605958ms)
+✔ vertical exit cancels a gesture and its subsequent release (2.187834ms)
+✔ reversal continues from current position and does not overshoot (4.187917ms)
+✔ reduced motion suppresses optics while preserving drag release navigation (1.538875ms)
+✔ keyboard click navigates without waiting for animation (3.170542ms)
+✔ resize notification with unchanged geometry does not interrupt a held gesture (1.881959ms)
+✔ release outside the panel cancels even if the last move was missed (2.230875ms)
+✔ rapid alternating clicks keep one frame callback and settle on the last selection (5.444917ms)
+✔ a ready but blank optical renderer cannot hide the real selection material (3.375041ms)
+✔ release uses its final position when the last pointermove was not delivered (3.322208ms)
+✔ holding and moving never scales the real material outside the button row (2.161333ms)
+✔ off-centre press stays centred on its button until a drag is recognised (2.709958ms)
+✔ release keeps optics alive during travel and then restores the resting surface (2.122208ms)
+✔ reversing a live drag preserves position and curvature state until the next frame (0.826042ms)
+✔ several pages -> refresh -> continue, updated values and no duplicates (12.218416ms)
+✔ stale refresh cannot overwrite new filters (1.386541ms)
+✔ stale load-more cannot append into a new filter, double click deduplicated (0.998667ms)
+✔ HTML escaping and money are exact, invalid values rejected (0.651208ms)
+✔ detail and transfer form escape personal fields and explain ownership (70.660042ms)
+✔ payment and ETA edits do not rewrite a checkpoint date (8.161083ms)
+✔ separate workspaces hide role choices and discard stale page responses (1.51275ms)
+✔ tracking displays confirmed facts, escapes carrier/track, and labels old source data (0.622458ms)
+✔ manager inbox escapes client content and public cabinet has no manager entry (1.153208ms)
+✔ saved manual theme applies before DOMContentLoaded and ignores system changes (13.308292ms)
+✔ first browser launch follows system even when Telegram SDK exists outside Telegram (2.256ms)
+✔ Telegram launch hash sets dark before body, host events follow only in auto mode (4.533666ms)
+✔ choice persists, all controls sync, reopening keeps manual priority (1.847042ms)
+✔ blocked storage, invalid stored values and malformed launch data do not crash (1.165375ms)
+✔ one failing or absent host method does not prevent remaining operations (1.984333ms)
+✔ old host header uses supported keyword and no unsupported bottom method (0.973875ms)
+✔ storage event updates another instance and removal resets to auto (1.05325ms)
+✔ circle toggles current appearance in one click and auto restores device theme (1.06125ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 221.172125

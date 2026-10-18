@@ -1,0 +1,262 @@
+[
+  {
+    "file": ".env.example",
+    "before": "452fb40f33dd450f8cbe87fcf93d68ba94ca40d65f6805e21e3b648aa1429b25",
+    "after": "f87951c3e1a83d6c8dc327a86a8f6832be8080749f99cb10da8bd2aaa2718b4b"
+  },
+  {
+    "file": ".run/MAJLIS 0.8 Check.run.xml",
+    "before": null,
+    "after": "fe733119e11918191136d96a1ee77c10d1f83009894ef7205003d1f9c0e9902b"
+  },
+  {
+    "file": ".run/MAJLIS 0.8 MiniApp.run.xml",
+    "before": null,
+    "after": "1873d613013703b16a899bbed3333667138d1c952b786aa73a1d42736b2966aa"
+  },
+  {
+    "file": "Caddyfile",
+    "before": "65aaa4ec43433bb2075a2d6f6500c1e1817b357bcb296cc9aaca579b11fdcb04",
+    "after": "2a1b11bb887b81a5a00a14afcf3dc56bb82c3ce52f34e84fa670095f34206b75"
+  },
+  {
+    "file": "Dockerfile",
+    "before": "3814cb801e1a6252155b7ceb817d89e1667cc05c91b8199eab820571926f4dc2",
+    "after": "b3685c86e127708443fddd806a645d577e6493629f0b012a947ada8f90c0a8fa"
+  },
+  {
+    "file": "README.md",
+    "before": "1b42259b6f8958161a05436b3caed628bdc12aa5be47100a7a69e403edaea2e9",
+    "after": "2345888a3d1432a8908c84a5fb3c4604befc1b3eabbe676cef7a01a9c0bfb793"
+  },
+  {
+    "file": "compose.server.yaml",
+    "before": "98b0daf50cfd20338b8f88460f899c9856c8854c70c206fc7f47c7008c0dd185",
+    "after": "ffc49d8865b20c1d9ab6c32607755463ef10d593632a14335c675c5c84177d6d"
+  },
+  {
+    "file": "docker/Postgres.Dockerfile",
+    "before": "b01051b32cd37c5655c3fe85694d02a4c9f552cb1271e35c5c1d0326a3d0d096",
+    "after": "10e270480697c02613c8423164f198f9e7054eb31beaecf5abd57323a1ed760b"
+  },
+  {
+    "file": "docs/ARCHITECTURE.md",
+    "before": "460fe7ff3f749872ea0900901bf4d9738689d9c6a791e5740c27f048d745a02e",
+    "after": "ff4cbc1ac460fe4ab8d750e88603b35389cb14c589f4aebc862a9fda378ea942"
+  },
+  {
+    "file": "docs/INTEGRATIONS.md",
+    "before": "81840a7e14b91b4095c097b35ddda4c32352420455224597c66b85788bf05560",
+    "after": "c9bb678dc1b444c1f3c9486b2f664aecabe2bb27ca7ab05463ad8daf5f99880d"
+  },
+  {
+    "file": "docs/NAVIGATION-LENS.md",
+    "before": "f1b529f439e54ec6dcbad174ff9904019ff0190bca3948c1990a7fb4183bc85c",
+    "after": "cee71534e6f7dc8d518f824da0430655313fabd019faf970299979b3cabe1326"
+  },
+  {
+    "file": "docs/NOTIFICATIONS.md",
+    "before": null,
+    "after": "6f22827457a0a9e2dce48b22214b02a381e8c028f24ab02b0d2fd277b14c1d52"
+  },
+  {
+    "file": "docs/OPERATIONS-0.8.md",
+    "before": null,
+    "after": "a35593cf23093c54cbd7b50a80265fabee9d116bb63aca2552dc3dd5d1855431"
+  },
+  {
+    "file": "docs/OPERATIONS.md",
+    "before": "d04f9216c3e24f3106ee667e7ce5a80fd290c9d5aa1ed6d05fddaedad4d2e1e2",
+    "after": "7feb7a0a69489c50d061b58c71576e0c09a9b7346916c77c82771ba2f6c37a86"
+  },
+  {
+    "file": "docs/PRIVACY.md",
+    "before": "4b25f917568b93f19d11950ff28f0b02a923561ed4f80989d0c91265a77cbc9d",
+    "after": "6e6fe517c5f3ed410a60e94bd4357b637c13355dd62890056bae22e893ded9b1"
+  },
+  {
+    "file": "docs/RELEASE-0.8.md",
+    "before": null,
+    "after": "4dec5003585f3ed781789977cd63e349fdabf3688310efa80f9a1f50c2057a05"
+  },
+  {
+    "file": "docs/TESTING.md",
+    "before": "9543ac5973e94b751b8fcaadd02ca955da3a98e07f8364967284c0d823c457fb",
+    "after": "896475915c00c4704a83ef2bf76c99164411cda73925c51bcba103231068a394"
+  },
+  {
+    "file": "docs/UPGRADE-0.8.md",
+    "before": null,
+    "after": "503c1308e0bb4489de75360fc639cb16d254d6dfedeb0a9fd82983750410e260"
+  },
+  {
+    "file": "main.py",
+    "before": "58924218d64f1cbffbfb7d603959d796cd74bf0d1e8e84c78010812a11f81c34",
+    "after": "185ce7ae743e91218cfc88f99cff77fda63b1b261061548db2e26cd87d0e287a"
+  },
+  {
+    "file": "majlis/api.py",
+    "before": "d1d05dfd7c69aed52e36961ebb4ba1c2d2a068d78995cd1efae389eb6aae111f",
+    "after": "88a1d9316812753390e8924e8b3ff9fdb63a08576909e3a470f000e36940b8d7"
+  },
+  {
+    "file": "majlis/bot.py",
+    "before": "d448ac2902d23dd288b09cf10a232804b51fa3c16f47ca33f631d8cfd8b0d7d0",
+    "after": "3ca041c51f4f416c5b6f8777727a9bc35c5bc630a46989de06e2d6d1736e85fd"
+  },
+  {
+    "file": "majlis/cli.py",
+    "before": "241737ebcc1065cc42fc884c80193843678ad1d91c55a7e85c8d19231cf109fa",
+    "after": "64914c01f8321e4843b466280040c5b69dd27f467d06f6fa70c4c16d15a5d58a"
+  },
+  {
+    "file": "majlis/config.py",
+    "before": "4ba46fa5e9ccd01d2f0f8e7cbeca4b8b408f40ed120652d5a06168a6fe2d5537",
+    "after": "f1d615dd4059636508b315734b1170f472004100fe62381dfb2777842670f8ed"
+  },
+  {
+    "file": "majlis/database.py",
+    "before": "7672348a919be74dac63b6e345cf7c693e49bcfa1c5fb81cc0bf67d983fea1fd",
+    "after": "6e9fc0343ce2115d9deaee8e541ffeaa7887166d7a1c412422f36d70c4131895"
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "before": "1b483df4c1601e73951cf89ab180c04b5918b4ae93d4d517b42267d46bcf4f19",
+    "after": "252c80893bc8bec15bac245d2a658b04b76263e3b141e70208553279056c7615"
+  },
+  {
+    "file": "majlis/integrations.py",
+    "before": null,
+    "after": "8d7a6a8ace900cd12578a9d1e38053657fa4d802c3fc4e1267e2ca626ffb6a1f"
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "before": "59284a05afcc80f462874616af63c20ac19d9cce1ce6354b88991b62e3ade167",
+    "after": "e8d921774e49e2b235c8fc1d9fdb97208e5f113ee1b5d50cd3d8a18d8e2ccf44"
+  },
+  {
+    "file": "majlis/limiting.py",
+    "before": null,
+    "after": "b96a0a067ad2761c7ec07efec57e60ffe3effca82f96ac2be2d57d91d02a65fb"
+  },
+  {
+    "file": "majlis/migration_safety.py",
+    "before": null,
+    "after": "4351a272fe9b60d4195919b86e2503f63bf2a00747bd69dcf3efc9a83cb895e3"
+  },
+  {
+    "file": "majlis/notifications.py",
+    "before": null,
+    "after": "75d91439b453810c0bbb2a8f256284c5ffafa45a88baed02f7b25fac8ddba31c"
+  },
+  {
+    "file": "majlis/observability.py",
+    "before": null,
+    "after": "e577078379de3d672a8eea22fd95e6e1ba7861cec94c95e88184a730d10cce42"
+  },
+  {
+    "file": "majlis/operations.py",
+    "before": null,
+    "after": "da2b5def444b257f1194b2a74888b3d41a4d25d53128aa1770c4c12a264cfe9b"
+  },
+  {
+    "file": "majlis/schemas.py",
+    "before": "997b491de07a812560f0544c45d10358fb7a8d4ef92d7f1a34ff66978ef1398d",
+    "after": "0bd72d35ec02379d316f7a95510937d9d918c0d8e3ffea579a23e670b369f5b2"
+  },
+  {
+    "file": "majlis/services.py",
+    "before": "1bbd78604ed28e12558e2622cac4666c94d8c5497de394c4cd670b5e9853612e",
+    "after": "81d255374049460f69185b0a57dbec1e59e8ef54806b75c96b11a99f39206515"
+  },
+  {
+    "file": "majlis/support.py",
+    "before": "4e3efc503c788c1133ce75a13d5465ef9bf84d8e91f624501f06622e3725595b",
+    "after": "a366c225bc70b5d11c69647d0b57f01b0a49d5b8bf1ca9c1d342616525d9105e"
+  },
+  {
+    "file": "manage.py",
+    "before": "21ad8737bf86b292ebee9289bff55263b9efbcf6fe499c2918e0e6661589b502",
+    "after": "d42e448ba0f9a6f770f4aefa3748d6c291059b41b7daf478dbbaf29776922bb6"
+  },
+  {
+    "file": "migrations/008_operational_safety.sql",
+    "before": null,
+    "after": "83d21cf9c2ae6a40f8380e490c24e8666bb6b10323493149b1fdd0afa1903440"
+  },
+  {
+    "file": "migrations/009_privacy_redaction.sql",
+    "before": null,
+    "after": "a92dc85f7235a07fcc638be5d5580bd40b5299e86bff284a902d2f576fb969ad"
+  },
+  {
+    "file": "ops/backup.cron.example",
+    "before": null,
+    "after": "2398d8f2d97cc91cd1a0e1cc4fa58e76400f3f4c1ed313aed7ef57e0b60e9d04"
+  },
+  {
+    "file": "ops/backup_job.py",
+    "before": null,
+    "after": "ee09f8dc30bedc26dbefc7b68a3ebd60d766c00887f862296cba27e077dc38e4"
+  },
+  {
+    "file": "ops/monitor.cron.example",
+    "before": null,
+    "after": "50d2bc4c215c30ec8759ffb866044daa4fbbe58422b07da3090fd37546090f87"
+  },
+  {
+    "file": "tests/conftest.py",
+    "before": "2b1fbd423fc2f41c4b4ab5cbd698e982466e5156e8881ac18e373086f36da1b9",
+    "after": "ab1a12e402276909f995e275308d75d6ea724872ea1a7e728be37fc77edfe8b4"
+  },
+  {
+    "file": "tests/js/feed-requests.test.mjs",
+    "before": null,
+    "after": "3a603bf80dc8303e12b418d1e9ae26f9916143788ea0222d6f6a07ec79ae7491"
+  },
+  {
+    "file": "tests/test_audit_fixes.py",
+    "before": null,
+    "after": "9ec88a5ead9aaf85bef3b40bb9b77611a60acf3a5da9b039db87e5fe2e9753b7"
+  },
+  {
+    "file": "tests/test_platform.py",
+    "before": "0241f473dbb1cbeede5dc13e79fab04c1691d1a1e07d0a483f905f1a105c215c",
+    "after": "b30be732cfbaa3ffb2849caefe794973893df3f1000a2dd3e4448406c2126377"
+  },
+  {
+    "file": "tests/test_security_changes.py",
+    "before": "fb469e332d604e0dadf530baf2e2f4b71959541f2a9da2a31be59156ace57004",
+    "after": "4edc47b492361fd75481b7908983a3315fdc2f7e99bd8ed93b3e42dbb10dedee"
+  },
+  {
+    "file": "web/app.js",
+    "before": "0a27a5eb1e3dc6e8b14fe747e2f9125f5c57448d4d73c0d17a7bfd167628e1ba",
+    "after": "cd482e9142201f16e9343c08195bc807e18ee81904052e5f7871c896bcb9fad3"
+  },
+  {
+    "file": "web/nav-lens.js",
+    "before": "097e9a15ea194da80ffdaa7180297170f1720a6ede9b79aa390e26d9158e85c7",
+    "after": "dd9a3bf61d62f264720fc4af65037f173d32c7b79f6342f3027c852eac02f692"
+  },
+  {
+    "file": "web/order-editor.js",
+    "before": "bd71a7a062526240b181de5e99e9343ed56a93c0480b44da1fc3dd8a72ca1624",
+    "after": "806bb782de5db1c241218bd2e4e9891521403b671287f1b1c2edff42f961fbfb"
+  },
+  {
+    "file": "web/style.css",
+    "before": "ba90fd2ac370171f337b9ea658fd432ee1e7f7329ae03366522620930795e927",
+    "after": "fa2defa5b4a84673305841d49ddd0f406997c77b5aa68cd2b2aa1d413d89ce27"
+  },
+  {
+    "file": "web/workspace.js",
+    "before": "2d2718ab9fc613e24da3e25cd4e0187d66816ecde0382cbb0aa23e3f32a754c0",
+    "after": "8f05afae3bc8999e35bf8fcc7db03a32d45e774c513e23aab517bb06bb1e7a91"
+  },
+  {
+    "file": "FIX_REPORT.md",
+    "before": null,
+    "after": "dcc0310173e5f97b0dc8f2a615e5146659adb32ac6f705dfca0f79be4996b4ed"
+  }
+]

@@ -1,0 +1,112 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 600B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#2 ...
+
+#3 [auth] library/python:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#2 DONE 2.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 99B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#5 resolve docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 475.28kB 0.0s done
+#6 DONE 0.0s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [3/7] COPY requirements.lock ./requirements.lock
+#8 DONE 0.0s
+
+#9 [4/7] RUN pip install --no-cache-dir -r requirements.lock && useradd --uid 10001 --create-home app
+#9 2.257 Collecting annotated-doc==0.0.5 (from -r requirements.lock (line 2))
+#9 3.197   Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#9 3.402 Collecting annotated-types==0.8.0 (from -r requirements.lock (line 5))
+#9 3.557   Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#9 3.859 Collecting anyio==4.15.1 (from -r requirements.lock (line 8))
+#9 4.084   Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#9 4.727 Collecting certifi==2026.7.22 (from -r requirements.lock (line 11))
+#9 4.887   Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+#9 5.268 Collecting click==8.5.0 (from -r requirements.lock (line 14))
+#9 5.433   Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#9 6.332 Collecting fastapi==0.143.1 (from -r requirements.lock (line 17))
+#9 6.489   Downloading fastapi-0.143.1-py3-none-any.whl (144 kB)
+#9 6.904 Collecting h11==0.16.0 (from -r requirements.lock (line 20))
+#9 7.056   Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#9 7.274 Collecting httpcore==1.0.9 (from -r requirements.lock (line 23))
+#9 7.517   Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#9 7.720 Collecting httpx==0.28.1 (from -r requirements.lock (line 26))
+#9 7.873   Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#9 8.110 Collecting idna==3.20 (from -r requirements.lock (line 29))
+#9 8.265   Downloading idna-3.20-py3-none-any.whl (69 kB)
+#9 8.608 Collecting opentelemetry-api==1.45.1 (from -r requirements.lock (line 32))
+#9 8.766   Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+#9 8.983 Collecting psycopg==3.3.6 (from -r requirements.lock (line 35))
+#9 9.135   Downloading psycopg-3.3.6-py3-none-any.whl (215 kB)
+#9 9.955 Collecting psycopg-binary==3.3.6 (from -r requirements.lock (line 38))
+#9 10.12   Downloading psycopg_binary-3.3.6-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (6.8 MB)
+#9 13.42      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.8/6.8 MB 2.5 MB/s eta 0:00:00
+#9 13.62 Collecting psycopg-pool==3.3.3 (from -r requirements.lock (line 105))
+#9 13.77   Downloading psycopg_pool-3.3.3-py3-none-any.whl (40 kB)
+#9 14.10 Collecting pydantic==2.14.1 (from -r requirements.lock (line 108))
+#9 14.26   Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+#9 16.20 Collecting pydantic-core==2.50.1 (from -r requirements.lock (line 111))
+#9 16.36   Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (2.0 MB)
+#9 17.08      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 2.8 MB/s eta 0:00:00
+#9 17.26 Collecting pydantic-settings==2.16.0 (from -r requirements.lock (line 249))
+#9 17.41   Downloading pydantic_settings-2.16.0-py3-none-any.whl (80 kB)
+#9 17.71 Collecting python-dotenv==1.2.4 (from -r requirements.lock (line 252))
+#9 17.88   Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+#9 18.18 Collecting starlette==1.8.0 (from -r requirements.lock (line 255))
+#9 18.34   Downloading starlette-1.8.0-py3-none-any.whl (79 kB)
+#9 18.63 Collecting truststore==0.10.5 (from -r requirements.lock (line 258))
+#9 18.80   Downloading truststore-0.10.5-py3-none-any.whl (19 kB)
+#9 19.00 Collecting typing-extensions==4.16.0 (from -r requirements.lock (line 261))
+#9 19.17   Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#9 19.33 Collecting typing-inspection==0.4.4 (from -r requirements.lock (line 264))
+#9 19.49   Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#9 19.68 Collecting uvicorn==0.54.0 (from -r requirements.lock (line 267))
+#9 19.84   Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+#9 19.99 Installing collected packages: typing-extensions, truststore, python-dotenv, psycopg-binary, idna, h11, click, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, psycopg-pool, psycopg, opentelemetry-api, httpcore, anyio, starlette, pydantic, httpx, pydantic-settings, fastapi
+#9 21.47 Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 click-8.5.0 fastapi-0.143.1 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 opentelemetry-api-1.45.1 psycopg-3.3.6 psycopg-binary-3.3.6 psycopg-pool-3.3.3 pydantic-2.14.1 pydantic-core-2.50.1 pydantic-settings-2.16.0 python-dotenv-1.2.4 starlette-1.8.0 truststore-0.10.5 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
+#9 21.47 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#9 22.35 
+#9 22.35 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+#9 22.35 [notice] To update, run: pip install --upgrade pip
+#9 DONE 22.6s
+
+#10 [5/7] COPY --chown=app:app majlis ./majlis
+#10 DONE 0.0s
+
+#11 [6/7] COPY --chown=app:app migrations ./migrations
+#11 DONE 0.0s
+
+#12 [7/7] COPY --chown=app:app web ./web
+#12 DONE 0.0s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 1.7s done
+#13 exporting manifest sha256:0dc53adbca624ce7a6123b02a8f230dec43748bc015ac65d1e69d3c171eededc done
+#13 exporting config sha256:a76039ccf025c9bad374764eaf5ff37b0adf7ad04bfb990fe2598a25b1d80a54 done
+#13 exporting attestation manifest sha256:76b3b9666bf0111e55fc7b195dd2dd05d405625bccfe3fcf5ba8e7fc384538f5 done
+#13 exporting manifest list sha256:8e0eaec55236b2e93af5ef7075671006d5030cec901f7031c029a2fe9be46cdf done
+#13 naming to docker.io/library/majlis-platform:audit-fixes-20261018 done
+#13 unpacking to docker.io/library/majlis-platform:audit-fixes-20261018
+#13 unpacking to docker.io/library/majlis-platform:audit-fixes-20261018 0.4s done
+#13 DONE 2.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/01k4w9muh1sc8xz0c6b0nf3dg

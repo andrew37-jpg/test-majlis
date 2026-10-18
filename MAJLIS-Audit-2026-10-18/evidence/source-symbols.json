@@ -1,0 +1,956 @@
+[
+  {
+    "file": "majlis/services.py",
+    "name": "serial",
+    "start": 12,
+    "end": 19
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "ensure_user",
+    "start": 22,
+    "end": 28
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "get_order",
+    "start": 31,
+    "end": 37
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "public_order",
+    "start": 40,
+    "end": 47
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "order_json",
+    "start": 50,
+    "end": 56
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "order_events",
+    "start": 59,
+    "end": 72
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "add_event",
+    "start": 75,
+    "end": 88
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "audit",
+    "start": 91,
+    "end": 109
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "bootstrap",
+    "start": 112,
+    "end": 200
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "create_order",
+    "start": 203,
+    "end": 224
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "check_revision",
+    "start": 227,
+    "end": 229
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "change_status",
+    "start": 232,
+    "end": 252
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "update_details",
+    "start": 255,
+    "end": 309
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "queue_event",
+    "start": 312,
+    "end": 316
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "update_payment",
+    "start": 319,
+    "end": 339
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "update_commercial",
+    "start": 342,
+    "end": 355
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "integration_event",
+    "start": 358,
+    "end": 395
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "rate_limit",
+    "start": 398,
+    "end": 408
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "update_tracking",
+    "start": 411,
+    "end": 425
+  },
+  {
+    "file": "majlis/services.py",
+    "name": "minimal",
+    "start": 103,
+    "end": 104
+  },
+  {
+    "file": "majlis/support.py",
+    "name": "create",
+    "start": 12,
+    "end": 35
+  },
+  {
+    "file": "majlis/support.py",
+    "name": "from_telegram",
+    "start": 38,
+    "end": 66
+  },
+  {
+    "file": "majlis/support.py",
+    "name": "inbox",
+    "start": 69,
+    "end": 87
+  },
+  {
+    "file": "majlis/support.py",
+    "name": "activity",
+    "start": 90,
+    "end": 102
+  },
+  {
+    "file": "majlis/support.py",
+    "name": "own_messages",
+    "start": 105,
+    "end": 111
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "Settings",
+    "start": 11,
+    "end": 80
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "settings",
+    "start": 84,
+    "end": 85
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "token_valid",
+    "start": 33,
+    "end": 38
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "postgres_only",
+    "start": 42,
+    "end": 49
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "valid_ids",
+    "start": 53,
+    "end": 58
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "positive",
+    "start": 62,
+    "end": 65
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "tunnel_mode",
+    "start": 69,
+    "end": 72
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "managers",
+    "start": 75,
+    "end": 76
+  },
+  {
+    "file": "majlis/config.py",
+    "name": "payment_domains",
+    "start": 79,
+    "end": 80
+  },
+  {
+    "file": "majlis/domain.py",
+    "name": "Problem",
+    "start": 20,
+    "end": 22
+  },
+  {
+    "file": "majlis/domain.py",
+    "name": "validate_init_data",
+    "start": 25,
+    "end": 51
+  },
+  {
+    "file": "majlis/domain.py",
+    "name": "https_url",
+    "start": 54,
+    "end": 69
+  },
+  {
+    "file": "majlis/domain.py",
+    "name": "required_text",
+    "start": 72,
+    "end": 76
+  },
+  {
+    "file": "majlis/domain.py",
+    "name": "positive_int",
+    "start": 79,
+    "end": 88
+  },
+  {
+    "file": "majlis/domain.py",
+    "name": "__init__",
+    "start": 21,
+    "end": 22
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "PublicLimiter",
+    "start": 21,
+    "end": 43
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "HttpBoundary",
+    "start": 46,
+    "end": 115
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "__init__",
+    "start": 24,
+    "end": 27
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "allow",
+    "start": 29,
+    "end": 43
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "__init__",
+    "start": 47,
+    "end": 48
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "__call__",
+    "start": 50,
+    "end": 115
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "secure_send",
+    "start": 55,
+    "end": 64
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "reject",
+    "start": 66,
+    "end": 67
+  },
+  {
+    "file": "majlis/http_boundary.py",
+    "name": "replay_receive",
+    "start": 102,
+    "end": 107
+  },
+  {
+    "file": "majlis/database.py",
+    "name": "Database",
+    "start": 12,
+    "end": 97
+  },
+  {
+    "file": "majlis/database.py",
+    "name": "__init__",
+    "start": 13,
+    "end": 22
+  },
+  {
+    "file": "majlis/database.py",
+    "name": "open",
+    "start": 24,
+    "end": 26
+  },
+  {
+    "file": "majlis/database.py",
+    "name": "close",
+    "start": 28,
+    "end": 29
+  },
+  {
+    "file": "majlis/database.py",
+    "name": "connection",
+    "start": 32,
+    "end": 34
+  },
+  {
+    "file": "majlis/database.py",
+    "name": "migrate",
+    "start": 36,
+    "end": 97
+  },
+  {
+    "file": "majlis/access.py",
+    "name": "context",
+    "start": 6,
+    "end": 28
+  },
+  {
+    "file": "majlis/access.py",
+    "name": "scope",
+    "start": 31,
+    "end": 39
+  },
+  {
+    "file": "majlis/access.py",
+    "name": "check_order",
+    "start": 42,
+    "end": 55
+  },
+  {
+    "file": "majlis/access.py",
+    "name": "permissions",
+    "start": 58,
+    "end": 67
+  },
+  {
+    "file": "majlis/access.py",
+    "name": "list_permissions",
+    "start": 70,
+    "end": 79
+  },
+  {
+    "file": "majlis/tunnel.py",
+    "name": "TunnelError",
+    "start": 17,
+    "end": 18
+  },
+  {
+    "file": "majlis/tunnel.py",
+    "name": "accepted_url",
+    "start": 21,
+    "end": 39
+  },
+  {
+    "file": "majlis/tunnel.py",
+    "name": "LocalhostTunnel",
+    "start": 42,
+    "end": 140
+  },
+  {
+    "file": "majlis/tunnel.py",
+    "name": "__init__",
+    "start": 43,
+    "end": 48
+  },
+  {
+    "file": "majlis/tunnel.py",
+    "name": "start",
+    "start": 50,
+    "end": 127
+  },
+  {
+    "file": "majlis/tunnel.py",
+    "name": "close",
+    "start": 129,
+    "end": 140
+  },
+  {
+    "file": "majlis/tunnel.py",
+    "name": "read",
+    "start": 98,
+    "end": 104
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "lifespan",
+    "start": 30,
+    "end": 38
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "problem",
+    "start": 54,
+    "end": 55
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "invalid",
+    "start": 59,
+    "end": 60
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "failed",
+    "start": 64,
+    "end": 66
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "identity",
+    "start": 69,
+    "end": 84
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "manager",
+    "start": 87,
+    "end": 90
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "health",
+    "start": 94,
+    "end": 95
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "ready",
+    "start": 99,
+    "end": 105
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "index",
+    "start": 109,
+    "end": 110
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "script",
+    "start": 114,
+    "end": 115
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "ui_script",
+    "start": 119,
+    "end": 120
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "navigation_lens_script",
+    "start": 124,
+    "end": 125
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "theme_script",
+    "start": 129,
+    "end": 130
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "style",
+    "start": 134,
+    "end": 135
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "bootstrap",
+    "start": 139,
+    "end": 148
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "read_order",
+    "start": 152,
+    "end": 158
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "create",
+    "start": 162,
+    "end": 179
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "status",
+    "start": 183,
+    "end": 188
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "details",
+    "start": 192,
+    "end": 195
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "payment",
+    "start": 199,
+    "end": 202
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "integration",
+    "start": 206,
+    "end": 234
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "export",
+    "start": 238,
+    "end": 252
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "pagination_script",
+    "start": 256,
+    "end": 257
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "detail_script",
+    "start": 261,
+    "end": 262
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "editor_script",
+    "start": 266,
+    "end": 267
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "order_history",
+    "start": 271,
+    "end": 287
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "commercial",
+    "start": 291,
+    "end": 294
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "tracking",
+    "start": 298,
+    "end": 301
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "cabinets_script",
+    "start": 305,
+    "end": 306
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "manager_index",
+    "start": 311,
+    "end": 312
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "create_support",
+    "start": 316,
+    "end": 320
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "manager_inbox",
+    "start": 324,
+    "end": 331
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "manager_activity",
+    "start": 335,
+    "end": 342
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "workspace_script",
+    "start": 346,
+    "end": 347
+  },
+  {
+    "file": "majlis/api.py",
+    "name": "apply",
+    "start": 230,
+    "end": 232
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "TelegramFailure",
+    "start": 13,
+    "end": 17
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "Telegram",
+    "start": 20,
+    "end": 75
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "respond",
+    "start": 78,
+    "end": 133
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "claim_notification",
+    "start": 136,
+    "end": 139
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "deliver",
+    "start": 142,
+    "end": 213
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "notification_worker",
+    "start": 216,
+    "end": 227
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "configure_with_retry",
+    "start": 230,
+    "end": 251
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "run",
+    "start": 254,
+    "end": 313
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "__init__",
+    "start": 14,
+    "end": 17
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "__init__",
+    "start": 21,
+    "end": 23
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "close",
+    "start": 25,
+    "end": 26
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "call",
+    "start": 28,
+    "end": 43
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "send",
+    "start": 45,
+    "end": 51
+  },
+  {
+    "file": "majlis/bot.py",
+    "name": "configure",
+    "start": 53,
+    "end": 75
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Input",
+    "start": 9,
+    "end": 10
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "NewOrder",
+    "start": 13,
+    "end": 25
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Revision",
+    "start": 28,
+    "end": 30
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Status",
+    "start": 33,
+    "end": 35
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Details",
+    "start": 38,
+    "end": 49
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Payment",
+    "start": 52,
+    "end": 53
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Integration",
+    "start": 56,
+    "end": 61
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Commercial",
+    "start": 64,
+    "end": 66
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "Tracking",
+    "start": 69,
+    "end": 71
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "SupportMessage",
+    "start": 74,
+    "end": 76
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "empty_date",
+    "start": 24,
+    "end": 25
+  },
+  {
+    "file": "majlis/schemas.py",
+    "name": "empty_date",
+    "start": 48,
+    "end": 49
+  },
+  {
+    "file": "majlis/cli.py",
+    "name": "main",
+    "start": 11,
+    "end": 58
+  },
+  {
+    "file": "majlis/network.py",
+    "name": "NetworkSetupError",
+    "start": 7,
+    "end": 8
+  },
+  {
+    "file": "majlis/network.py",
+    "name": "ssl_context",
+    "start": 12,
+    "end": 21
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "HistoryRecord",
+    "start": 23,
+    "end": 51
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "ImportRecord",
+    "start": 54,
+    "end": 96
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "ImportPackage",
+    "start": 99,
+    "end": 109
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "load_package",
+    "start": 112,
+    "end": 117
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "digest",
+    "start": 120,
+    "end": 121
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "inspect_package",
+    "start": 124,
+    "end": 181
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "apply_test_package",
+    "start": 184,
+    "end": 254
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "test_target_urls",
+    "start": 257,
+    "end": 265
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "safe_validation_locations",
+    "start": 268,
+    "end": 305
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "main",
+    "start": 308,
+    "end": 348
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "known_status",
+    "start": 33,
+    "end": 36
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "explicit_timezone",
+    "start": 40,
+    "end": 43
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "ownership",
+    "start": 46,
+    "end": 51
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "creation_timezone",
+    "start": 68,
+    "end": 71
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "explicit_verification",
+    "start": 75,
+    "end": 78
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "known_status",
+    "start": 82,
+    "end": 85
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "consistency",
+    "start": 88,
+    "end": 96
+  },
+  {
+    "file": "majlis/legacy_import.py",
+    "name": "supported",
+    "start": 106,
+    "end": 109
+  },
+  {
+    "file": "majlis/tracking.py",
+    "name": "snapshot",
+    "start": 6,
+    "end": 21
+  },
+  {
+    "file": "main.py",
+    "name": "stop_process",
+    "start": 18,
+    "end": 25
+  },
+  {
+    "file": "main.py",
+    "name": "wait_http",
+    "start": 28,
+    "end": 58
+  },
+  {
+    "file": "main.py",
+    "name": "run",
+    "start": 61,
+    "end": 257
+  },
+  {
+    "file": "manage.py",
+    "name": "database_name",
+    "start": 36,
+    "end": 39
+  },
+  {
+    "file": "manage.py",
+    "name": "docker_prefix",
+    "start": 42,
+    "end": 61
+  },
+  {
+    "file": "manage.py",
+    "name": "run_db",
+    "start": 64,
+    "end": 66
+  },
+  {
+    "file": "manage.py",
+    "name": "fingerprint",
+    "start": 69,
+    "end": 124
+  },
+  {
+    "file": "manage.py",
+    "name": "verify_constraints",
+    "start": 127,
+    "end": 227
+  },
+  {
+    "file": "manage.py",
+    "name": "main",
+    "start": 230,
+    "end": 353
+  }
+]

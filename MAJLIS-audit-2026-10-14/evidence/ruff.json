@@ -1,0 +1,1243 @@
+[
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 25,
+      "row": 3
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/main.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import argparse\nimport json\nimport os\nimport signal\nimport subprocess\nimport sys\nimport time\nimport uuid\nfrom pathlib import Path\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 4
+          },
+          "location": {
+            "column": 1,
+            "row": 2
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 2
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 2,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 43,
+      "row": 14
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/main.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "    import urllib.request\n\n    from majlis.network import ssl_context\n",
+          "end_location": {
+            "column": 1,
+            "row": 15
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 5,
+      "row": 13
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 13,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "BLE001",
+    "end_location": {
+      "column": 25,
+      "row": 23
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/main.py",
+    "fix": null,
+    "location": {
+      "column": 16,
+      "row": 23
+    },
+    "message": "Do not catch blind exception: `Exception`",
+    "name": "blind-except",
+    "noqa_row": 23,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/blind-except"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 30,
+      "row": 40
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/main.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 40
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 40,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 29,
+      "row": 42
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/main.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 42
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 42,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "BLE001",
+    "end_location": {
+      "column": 21,
+      "row": 109
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/main.py",
+    "fix": null,
+    "location": {
+      "column": 12,
+      "row": 109
+    },
+    "message": "Do not catch blind exception: `Exception`",
+    "name": "blind-except",
+    "noqa_row": 109,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/blind-except"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 23,
+      "row": 12
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import hashlib\nimport hmac\nimport json\nimport logging\nimport time\nfrom contextlib import asynccontextmanager\nfrom typing import Annotated\n\nfrom fastapi import Depends, FastAPI, Query, Request\nfrom fastapi.exceptions import RequestValidationError\nfrom fastapi.responses import FileResponse, JSONResponse\nfrom psycopg import OperationalError\n\nfrom . import services\nfrom .config import ROOT, settings\nfrom .database import Database\nfrom .domain import Problem, validate_init_data\nfrom .schemas import Details, Integration, NewOrder, Payment, Status\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 25,
+      "row": 1
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import hashlib,hmac,time,logging",
+          "end_location": {
+            "column": 38,
+            "row": 1
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Remove unused import: `json`"
+    },
+    "location": {
+      "column": 21,
+      "row": 1
+    },
+    "message": "`json` imported but unused",
+    "name": "unused-import",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 37,
+      "row": 7
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 7
+          }
+        }
+      ],
+      "message": "Remove unused import: `psycopg.OperationalError`"
+    },
+    "location": {
+      "column": 21,
+      "row": 7
+    },
+    "message": "`psycopg.OperationalError` imported but unused",
+    "name": "unused-import",
+    "noqa_row": 7,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "B008",
+    "end_location": {
+      "column": 35,
+      "row": 56
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": null,
+    "location": {
+      "column": 18,
+      "row": 56
+    },
+    "message": "Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable",
+    "name": "function-call-in-default-argument",
+    "noqa_row": 56,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/function-call-in-default-argument"
+  },
+  {
+    "cell": null,
+    "code": "B008",
+    "end_location": {
+      "column": 209,
+      "row": 78
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": null,
+    "location": {
+      "column": 192,
+      "row": 78
+    },
+    "message": "Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable",
+    "name": "function-call-in-default-argument",
+    "noqa_row": 78,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/function-call-in-default-argument"
+  },
+  {
+    "cell": null,
+    "code": "B008",
+    "end_location": {
+      "column": 67,
+      "row": 83
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": null,
+    "location": {
+      "column": 50,
+      "row": 83
+    },
+    "message": "Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable",
+    "name": "function-call-in-default-argument",
+    "noqa_row": 83,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/function-call-in-default-argument"
+  },
+  {
+    "cell": null,
+    "code": "B008",
+    "end_location": {
+      "column": 63,
+      "row": 90
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": null,
+    "location": {
+      "column": 47,
+      "row": 90
+    },
+    "message": "Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable",
+    "name": "function-call-in-default-argument",
+    "noqa_row": 90,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/function-call-in-default-argument"
+  },
+  {
+    "cell": null,
+    "code": "B008",
+    "end_location": {
+      "column": 61,
+      "row": 93
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": null,
+    "location": {
+      "column": 45,
+      "row": 93
+    },
+    "message": "Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable",
+    "name": "function-call-in-default-argument",
+    "noqa_row": 93,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/function-call-in-default-argument"
+  },
+  {
+    "cell": null,
+    "code": "B008",
+    "end_location": {
+      "column": 63,
+      "row": 96
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": null,
+    "location": {
+      "column": 47,
+      "row": 96
+    },
+    "message": "Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable",
+    "name": "function-call-in-default-argument",
+    "noqa_row": 96,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/function-call-in-default-argument"
+  },
+  {
+    "cell": null,
+    "code": "B008",
+    "end_location": {
+      "column": 63,
+      "row": 99
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/api.py",
+    "fix": null,
+    "location": {
+      "column": 47,
+      "row": 99
+    },
+    "message": "Do not perform function call `Depends` in argument defaults; instead, perform the call within the function, or read the default from a module-level singleton variable",
+    "name": "function-call-in-default-argument",
+    "noqa_row": 99,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/function-call-in-default-argument"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 34,
+      "row": 7
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/bot.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import json\nimport threading\nimport time\n\nimport httpx\nimport psycopg\n\nfrom .config import settings\nfrom .database import Database\nfrom .domain import STAGE_MAP, https_url\nfrom .network import ssl_context\nfrom .services import ensure_user\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 12,
+      "row": 1
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/bot.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import threading",
+          "end_location": {
+            "column": 27,
+            "row": 1
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 8,
+      "row": 1
+    },
+    "message": "`json` imported but unused",
+    "name": "unused-import",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 17,
+      "row": 1
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/bot.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import threading",
+          "end_location": {
+            "column": 27,
+            "row": 1
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 13,
+      "row": 1
+    },
+    "message": "`time` imported but unused",
+    "name": "unused-import",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 31,
+      "row": 2
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/cli.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import argparse\nimport signal\nimport sys\n\nfrom .database import Database\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 4
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 41,
+      "row": 14
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/cli.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "            import uvicorn\n\n            from .config import settings\n",
+          "end_location": {
+            "column": 1,
+            "row": 15
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 13,
+      "row": 13
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 13,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 29,
+      "row": 18
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/cli.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "            import threading\n\n            from .bot import run\n",
+          "end_location": {
+            "column": 1,
+            "row": 19
+          },
+          "location": {
+            "column": 1,
+            "row": 17
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 13,
+      "row": 17
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 17,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "BLE001",
+    "end_location": {
+      "column": 21,
+      "row": 24
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/cli.py",
+    "fix": null,
+    "location": {
+      "column": 12,
+      "row": 24
+    },
+    "message": "Do not catch blind exception: `Exception`",
+    "name": "blind-except",
+    "noqa_row": 24,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/blind-except"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 63,
+      "row": 4
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/config.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from functools import lru_cache\nfrom pathlib import Path\n\nfrom pydantic import SecretStr, field_validator\nfrom pydantic_settings import BaseSettings, SettingsConfigDict\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 35,
+      "row": 5
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/database.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import hashlib\nfrom contextlib import contextmanager\n\nfrom psycopg.rows import dict_row\nfrom psycopg_pool import ConnectionPool\n\nfrom .config import ROOT, settings\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 7
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 45,
+      "row": 2
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/domain.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import hashlib\nimport hmac\nimport json\nimport time\nfrom urllib.parse import parse_qsl, urlparse\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 4
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 32,
+      "row": 3
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/network.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import ssl\nfrom functools import lru_cache\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 4
+          },
+          "location": {
+            "column": 1,
+            "row": 2
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 2
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 2,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 23,
+      "row": 8
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/network.py",
+    "fix": null,
+    "location": {
+      "column": 6,
+      "row": 8
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 8,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 67,
+      "row": 3
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/schemas.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import date\nfrom typing import Annotated\n\nfrom pydantic import BaseModel, ConfigDict, Field, field_validator\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 58,
+      "row": 5
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/services.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import json\nfrom datetime import date, datetime\n\nfrom psycopg.errors import UniqueViolation\nfrom psycopg.types.json import Jsonb\n\nfrom .domain import STAGE_MAP, STAGES, Problem, https_url\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 7
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 12,
+      "row": 1
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/services.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 2
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Remove unused import: `json`"
+    },
+    "location": {
+      "column": 8,
+      "row": 1
+    },
+    "message": "`json` imported but unused",
+    "name": "unused-import",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 25,
+      "row": 2
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/majlis/tunnel.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import json\nimport queue\nimport re\nimport shutil\nimport subprocess\nimport threading\nimport time\n\nfrom .config import ROOT\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 4
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 31,
+      "row": 4
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/manage.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import argparse\nimport datetime\nimport os\nimport subprocess\nimport sys\nfrom pathlib import Path\n\nfrom majlis.config import ROOT\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 6
+          },
+          "location": {
+            "column": 1,
+            "row": 2
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 2
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 2,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "PLW1510",
+    "end_location": {
+      "column": 34,
+      "row": 16
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/manage.py",
+    "fix": {
+      "applicability": "displayonly",
+      "edits": [
+        {
+          "content": "check=False, ",
+          "end_location": {
+            "column": 170,
+            "row": 16
+          },
+          "location": {
+            "column": 170,
+            "row": 16
+          }
+        }
+      ],
+      "message": "Add explicit `check=False`"
+    },
+    "location": {
+      "column": 20,
+      "row": 16
+    },
+    "message": "`subprocess.run` without explicit `check` argument",
+    "name": "subprocess-run-without-check",
+    "noqa_row": 16,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/subprocess-run-without-check"
+  },
+  {
+    "cell": null,
+    "code": "UP022",
+    "end_location": {
+      "column": 216,
+      "row": 24
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/manage.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "capture_output=True",
+          "end_location": {
+            "column": 183,
+            "row": 24
+          },
+          "location": {
+            "column": 161,
+            "row": 24
+          }
+        },
+        {
+          "content": "",
+          "end_location": {
+            "column": 207,
+            "row": 24
+          },
+          "location": {
+            "column": 184,
+            "row": 24
+          }
+        }
+      ],
+      "message": "Replace with `capture_output` keyword argument"
+    },
+    "location": {
+      "column": 20,
+      "row": 24
+    },
+    "message": "Prefer `capture_output` over sending `stdout` and `stderr` to `PIPE`",
+    "name": "replace-stdout-stderr",
+    "noqa_row": 24,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/replace-stdout-stderr"
+  },
+  {
+    "cell": null,
+    "code": "PLW1510",
+    "end_location": {
+      "column": 34,
+      "row": 24
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/manage.py",
+    "fix": {
+      "applicability": "displayonly",
+      "edits": [
+        {
+          "content": "check=False, ",
+          "end_location": {
+            "column": 148,
+            "row": 24
+          },
+          "location": {
+            "column": 148,
+            "row": 24
+          }
+        }
+      ],
+      "message": "Add explicit `check=False`"
+    },
+    "location": {
+      "column": 20,
+      "row": 24
+    },
+    "message": "`subprocess.run` without explicit `check` argument",
+    "name": "subprocess-run-without-check",
+    "noqa_row": 24,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/subprocess-run-without-check"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 37,
+      "row": 4
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/tests/conftest.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import os\n\nimport pytest\nfrom pydantic import SecretStr\n\nfrom majlis.config import Settings\nfrom majlis.database import Database\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 46,
+      "row": 7
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/tests/conftest.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": " from urllib.parse import urlsplit, urlunsplit\n",
+          "end_location": {
+            "column": 1,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 7
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 2,
+      "row": 7
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 7,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 28,
+      "row": 26
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/tests/conftest.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": " from fastapi.testclient import TestClient\n\n from majlis.api import app\n",
+          "end_location": {
+            "column": 1,
+            "row": 27
+          },
+          "location": {
+            "column": 1,
+            "row": 25
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 2,
+      "row": 25
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 25,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 66,
+      "row": 8
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/tests/test_platform.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import hashlib\nimport hmac\nimport json\nimport time\nfrom concurrent.futures import ThreadPoolExecutor\nfrom urllib.parse import urlencode\n\nimport pytest\n\nfrom majlis.bot import TelegramFailure, claim_notification, deliver\nfrom majlis.domain import Problem, validate_init_data\nfrom majlis.schemas import Details, NewOrder\nfrom majlis.services import change_status, create_order, ensure_user, update_details\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 10
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "SIM117",
+    "end_location": {
+      "column": 32,
+      "row": 45
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/tests/test_platform.py",
+    "fix": null,
+    "location": {
+      "column": 2,
+      "row": 44
+    },
+    "message": "Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "name": "multiple-with-statements",
+    "noqa_row": 44,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/multiple-with-statements"
+  },
+  {
+    "cell": null,
+    "code": "SIM117",
+    "end_location": {
+      "column": 32,
+      "row": 127
+    },
+    "filename": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/source/tests/test_platform.py",
+    "fix": null,
+    "location": {
+      "column": 2,
+      "row": 126
+    },
+    "message": "Use a single `with` statement with multiple contexts instead of nested `with` statements",
+    "name": "multiple-with-statements",
+    "noqa_row": 126,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/multiple-with-statements"
+  }
+]

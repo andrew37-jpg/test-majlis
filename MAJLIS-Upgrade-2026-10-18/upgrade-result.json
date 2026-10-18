@@ -1,0 +1,73 @@
+{
+  "project": "/Users/andreyromanov/Desktop/majlis_bot_test/majlis-platform",
+  "restore_database": "majlis_pre08_20261018_173629_test",
+  "backup_verified": true,
+  "working_migrated": true,
+  "queue_before": {},
+  "migrations_before": 7,
+  "other_active_sessions": 0,
+  "backup_file": "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/outputs/MAJLIS-Upgrade-2026-10-18/majlis-pre08-20261018-173630.dump",
+  "backup_sha256": "ae482b4b7a0f3bc7a2de4020535d718ede625fa02ccd31e07c9bdf2d887ac583",
+  "backup_mode": "0o600",
+  "restore_check_note": "Rows match exactly. Constraint metadata compared; pg_restore distributed varchar-to-text casts in three CHECK arrays. Actual constraint rejection probes follow in restored DB.",
+  "restored_tables": 13,
+  "restored_constraints": 43,
+  "restore_upgrade_ready": true,
+  "restore_constraint_probes": 30,
+  "migrations_after": 9,
+  "queue_after": {},
+  "working_ready": true,
+  "preserved_original_tables": true,
+  "original_column_checks": {
+    "audit_log": {
+      "match": true,
+      "rows": 0
+    },
+    "bot_state": {
+      "match": true,
+      "rows": 1
+    },
+    "customer_messages": {
+      "match": true,
+      "rows": 0
+    },
+    "events": {
+      "match": true,
+      "rows": 0
+    },
+    "integration_events": {
+      "match": true,
+      "rows": 0
+    },
+    "legacy_imports": {
+      "match": true,
+      "rows": 0
+    },
+    "manager_access": {
+      "match": true,
+      "rows": 0
+    },
+    "order_managers": {
+      "match": true,
+      "rows": 0
+    },
+    "orders": {
+      "match": true,
+      "rows": 0
+    },
+    "outbox": {
+      "match": true,
+      "rows": 0
+    },
+    "rate_limits": {
+      "match": true,
+      "rows": 1
+    },
+    "users": {
+      "match": true,
+      "rows": 1
+    }
+  },
+  "baseline_restore_database": "majlis_pre08_20261018_173629_baseline_test",
+  "postcheck_note": "Compare original columns, not full row JSON: migrations add columns to users/orders, so full-row hashes change by design."
+}

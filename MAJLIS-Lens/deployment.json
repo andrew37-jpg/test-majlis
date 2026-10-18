@@ -1,0 +1,48 @@
+{
+  "project": "/Users/andreyromanov/Desktop/majlis_bot_test/majlis-platform",
+  "envUnchanged": true,
+  "files": [
+    {
+      "file": "web/ui.js",
+      "before": "05474fa18777c50750a4aa7c02b7ea5cfc73817739bdf6dca6a06fd61a9e7763",
+      "after": "1f66a970b4499ef33ba7806746842d32f5920680e3d54c39f143caa3f4b1008a",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "web/app.js",
+      "before": "a79493af28789c37b6f8c4804845096203e4cf6bc6cb8fbf36052d44da8e7472",
+      "after": "0a27a5eb1e3dc6e8b14fe747e2f9125f5c57448d4d73c0d17a7bfd167628e1ba",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "web/style.css",
+      "before": "c42945656ffe29e6fc3a74086c5bf115cc1c48d352607597a817df8abe882846",
+      "after": "638ef9a8d34349e8cb8b9ccb15b71ad5d65ec14ff46d651a455030c3dcb5be1d",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "web/nav-lens.js",
+      "before": null,
+      "after": "7f4c56864e6b25aef1020a96cbcbb39d66057a08394537a37219afcb4cc00bcf",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "majlis/api.py",
+      "before": "2d19915f8e65ec57eb03ba25dde73c62c01ecec185324b888489f5c19bb5ff87",
+      "after": "d1d05dfd7c69aed52e36961ebb4ba1c2d2a068d78995cd1efae389eb6aae111f",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "tests/js/navigation.test.mjs",
+      "before": null,
+      "after": "5ac726e09def1ad95c3dcd87cf666d7f725884aa83e4c318b1651e803637082e",
+      "matchesTestedSource": true
+    },
+    {
+      "file": "docs/NAVIGATION-LENS.md",
+      "before": null,
+      "after": "a5ba8ac812c2def4ea5bd06764b5c3f1884a4d1d7041a075893e579adbd54ded",
+      "matchesTestedSource": true
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "runtimeDatabase": "majlis_audit_test",
+  "migrationDatabase": "majlis_upgrade_test",
+  "rejected": false,
+  "migrationReturnedSuccessfully": true
+}

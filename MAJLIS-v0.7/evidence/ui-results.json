@@ -1,0 +1,18 @@
+{
+  "environment": "Real isolated PostgreSQL and real FastAPI; only Telegram SDK/auth signed with fake token and fictional IDs",
+  "width": 360,
+  "document_scroll_width": 360,
+  "manager_nav_client_width": 334,
+  "manager_nav_scroll_width": 334,
+  "buyer_has_manager_links": false,
+  "buyer_visible_orders": [
+    "UI-BUYER"
+  ],
+  "manager_has_separate_url": true,
+  "buyer_request_visible_to_authorized_manager": true,
+  "client_script_executed": false,
+  "tracking_edit_persisted": true,
+  "api_outage_preserves_cached_orders": true,
+  "real_telegram_ui_verified": false,
+  "fixture_stopped": true
+}

@@ -1,0 +1,126 @@
+FFF..F.F                                                                 [100%]
+=================================== FAILURES ===================================
+___________ test_audit_reassignment_retains_previous_personal_fields ___________
+
+client = <starlette.testclient.TestClient object at 0x103ab00e0>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), mini_app_url='', manager_ids='9001',...*****'), port=8891, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    def test_audit_reassignment_retains_previous_personal_fields(client,cfg):
+     order=created(client,cfg)
+     assert client.post('/api/orders/payment',headers=signed(cfg),json={'order_id':order['id'],'version':1,'url':'https://payments.example/invoice/old-buyer'}).status_code==200
+     assert client.post('/api/orders/status',headers=signed(cfg),json={'order_id':order['id'],'version':2,'status':'purchased','note':'Private note for previous customer (fictional)'}).status_code==200
+>    assert client.post('/api/orders/details',headers=signed(cfg),json={'order_id':order['id'],'version':3,'customer_id':4001,'customer_name':'Новый покупатель','shipment':'NEW-PARTY','eta':'','eta_confirmed':False}).status_code==200
+E    AssertionError: assert 422 == 200
+E     +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+E     +    where <Response [422 Unprocessable Entity]> = post('/api/orders/details', headers={'X-Telegram-Init-Data': 'auth_date=1792010071&user=%7B%22id%22%3A+9001%2C+%22first_name%22%3A+%22Test%22%7D&hash=9a1f33e9c9aba074525368afe9c70005998d37ac1d54c22fcf696db21b4bb470'}, json={'order_id': 1, 'version': 3, 'customer_id': 4001, 'customer_name': 'Новый покупатель', ...})
+E     +      where post = <starlette.testclient.TestClient object at 0x103ab00e0>.post
+E     +      and   {'X-Telegram-Init-Data': 'auth_date=1792010071&user=%7B%22id%22%3A+9001%2C+%22first_name%22%3A+%22Test%22%7D&hash=9a1f33e9c9aba074525368afe9c70005998d37ac1d54c22fcf696db21b4bb470'} = signed(Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), mini_app_url='', manager_ids='9001',...*****'), port=8891, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8))
+
+tests/test_regressions.py:13: AssertionError
+___________ test_audit_late_integration_can_regress_delivered_order ____________
+
+client = <starlette.testclient.TestClient object at 0x10420f3b0>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), mini_app_url='', manager_ids='9001',...*****'), port=8891, instance_id='test-instance', https_mode='localhost_run', auto_start_database=False, db_pool_size=8)
+
+    def test_audit_late_integration_can_regress_delivered_order(client,cfg):
+     order=created(client,cfg)
+     def send(event,status):
+      raw=json.dumps({'event_id':event,'shipment':'TEST-CARGO','status':status}).encode();stamp=str(int(time.time()))
+      signature=hmac.new(cfg.integration_secret.get_secret_value().encode(),stamp.encode()+b'.'+raw,hashlib.sha256).hexdigest()
+      return client.post('/api/integrations/events',content=raw,headers={'Content-Type':'application/json','X-Event-Timestamp':stamp,'X-Event-Signature':signature})
+     assert send('NEW-DELIVERED','delivered').status_code==200
+     assert send('LATE-CUSTOMS','customs').status_code==200
+>    assert client.get('/api/orders/'+str(order['id']),headers=signed(cfg,3001)).json()['status']=='delivered'
+E    AssertionError: assert 'customs' == 'delivered'
+E      
+E      - delivered
+E      + customs
+
+tests/test_regressions.py:30: AssertionError
+________________ test_audit_ready_has_no_application_rate_limit ________________
+
+client = <starlette.testclient.TestClient object at 0x10433c6e0>
+
+    def test_audit_ready_has_no_application_rate_limit(client):
+     results=[client.get('/ready').status_code for _ in range(121)]
+>    assert set(results)<={403,429} and 403 in results
+E    assert ({200} <= {403, 429}
+E      
+E      Extra items in the left set:
+E      200)
+
+tests/test_regressions.py:34: AssertionError
+_______________ test_audit_outbox_network_send_holds_order_lock ________________
+
+db = <majlis.database.Database object at 0x10435f7a0>
+
+    def test_audit_outbox_network_send_holds_order_lock(db):
+     order=queued(db);started=threading.Event();release=threading.Event()
+     class SlowAPI:
+      def send(self,*args):started.set();assert release.wait(3)
+     with ThreadPoolExecutor(max_workers=1) as executor:
+      task=executor.submit(deliver,db,SlowAPI())
+      try:
+       assert started.wait(2)
+>      with db.connection() as conn:conn.execute('SELECT id FROM orders WHERE id=%s FOR UPDATE NOWAIT',(order['id'],))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_regressions.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <psycopg.Connection [IDLE] (host=127.0.0.1 port=55437 user=majlis_app database=majlis_audit_20261014_test) at 0x1043b2d20>
+query = 'SELECT id FROM orders WHERE id=%s FOR UPDATE NOWAIT', params = (1,)
+prepare = None, binary = False
+
+    def execute(
+        self,
+        query: Query,
+        params: Params | None = None,
+        *,
+        prepare: bool | None = None,
+        binary: bool = False,
+    ) -> Cursor[Row]:
+        """Execute a query and return a cursor to read its results."""
+        try:
+            cur = self.cursor()
+            if binary:
+                cur.format = BINARY
+    
+            if isinstance(query, Template):
+                if params is not None:
+                    raise TypeError(
+                        "'execute()' with string template query doesn't support parameters"
+                    )
+                return cur.execute(query, prepare=prepare)
+            else:
+                return cur.execute(query, params, prepare=prepare)
+        except e._NO_TRACEBACK as ex:
+>           raise ex.with_traceback(None)
+E           psycopg.errors.LockNotAvailable: could not obtain lock on row in relation "orders"
+
+../tools/lib/python3.12/site-packages/psycopg/connection.py:304: LockNotAvailable
+___________________ test_audit_error_headers_not_consistent ____________________
+
+client = <starlette.testclient.TestClient object at 0x1043b2b10>
+
+    def test_audit_error_headers_not_consistent(client):
+     response=client.post('/api/orders',json={'data':'a'*70000})
+     assert response.status_code==413
+>    assert 'content-security-policy' in response.headers
+E    AssertionError: assert 'content-security-policy' in Headers({'content-length': '57', 'content-type': 'application/json'})
+E     +  where Headers({'content-length': '57', 'content-type': 'application/json'}) = <Response [413 Request Entity Too Large]>.headers
+
+tests/test_regressions.py:71: AssertionError
+=============================== warnings summary ===============================
+tests/test_regressions.py::test_audit_reassignment_retains_previous_personal_fields
+  /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/tools/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_regressions.py::test_audit_reassignment_retains_previous_personal_fields
+FAILED tests/test_regressions.py::test_audit_late_integration_can_regress_delivered_order
+FAILED tests/test_regressions.py::test_audit_ready_has_no_application_rate_limit
+FAILED tests/test_regressions.py::test_audit_outbox_network_send_holds_order_lock
+FAILED tests/test_regressions.py::test_audit_error_headers_not_consistent - A...
+5 failed, 3 passed, 1 warning in 1.06s

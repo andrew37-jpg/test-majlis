@@ -1,0 +1,52 @@
+{
+  "csp": "{\"directive\":\"style-src-elem\",\"source\":\"\",\"blocked\":\"inline\"}",
+  "css": {
+    "connection": {
+      "backgroundColor": {
+        "mirror": "rgb(234, 242, 255)",
+        "source": "rgb(234, 242, 255)"
+      },
+      "borderRadius": {
+        "mirror": "12px",
+        "source": "12px"
+      },
+      "color": {
+        "mirror": "rgb(0, 102, 237)",
+        "source": "rgb(0, 102, 237)"
+      },
+      "fontSize": {
+        "mirror": "11px",
+        "source": "11px"
+      },
+      "padding": {
+        "mirror": "12px 16px",
+        "source": "12px 16px"
+      }
+    },
+    "toast": {
+      "backgroundColor": {
+        "mirror": "rgb(16, 28, 49)",
+        "source": "rgb(16, 28, 49)"
+      },
+      "borderRadius": {
+        "mirror": "12px",
+        "source": "12px"
+      },
+      "color": {
+        "mirror": "rgb(255, 255, 255)",
+        "source": "rgb(255, 255, 255)"
+      },
+      "fontSize": {
+        "mirror": "12px",
+        "source": "12px"
+      },
+      "padding": {
+        "mirror": "13px 18px",
+        "source": "13px 18px"
+      }
+    }
+  },
+  "duplicates": [],
+  "inlineStyles": 0,
+  "lensHidden": false
+}

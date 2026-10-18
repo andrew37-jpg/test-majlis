@@ -1,0 +1,3 @@
+ruff format --check: 14 files would be reformatted, 6 files already formatted.
+No formatter was applied to production.
+Scope includes 8 supplementary audit cases, not only original source.

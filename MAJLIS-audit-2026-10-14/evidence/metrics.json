@@ -1,0 +1,33 @@
+{
+  "ruff_findings": 42,
+  "ruff_by_code": {
+    "I001": 22,
+    "BLE001": 3,
+    "F401": 5,
+    "B008": 7,
+    "PLW1510": 2,
+    "UP022": 1,
+    "SIM117": 2
+  },
+  "bandit_findings": 19,
+  "bandit_by_severity": {
+    "LOW": 13,
+    "MEDIUM": 6
+  },
+  "format_files_require_changes": 14,
+  "format_files_already_formatted": 6,
+  "frontend": {
+    "app.js": {
+      "lines": 75,
+      "max_line_characters": 2753
+    },
+    "ui.js": {
+      "lines": 32,
+      "max_line_characters": 202
+    },
+    "style.css": {
+      "lines": 13,
+      "max_line_characters": 10948
+    }
+  }
+}

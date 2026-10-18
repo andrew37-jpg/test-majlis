@@ -1,0 +1,101 @@
+{
+  "orders": 25000,
+  "customers": 100,
+  "samples": 20,
+  "milliseconds": {
+    "manager_count": {
+      "median": 12.798770447261631,
+      "p95": 18.353041959926486,
+      "max": 25.451250025071204
+    },
+    "manager_substring": {
+      "median": 105.49687541788444,
+      "p95": 111.22795904520899,
+      "max": 111.97399999946356
+    },
+    "buyer": {
+      "median": 7.647312537301332,
+      "p95": 12.031208025291562,
+      "max": 14.283791999332607
+    }
+  },
+  "query_plan": [
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 0.29,
+        "Total Cost": 539.02,
+        "Plan Rows": 101,
+        "Plan Width": 8,
+        "Actual Startup Time": 0.013,
+        "Actual Total Time": 16.249,
+        "Actual Rows": 43,
+        "Actual Loops": 1,
+        "Shared Hit Blocks": 764,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0,
+        "Plans": [
+          {
+            "Node Type": "Index Scan",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Scan Direction": "Backward",
+            "Index Name": "orders_pkey",
+            "Relation Name": "orders",
+            "Alias": "orders",
+            "Startup Cost": 0.29,
+            "Total Cost": 1349.79,
+            "Plan Rows": 253,
+            "Plan Width": 8,
+            "Actual Startup Time": 0.013,
+            "Actual Total Time": 16.241,
+            "Actual Rows": 43,
+            "Actual Loops": 1,
+            "Filter": "((item)::text ~~* '%999%'::text)",
+            "Rows Removed by Filter": 24957,
+            "Shared Hit Blocks": 764,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          }
+        ]
+      },
+      "Planning": {
+        "Shared Hit Blocks": 0,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 0.104,
+      "Triggers": [],
+      "Execution Time": 16.262
+    }
+  ],
+  "timeouts": {
+    "statement_timeout": "5s",
+    "lock_timeout": "1s",
+    "idle_in_transaction_session_timeout": "15s"
+  }
+}

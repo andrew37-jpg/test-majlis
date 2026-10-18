@@ -1,0 +1,6 @@
+Backup created, permissions0600.
+Traceback (most recent call last):
+  File "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-approved-upgrade.py", line 54, in <module>
+    if before!=restored:raise RuntimeError('Restored data/schema do not match')
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Restored data/schema do not match

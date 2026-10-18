@@ -1,0 +1,9 @@
+{
+  "environment": "local browser mock API/SDK, fictional orders; no real Telegram session",
+  "copy_button_visible": true,
+  "payment_removal_visible_after_reopen": true,
+  "commercial_saved_item_visible": true,
+  "commercial_saved_rubles": "120.01",
+  "initial_harness_failure": "Mock saved url rather than payment_url; mock corrected and scenario repeated successfully. Real backend assertions passed separately.",
+  "screenshot": "ui-reviewed.png"
+}

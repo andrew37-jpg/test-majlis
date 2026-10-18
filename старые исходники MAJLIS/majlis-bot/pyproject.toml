@@ -1,0 +1,6 @@
+[project]
+name = "majlis-miniapp-bot"
+version = "0.2.0"
+description = "MAJLIS Telegram bot and Mini App"
+requires-python = ">=3.10"
+dependencies = ["truststore==0.10.5"]

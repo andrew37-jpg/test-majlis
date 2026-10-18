@@ -1,0 +1,110 @@
+.......F.......F........................................................ [ 56%]
+........................................................                 [100%]
+=================================== FAILURES ===================================
+_________ test_A03_unknown_is_held_and_can_only_be_retried_explicitly __________
+
+client = <starlette.testclient.TestClient object at 0x10897a4b0>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...e_transaction_timeout_ms=15000, trusted_proxy_cidrs='', shared_public_requests_per_minute=240, worker_stale_seconds=90)
+db = <majlis.database.Database object at 0x108bd3890>
+
+    def test_A03_unknown_is_held_and_can_only_be_retried_explicitly(client, cfg, db):
+        queued(db)
+    
+        class LostResponse:
+            calls = 0
+    
+            def send(self, *args):
+                self.calls += 1
+                raise bot.TelegramFailure(0)
+    
+        api = LostResponse()
+        bot.deliver(db, api)
+        bot.deliver(db, api)
+        with db.connection() as c:
+            row = c.execute("SELECT * FROM outbox").fetchone()
+            assert row["state"] == "unknown" and api.calls == 1
+            assert (
+                c.execute(
+                    "SELECT count(*) AS n FROM notification_attempts WHERE outcome='unknown'"
+                ).fetchone()["n"]
+                == 1
+            )
+        body = {
+            "notification_id": row["id"],
+            "attempts": row["attempts"],
+            "accept_duplicate_risk": True,
+        }
+        assert (
+            client.post(
+                "/api/manager/notifications/retry", headers=signed(cfg, 3001), json=body
+            ).status_code
+            == 403
+        )
+        assert (
+            client.post(
+                "/api/manager/notifications/retry",
+                headers=signed(cfg),
+                json={**body, "accept_duplicate_risk": False},
+            ).status_code
+            == 422
+        )
+>       assert (
+            client.post("/api/manager/notifications/retry", headers=signed(cfg), json=body).status_code
+            == 200
+        )
+E       AssertionError: assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+E        +    where <Response [500 Internal Server Error]> = post('/api/manager/notifications/retry', headers={'X-Telegram-Init-Data': 'auth_date=1792330951&user=%7B%22id%22%3A+9001%2C+%22first_name%22%3A+%22Test%22%7D&hash=3f61d3095469283e66c47bab61b418309625641832cc59cfd570a307834f02a4'}, json={'notification_id': 1, 'attempts': 1, 'accept_duplicate_risk': True})
+E        +      where post = <starlette.testclient.TestClient object at 0x10897a4b0>.post
+E        +      and   {'X-Telegram-Init-Data': 'auth_date=1792330951&user=%7B%22id%22%3A+9001%2C+%22first_name%22%3A+%22Test%22%7D&hash=3f61d3095469283e66c47bab61b418309625641832cc59cfd570a307834f02a4'} = signed(Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...e_transaction_timeout_ms=15000, trusted_proxy_cidrs='', shared_public_requests_per_minute=240, worker_stale_seconds=90))
+
+tests/test_audit_fixes.py:223: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    majlis:observability.py:39 {"status": 500, "event": "request_failed", "request_id": "22c2e5bbcc174bb8841182a8de56ace9", "error_type": "KeyError", "frames": [{"file": "routing.py", "line": 362, "function": "run_endpoint_function"}, {"file": "concurrency.py", "line": 34, "function": "run_in_threadpool"}, {"file": "to_thread.py", "line": 65, "function": "run_sync"}, {"file": "_asyncio.py", "line": 2706, "function": "run_sync_in_worker_thread"}, {"file": "_asyncio.py", "line": 1100, "function": "run"}, {"file": "_api.py", "line": 244, "function": "_run_sync_endpoint"}, {"file": "api.py", "line": 390, "function": "notification_retry"}, {"file": "notifications.py", "line": 165, "function": "operator_retry"}]}
+_______________ test_A11_mismatch_before_ddl_and_explicit_alias ________________
+
+db = <majlis.database.Database object at 0x108bc8f80>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...e_transaction_timeout_ms=15000, trusted_proxy_cidrs='', shared_public_requests_per_minute=240, worker_stale_seconds=90)
+
+    def test_A11_mismatch_before_ddl_and_explicit_alias(db, cfg):
+        runtime = cfg.database_url.get_secret_value()
+        migration = cfg.migration_database_url.get_secret_value()
+>       original = Database().schema_ready()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_audit_fixes.py:371: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+majlis/database.py:128: in schema_ready
+    with self.connection() as db:
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+majlis/database.py:42: in connection
+    with self.pool.connection() as connection:
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+../../majlis-audit/tools/lib/python3.12/site-packages/psycopg_pool/pool.py:184: in connection
+    conn = self.getconn(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../majlis-audit/tools/lib/python3.12/site-packages/psycopg_pool/pool.py:211: in getconn
+    self._check_open_getconn()
+../../majlis-audit/tools/lib/python3.12/site-packages/psycopg_pool/pool.py:129: in _check_open_getconn
+    super()._check_open_getconn()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <psycopg_pool.pool.ConnectionPool 'pool-30' at 0x108bd3380>
+
+    def _check_open_getconn(self) -> None:
+        if self._closed:
+            if self._opened:
+                raise PoolClosed(f"the pool {self.name!r} is already closed")
+            else:
+>               raise PoolClosed(f"the pool {self.name!r} is not open yet")
+E               psycopg_pool.PoolClosed: the pool 'pool-30' is not open yet
+
+../../majlis-audit/tools/lib/python3.12/site-packages/psycopg_pool/base.py:140: PoolClosed
+=========================== short test summary info ============================
+FAILED tests/test_audit_fixes.py::test_A03_unknown_is_held_and_can_only_be_retried_explicitly
+FAILED tests/test_audit_fixes.py::test_A11_mismatch_before_ddl_and_explicit_alias
+2 failed, 126 passed in 13.01s

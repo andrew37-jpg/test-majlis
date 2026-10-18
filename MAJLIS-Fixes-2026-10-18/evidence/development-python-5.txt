@@ -1,0 +1,20 @@
+F....................................................................... [ 54%]
+...........................................................              [100%]
+=================================== FAILURES ===================================
+_____________ test_A01_new_batch_and_return_have_independent_order _____________
+
+client = <starlette.testclient.TestClient object at 0x104be9f70>
+cfg = Settings(bot_token=SecretStr('**********'), database_url=SecretStr('**********'), migration_database_url=SecretStr('**...e_transaction_timeout_ms=15000, trusted_proxy_cidrs='', shared_public_requests_per_minute=240, worker_stale_seconds=90)
+
+    def test_A01_new_batch_and_return_have_independent_order(client, cfg):
+        row = created(client, cfg)
+        assert event(client, cfg, "old100", "purchased", 100).json()["updated"] == 1
+        row = client.get("/api/orders/" + str(row["id"]), headers=signed(cfg)).json()
+        row = move(client, cfg, row, "NEW-CARGO")
+>       assert row["integration_sequence"] == 0 and row["external_updated_at"] is None
+E       assert (1 == 0)
+
+tests/test_audit_fixes.py:66: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_audit_fixes.py::test_A01_new_batch_and_return_have_independent_order
+1 failed, 130 passed in 14.30s

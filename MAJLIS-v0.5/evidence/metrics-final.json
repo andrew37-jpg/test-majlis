@@ -1,0 +1,90 @@
+{
+  "python_tests": 65,
+  "javascript_tests": 5,
+  "ruff_findings": 0,
+  "bandit_findings": 0,
+  "frontend": {
+    "ui.js": {
+      "lines": 58,
+      "max_line_characters": 203
+    },
+    "pagination.js": {
+      "lines": 81,
+      "max_line_characters": 97
+    },
+    "style.css": {
+      "lines": 1621,
+      "max_line_characters": 92
+    },
+    "order-editor.js": {
+      "lines": 42,
+      "max_line_characters": 160
+    },
+    "order-detail.js": {
+      "lines": 48,
+      "max_line_characters": 432
+    },
+    "app.js": {
+      "lines": 760,
+      "max_line_characters": 565
+    }
+  },
+  "downloaded_and_hash_verified_wheels": 23,
+  "bandit_point_annotations": [
+    {
+      "file": "main.py",
+      "line": 9,
+      "ids": "B404"
+    },
+    {
+      "file": "main.py",
+      "line": 124,
+      "ids": "B603"
+    },
+    {
+      "file": "main.py",
+      "line": 152,
+      "ids": "B603"
+    },
+    {
+      "file": "main.py",
+      "line": 172,
+      "ids": "B603"
+    },
+    {
+      "file": "main.py",
+      "line": 178,
+      "ids": "B603"
+    },
+    {
+      "file": "main.py",
+      "line": 240,
+      "ids": "B603"
+    },
+    {
+      "file": "manage.py",
+      "line": 11,
+      "ids": "B404"
+    },
+    {
+      "file": "manage.py",
+      "line": 62,
+      "ids": "B603"
+    },
+    {
+      "file": "majlis/tunnel.py",
+      "line": 9,
+      "ids": "B404"
+    },
+    {
+      "file": "majlis/tunnel.py",
+      "line": 90,
+      "ids": "B603"
+    },
+    {
+      "file": "majlis/cli.py",
+      "line": 8,
+      "ids": "B104"
+    }
+  ]
+}

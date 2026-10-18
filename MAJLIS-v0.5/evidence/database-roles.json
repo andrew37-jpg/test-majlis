@@ -1,0 +1,18 @@
+{
+  "majlis": {
+    "role": "majlis_app",
+    "superuser": false,
+    "create_db": false,
+    "create_role": false,
+    "owns_database": true,
+    "owns_schema": true
+  },
+  "majlis_fix_20261014_test": {
+    "role": "majlis_fix_runtime",
+    "superuser": false,
+    "create_db": false,
+    "create_role": false,
+    "owns_database": false,
+    "owns_schema": false
+  }
+}

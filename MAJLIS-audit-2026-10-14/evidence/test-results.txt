@@ -1,0 +1,18 @@
+AUDIT_PRIVACY: new owner receives old customer name/payment link/history; previous owner is denied
+.AUDIT_STATUS: valid later request can regress delivered -> customs
+.AUDIT_RATE: 121 unauthenticated readiness queries all returned 200; no stress test performed
+.AUDIT_REPLAY: identical signed initData accepted twice within validity window
+..AUDIT_LOCK: order row locked throughout simulated external network send
+..AUDIT_HEADERS: early 413 response omits common security/cache headers
+.....................
+=============================== warnings summary ===============================
+tests/test_audit.py::test_audit_reassignment_retains_previous_personal_fields
+  /Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/tools/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+28 passed, 1 warning in 3.65s
+/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/tools/lib/python3.12/site-packages/coverage/inorout.py:558: CoverageWarning: Module main was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.16.2/messages.html#warning-module-not-imported
+  self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-audit/tools/lib/python3.12/site-packages/coverage/inorout.py:558: CoverageWarning: Module manage was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.16.2/messages.html#warning-module-not-imported
+  self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")

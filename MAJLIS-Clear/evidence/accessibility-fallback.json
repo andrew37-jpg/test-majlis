@@ -1,0 +1,13 @@
+{
+  "reduced": {
+    "current": "help",
+    "delta": 0,
+    "maxStretch": "0",
+    "transition": "0s"
+  },
+  "fallback": {
+    "backdrop": "none",
+    "background": "rgb(247, 250, 255)",
+    "current": "catalog"
+  }
+}

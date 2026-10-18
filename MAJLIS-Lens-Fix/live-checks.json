@@ -1,0 +1,64 @@
+{
+  "local": [
+    {
+      "path": "/health",
+      "status": 200,
+      "matchesFile": null,
+      "instanceMatches": true,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/ui.js",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/nav-lens.js?v=dom-optics-v3",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "matchesFile": true,
+      "instanceMatches": null,
+      "cacheControl": "no-store"
+    }
+  ],
+  "public": [
+    {
+      "path": "/health",
+      "errorType": "ConnectTimeout"
+    },
+    {
+      "path": "/ui.js",
+      "status": 502,
+      "matchesFile": false,
+      "instanceMatches": null,
+      "cacheControl": null
+    },
+    {
+      "path": "/nav-lens.js?v=dom-optics-v3",
+      "status": 502,
+      "matchesFile": false,
+      "instanceMatches": null,
+      "cacheControl": null
+    },
+    {
+      "path": "/style.css",
+      "status": 502,
+      "matchesFile": false,
+      "instanceMatches": null,
+      "cacheControl": null
+    }
+  ],
+  "menu": {
+    "ok": true,
+    "type": "web_app",
+    "urlMatchesRuntime": true
+  }
+}

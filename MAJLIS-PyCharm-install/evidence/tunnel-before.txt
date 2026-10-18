@@ -1,0 +1,13 @@
+.F..
+======================================================================
+FAIL: test_realistic_qr_payload_keeps_https_address (__main__.RegistrationTests.test_realistic_qr_payload_keeps_https_address)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-install/test_tunnel_registration.py", line 16, in test_realistic_qr_payload_keeps_https_address
+    self.assertEqual(accepted_url(self.event(data)), 'https://dbe23b54b4dc45.lhr.life')
+AssertionError: None != 'https://dbe23b54b4dc45.lhr.life'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+FAILED (failures=1)

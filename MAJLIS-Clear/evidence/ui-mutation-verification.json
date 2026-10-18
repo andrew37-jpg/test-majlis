@@ -1,0 +1,12 @@
+{
+  "orders": 6,
+  "created_via_form": {
+    "number": "CLEAR-DRAFT",
+    "item": "Проверка Clear через форму",
+    "amount": 12001
+  },
+  "saved_tracking_and_payment": {
+    "tracking_number": "CLEAR-TRACK-VERIFIED",
+    "payment_url": "https://example.com/clear-payment-check"
+  }
+}

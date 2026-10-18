@@ -1,0 +1,7 @@
+Separate restore matches all source tables and constraints.
+Restore upgrade and repeated migrate passed; applying approved working migration.
+Traceback (most recent call last):
+  File "/Users/andreyromanov/Documents/Codex/2026-10-14/new-chat/work/majlis-approved-upgrade-resume.py", line 67, in <module>
+    if not summary['preserved_original_tables']:raise RuntimeError('Original business table check failed')
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Original business table check failed
